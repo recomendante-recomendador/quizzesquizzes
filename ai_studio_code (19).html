@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>TikTok & Reels Quiz Maker Pro</title>
+  <!-- Tipografía Pop Quiz / Viral -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;0,900;1,900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0d0f17;
+      --panel-bg: #161822;
+      --card-white: rgba(255, 255, 255, 0.96);
+      --primary: #00F0FF;
+      --accent: #FF007F;
+      --gold: #FFC400;
+      --correct: #00E676;
+      --wrong: #FF1744;
+      --text-dark: #0f172a;
+      --text-muted: #8F9CAE;
+      --font-display: 'Montserrat', sans-serif;
+      --font-body: 'Poppins', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #fff;
+      font-family: var(--font-body);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    input, textarea, select, button {
+      font-family: inherit;
+    }
+
+    /* ========================================================
+       1. PANEL DE CONTROL (SETUP)
+       ======================================================== */
+    #setup-screen {
+      padding: 14px 14px 90px 14px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #282c3f;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-lib { background: #2b3044; color: #fff; }
+    .btn-save { background: var(--primary); color: #000; }
+
+    .card-setup {
+      background: var(--panel-bg);
+      border: 1px solid #282d3f;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .card-setup-title {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      background: #0d0f17;
+      border: 1px solid #272d42;
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: #fff;
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+      user-select: text;
+    }
+
+    .file-input-wrapper {
+      margin-bottom: 8px;
+    }
+    .file-input-wrapper input[type="file"] { display: none; }
+    .file-custom-btn {
+      display: block;
+      background: #1e2230;
+      border: 1px dashed #3a415a;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      text-align: center;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-custom-btn.loaded {
+      border: 1px solid var(--correct);
+      color: var(--correct);
+      background: rgba(0, 230, 118, 0.08);
+    }
+    .file-custom-btn.sfx-btn {
+      border-color: #818cf8;
+      color: #c7d2fe;
+    }
+
+    .btn-select-category {
+      width: 100%;
+      background: #202638;
+      border: 1px solid var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .opt-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f121b;
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1px solid #23283a;
+    }
+    .opt-row input[type="radio"] { accent-color: var(--correct); }
+    .opt-row input[type="text"] { margin-bottom: 0; background: transparent; border: none; padding: 4px; }
+
+    .btn-record-mode {
+      position: sticky;
+      bottom: 12px;
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #ff5252);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 900;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      box-shadow: 0 6px 20px rgba(255, 0, 127, 0.4);
+      cursor: pointer;
+      text-transform: uppercase;
+      z-index: 10;
+    }
+
+    /* ========================================================
+       2. MODO GRABACIÓN (9:16)
+       ======================================================== */
+    #record-screen {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: #000;
+      z-index: 999;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .bg-video-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    #bg-video-player {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .video-overlay-dim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%);
+    }
+
+    .btn-exit-record {
+      position: absolute;
+      top: max(12px, env(safe-area-inset-top));
+      right: 12px;
+      z-index: 50;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quiz-stage {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 390px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 16px 85px 16px;
+      gap: 14px;
+    }
+
+    /* Tarjetas Blancas */
+    .white-card {
+      background: var(--card-white);
+      color: var(--text-dark);
+      border-radius: 20px;
+      padding: 20px 16px;
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0,0,0,0.1);
+      width: 100%;
+      text-align: center;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.88) translateY(16px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ========================================================
+       PLACAS / RECTÁNGULOS DESTACADOS MÁS GRANDES
+       ======================================================== */
+    .pill-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), #ff0055);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 900;
+      padding: 7px 20px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 14px rgba(255, 0, 127, 0.45);
+    }
+
+    .pill-badge.badge-results {
+      background: linear-gradient(135deg, var(--accent), #ff0055);
+      color: #fff;
+      font-size: 1rem;
+      padding: 8px 24px;
+      box-shadow: 0 4px 15px rgba(255, 0, 127, 0.45);
+    }
+
+    .welcome-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 900;
+      line-height: 1.25;
+      color: #0f172a;
+    }
+
+    /* Tarjeta de Categoría con Ruleta */
+    .category-card { padding: 16px 14px; }
+    .cat-subtitle {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #64748b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .slot-viewport {
+      height: 48px;
+      overflow: hidden;
+      position: relative;
+      background: #f1f5f9;
+      border-radius: 12px;
+      border: 2px solid #e2e8f0;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .slot-reel {
+      display: flex;
+      flex-direction: column;
+      transform: translateY(0px);
+      transition: transform 1.8s cubic-bezier(0.12, 0.85, 0.25, 1);
+    }
+
+    .slot-item {
+      height: 48px;
+      line-height: 48px;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #334155;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 10px;
+    }
+
+    .slot-item.is-winner {
+      color: #b45309;
+      background: linear-gradient(135deg, #FFE600, #FF9100);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 6px rgba(255, 180, 0, 0.7));
+      animation: pulseGold 0.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseGold {
+      from { transform: scale(1); }
+      to { transform: scale(1.08); }
+    }
+
+    /* Tarjeta de Pregunta */
+    .question-img-wrap {
+      width: 100%;
+      height: 150px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: #000;
+      display: none;
+    }
+    .question-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .question-text {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 900;
+      line-height: 1.28;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+
+    /* Temporizador (3s) */
+    .timer-container {
+      width: 100%;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .timer-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .timer-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--gold), #ff3b30);
+      border-radius: 999px;
+      transition: width 3s linear;
+    }
+    .timer-badge {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #dc2626;
+      margin-top: 4px;
+    }
+
+    /* Opciones */
+    .quiz-options {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt-btn {
+      width: 100%;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      color: #1e293b;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 800;
+      padding: 10px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .opt-letter {
+      background: #334155;
+      color: #fff;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .quiz-opt-btn.is-correct {
+      background: var(--correct) !important;
+      border-color: #059669 !important;
+      color: #064e3b !important;
+      transform: scale(1.04);
+      box-shadow: 0 0 20px rgba(0, 230, 118, 0.7);
+      animation: pulseCorrect 0.6s infinite alternate;
+    }
+    .quiz-opt-btn.is-correct .opt-letter {
+      background: #064e3b;
+      color: #fff;
+    }
+
+    .quiz-opt-btn.is-wrong {
+      background: #fee2e2 !important;
+      border-color: #fca5a5 !important;
+      color: #991b1b !important;
+      opacity: 0.45;
+      transform: scale(0.96);
+    }
+
+    @keyframes pulseCorrect {
+      from { transform: scale(1.02); }
+      to { transform: scale(1.06); }
+    }
+
+    /* Botonera Inferior */
+    .thumb-controls {
+      position: absolute;
+      bottom: max(10px, env(safe-area-inset-bottom));
+      left: 10px;
+      right: 10px;
+      z-index: 100;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      background: rgba(13, 15, 23, 0.88);
+      backdrop-filter: blur(10px);
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .ctrl-btn {
+      background: #202538;
+      border: 1px solid #3b4362;
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 6px 2px;
+      border-radius: 9px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1;
+      height: 44px;
+    }
+    .ctrl-btn:active {
+      transform: scale(0.92);
+      background: var(--primary);
+      color: #000;
+    }
+    .ctrl-btn span.icon { font-size: 0.95rem; }
+
+    /* Modales */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-box {
+      background: var(--panel-bg);
+      border: 1px solid #33384c;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 18px;
+      padding: 16px;
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .modal-title { font-family: var(--font-display); font-size: 1rem; font-weight: 800; }
+    .modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .cat-chip {
+      background: #111420;
+      border: 1px solid #282f48;
+      color: #cbd5e1;
+      padding: 9px 8px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+    }
+    .cat-chip:active, .cat-chip.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    .projects-list {
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .project-item {
+      background: #0f111a;
+      border: 1px solid #262c3e;
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .project-info h4 { font-size: 0.8rem; font-weight: 700; color: #fff; }
+    .project-info span { font-size: 0.65rem; color: var(--text-muted); }
+    .project-actions { display: flex; gap: 6px; }
+    .btn-proj-load { background: var(--primary); color: #000; border: none; padding: 5px 8px; border-radius: 6px; font-weight: 700; font-size: 0.68rem; cursor: pointer; }
+    .btn-proj-del { background: rgba(255, 23, 68, 0.2); color: var(--wrong); border: 1px solid var(--wrong); padding: 5px 8px; border-radius: 6px; font-weight: 700; font-size: 0.68rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       1. PANEL DE CONTROL (SETUP)
+       ======================================================== -->
+  <div id="setup-screen">
+    <div class="header-bar">
+      <div class="logo">⚡ QUIZ MAKER 9:16</div>
+      <div class="top-actions">
+        <button type="button" class="btn-sm btn-lib" onclick="openLibraryModal()">📂 Biblioteca</button>
+        <button type="button" class="btn-sm btn-save" onclick="saveCurrentProject()">💾 Guardar</button>
+      </div>
+    </div>
+
+    <!-- Fondo de Video Global -->
+    <div class="card-setup">
+      <div class="card-setup-title">🎬 Video de Fondo</div>
+      <div class="file-input-wrapper">
+        <label for="bg-video-input" class="file-custom-btn" id="lbl-bg-video">Cargar Video MP4 / GIF de fondo</label>
+        <input type="file" id="bg-video-input" accept="video/mp4,image/gif" onchange="handleFileSelected(event, 'lbl-bg-video', 'bgVideo')" />
+      </div>
+    </div>
+
+    <!-- Efecto Global de Cuenta Regresiva -->
+    <div class="card-setup">
+      <div class="card-setup-title">⏱️ SFX Cuenta Regresiva (Global)</div>
+      <div class="file-input-wrapper">
+        <label for="timer-sfx-input" class="file-custom-btn sfx-btn" id="lbl-timer-sfx">🎵 Cargar SFX Cuenta Regresiva + Revelación (Vol 10%)</label>
+        <input type="file" id="timer-sfx-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-timer-sfx', 'timerSfx')" />
+      </div>
+    </div>
+
+    <!-- Intro & Categoría -->
+    <div class="card-setup">
+      <div class="card-setup-title">👋 Pantalla 1: Intro y Categoría</div>
+      <label>1. Pregunta de Bienvenida / Gancho</label>
+      <textarea id="intro-text" rows="2" placeholder="Ej: ¿Cuánto sabes de Cultura General?"></textarea>
+      
+      <div class="file-input-wrapper">
+        <label for="intro-audio-input" class="file-custom-btn" id="lbl-intro-audio">Cargar Audio Bienvenida (ElevenLabs)</label>
+        <input type="file" id="intro-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-intro-audio', 'introAudio')" />
+      </div>
+
+      <label style="margin-top: 8px;">2. Selección de Categoría</label>
+      <button type="button" class="btn-select-category" onclick="openCategoryModal()">
+        <span id="txt-selected-cat">🏷️ Categoría: Idiomas</span>
+        <span style="font-size: 0.75rem; color: var(--primary);">Cambiar ▾</span>
+      </button>
+
+      <div class="file-input-wrapper">
+        <label for="cat-audio-input" class="file-custom-btn" id="lbl-cat-audio">Cargar Audio Categoría ("Categoría de hoy:...")</label>
+        <input type="file" id="cat-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-cat-audio', 'catAudio')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="cat-sfx-input" class="file-custom-btn sfx-btn" id="lbl-cat-sfx">🎵 Cargar SFX / Fondo Ruleta Categoría (Vol 10%)</label>
+        <input type="file" id="cat-sfx-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-cat-sfx', 'catSfx')" />
+      </div>
+    </div>
+
+    <!-- Pregunta 1 -->
+    <div class="card-setup">
+      <div class="card-setup-title">❓ Pregunta 1</div>
+      <label>Texto de la Pregunta</label>
+      <textarea id="q1-text" rows="2" placeholder="¿Cuál es el idioma más hablado del mundo?"></textarea>
+
+      <label>Opciones</label>
+      <div class="options-grid">
+        <div class="opt-row">
+          <input type="radio" name="q1-correct" value="A" checked />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">A</span>
+          <input type="text" id="q1-optA" placeholder="Opción A" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q1-correct" value="B" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">B</span>
+          <input type="text" id="q1-optB" placeholder="Opción B" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q1-correct" value="C" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">C</span>
+          <input type="text" id="q1-optC" placeholder="Opción C" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q1-img-input" class="file-custom-btn" id="lbl-q1-img">Cargar Imagen Ilustrativa (Opcional)</label>
+        <input type="file" id="q1-img-input" accept="image/*" onchange="handleFileSelected(event, 'lbl-q1-img', 'q1Img')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q1-audio-input" class="file-custom-btn" id="lbl-q1-audio">Cargar Audio Pregunta 1 (ElevenLabs)</label>
+        <input type="file" id="q1-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q1-audio', 'q1Audio')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q1-ans-audio-input" class="file-custom-btn" id="lbl-q1-ans-audio">🔊 Cargar Audio Respuesta Correcta P1</label>
+        <input type="file" id="q1-ans-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q1-ans-audio', 'q1AnsAudio')" />
+      </div>
+    </div>
+
+    <!-- Pregunta 2 -->
+    <div class="card-setup">
+      <div class="card-setup-title">❓ Pregunta 2</div>
+      <label>Texto de la Pregunta</label>
+      <textarea id="q2-text" rows="2" placeholder="¿De qué país es originario el esperanto?"></textarea>
+
+      <label>Opciones</label>
+      <div class="options-grid">
+        <div class="opt-row">
+          <input type="radio" name="q2-correct" value="A" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">A</span>
+          <input type="text" id="q2-optA" placeholder="Opción A" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q2-correct" value="B" checked />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">B</span>
+          <input type="text" id="q2-optB" placeholder="Opción B" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q2-correct" value="C" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">C</span>
+          <input type="text" id="q2-optC" placeholder="Opción C" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q2-img-input" class="file-custom-btn" id="lbl-q2-img">Cargar Imagen Ilustrativa (Opcional)</label>
+        <input type="file" id="q2-img-input" accept="image/*" onchange="handleFileSelected(event, 'lbl-q2-img', 'q2Img')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q2-audio-input" class="file-custom-btn" id="lbl-q2-audio">Cargar Audio Pregunta 2 (ElevenLabs)</label>
+        <input type="file" id="q2-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q2-audio', 'q2Audio')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q2-ans-audio-input" class="file-custom-btn" id="lbl-q2-ans-audio">🔊 Cargar Audio Respuesta Correcta P2</label>
+        <input type="file" id="q2-ans-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q2-ans-audio', 'q2AnsAudio')" />
+      </div>
+    </div>
+
+    <!-- Pregunta 3 -->
+    <div class="card-setup">
+      <div class="card-setup-title">❓ Pregunta 3</div>
+      <label>Texto de la Pregunta</label>
+      <textarea id="q3-text" rows="2" placeholder="¿Cuál es el idioma oficial de Brasil?"></textarea>
+
+      <label>Opciones</label>
+      <div class="options-grid">
+        <div class="opt-row">
+          <input type="radio" name="q3-correct" value="A" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">A</span>
+          <input type="text" id="q3-optA" placeholder="Opción A" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q3-correct" value="B" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">B</span>
+          <input type="text" id="q3-optB" placeholder="Opción B" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q3-correct" value="C" checked />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">C</span>
+          <input type="text" id="q3-optC" placeholder="Opción C" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q3-img-input" class="file-custom-btn" id="lbl-q3-img">Cargar Imagen Ilustrativa (Opcional)</label>
+        <input type="file" id="q3-img-input" accept="image/*" onchange="handleFileSelected(event, 'lbl-q3-img', 'q3Img')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q3-audio-input" class="file-custom-btn" id="lbl-q3-audio">Cargar Audio Pregunta 3 (ElevenLabs)</label>
+        <input type="file" id="q3-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q3-audio', 'q3Audio')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q3-ans-audio-input" class="file-custom-btn" id="lbl-q3-ans-audio">🔊 Cargar Audio Respuesta Correcta P3</label>
+        <input type="file" id="q3-ans-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q3-ans-audio', 'q3AnsAudio')" />
+      </div>
+    </div>
+
+    <!-- Outro -->
+    <div class="card-setup">
+      <div class="card-setup-title">🏁 Pantalla Final: Outro</div>
+      <label>Texto de Cierre</label>
+      <textarea id="outro-text" rows="2" placeholder="¿Cuántas acertaste? Escríbelo en los comentarios. ¡Nos vemos luego!"></textarea>
+
+      <div class="file-input-wrapper">
+        <label for="outro-audio-input" class="file-custom-btn" id="lbl-outro-audio">Cargar Audio Outro (MP3/WAV)</label>
+        <input type="file" id="outro-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-outro-audio', 'outroAudio')" />
+      </div>
+    </div>
+
+    <button type="button" class="btn-record-mode" onclick="enterRecordMode()">
+      🎥 Entrar en Modo Grabación
+    </button>
+  </div>
+
+  <!-- ========================================================
+       2. MODO GRABACIÓN (9:16)
+       ======================================================== -->
+  <div id="record-screen">
+    <div class="bg-video-container">
+      <video id="bg-video-player" autoplay loop muted playsinline></video>
+      <div class="video-overlay-dim"></div>
+    </div>
+
+    <button class="btn-exit-record" title="Volver al panel" onclick="exitRecordMode()">✕</button>
+
+    <div class="quiz-stage" id="quiz-stage"></div>
+
+    <!-- Controles -->
+    <div class="thumb-controls">
+      <button class="ctrl-btn" onclick="stepStartIntro()">
+        <span class="icon">🚀</span>
+        <span>Intro</span>
+      </button>
+
+      <button class="ctrl-btn" onclick="stepRevealCategory()">
+        <span class="icon">🏷️</span>
+        <span>Categoría</span>
+      </button>
+
+      <button class="ctrl-btn" onclick="stepShowQuestion()">
+        <span class="icon">❓</span>
+        <span>Pregunta</span>
+      </button>
+
+      <button class="ctrl-btn" onclick="stepStartCountdown()">
+        <span class="icon">⏱️</span>
+        <span>3 Seg</span>
+      </button>
+
+      <button class="ctrl-btn" onclick="stepNextOrFinish()">
+        <span class="icon">⏩</span>
+        <span>Sig/Fin</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal Categorías -->
+  <div class="modal-backdrop" id="category-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">🏷️ Elige la Categoría</div>
+        <button class="modal-close" onclick="closeCategoryModal()">✕</button>
+      </div>
+      <div class="category-grid" id="category-grid"></div>
+    </div>
+  </div>
+
+  <!-- Modal Biblioteca -->
+  <div class="modal-backdrop" id="library-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">📚 Proyectos Guardados</div>
+        <button class="modal-close" onclick="closeLibraryModal()">✕</button>
+      </div>
+      <div class="projects-list" id="projects-list"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       LÓGICA JAVASCRIPT & MOTOR DE AUDIO CERO LATENCIA
+       ======================================================== -->
+  <script>
+    const CATEGORIES_LIST = [
+      "Países del mundo", "Banderas", "Idiomas", "Inventos", "Personajes históricos",
+      "Física", "Química", "Biología", "Astronomía", "Espacio",
+      "Planetas", "Animales", "Cuerpo humano", "Cine", "Series",
+      "Anime", "Superhéroes", "Videojuegos", "Minecraft", "Actores",
+      "Música", "Artistas", "Fútbol", "Deportistas", "Comida",
+      "Bebidas", "Presidentes", "Marcas", "Redes sociales", "Logotipos"
+    ];
+
+    let selectedCategory = "Idiomas";
+
+    const mediaStore = {
+      bgVideo: null,
+      timerSfx: null,
+      introAudio: null,
+      catAudio: null,
+      catSfx: null,
+      q1Img: null,
+      q1Audio: null,
+      q1AnsAudio: null,
+      q2Img: null,
+      q2Audio: null,
+      q2AnsAudio: null,
+      q3Img: null,
+      q3Audio: null,
+      q3AnsAudio: null,
+      outroAudio: null
+    };
+
+    /* ========================================================
+       WEB AUDIO API: PRECARGA EN RAM PARA 0 MS DE RETRASO
+       ======================================================== */
+    let audioCtx = null;
+    const audioBufferCache = {};
+
+    let currentVoiceSource = null;
+    let currentCatSfxSource = null;
+    let currentTimerSfxSource = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    async function preloadAudioToBuffer(key, blob) {
+      if (!blob) {
+        audioBufferCache[key] = null;
+        return;
+      }
+      try {
+        const ctx = getAudioContext();
+        const arrayBuffer = await blob.arrayBuffer();
+        const decodedBuffer = await ctx.decodeAudioData(arrayBuffer);
+        audioBufferCache[key] = decodedBuffer;
+      } catch (err) {
+        console.warn('Error decodificando audio en RAM:', key, err);
+      }
+    }
+
+    function playVoiceInstant(key) {
+      const ctx = getAudioContext();
+      if (currentVoiceSource) {
+        try { currentVoiceSource.stop(); } catch(e){}
+        currentVoiceSource = null;
+      }
+
+      const buffer = audioBufferCache[key];
+      if (!buffer) return;
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+
+      const gain = ctx.createGain();
+      gain.gain.value = 1.0; // Voz al 100%
+
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(0); // Disparo inmediato en 0ms
+      currentVoiceSource = source;
+    }
+
+    function playCatSfxInstant(key) {
+      const ctx = getAudioContext();
+      if (currentCatSfxSource) {
+        try { currentCatSfxSource.stop(); } catch(e){}
+        currentCatSfxSource = null;
+      }
+
+      const buffer = audioBufferCache[key];
+      if (!buffer) return;
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+
+      const gain = ctx.createGain();
+      gain.gain.value = 0.1; // SFX al 10%
+
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(0);
+      currentCatSfxSource = source;
+    }
+
+    function playTimerSfxInstant(key) {
+      const ctx = getAudioContext();
+      if (currentTimerSfxSource) {
+        try { currentTimerSfxSource.stop(); } catch(e){}
+        currentTimerSfxSource = null;
+      }
+
+      const buffer = audioBufferCache[key];
+      if (!buffer) return;
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+
+      const gain = ctx.createGain();
+      gain.gain.value = 0.1; // SFX al 10%
+
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(0);
+      currentTimerSfxSource = source;
+    }
+
+    function stopAllAudio() {
+      if (currentVoiceSource) {
+        try { currentVoiceSource.stop(); } catch(e){}
+        currentVoiceSource = null;
+      }
+      if (currentCatSfxSource) {
+        try { currentCatSfxSource.stop(); } catch(e){}
+        currentCatSfxSource = null;
+      }
+      if (currentTimerSfxSource) {
+        try { currentTimerSfxSource.stop(); } catch(e){}
+        currentTimerSfxSource = null;
+      }
+    }
+
+    let countdownTimer = null;
+    let countdownInterval = null;
+    let currentQuestionIndex = 0;
+
+    async function handleFileSelected(event, labelId, storeKey) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const label = document.getElementById(labelId);
+      if (file) {
+        label.textContent = `✓ ${file.name}`;
+        label.classList.add('loaded');
+        mediaStore[storeKey] = file;
+
+        // Si es un audio, precargar en RAM inmediatamente
+        if (storeKey !== 'bgVideo' && !storeKey.includes('Img')) {
+          await preloadAudioToBuffer(storeKey, file);
+        }
+      }
+    }
+
+    function openCategoryModal() {
+      const grid = document.getElementById('category-grid');
+      grid.innerHTML = '';
+      CATEGORIES_LIST.forEach(cat => {
+        const chip = document.createElement('div');
+        chip.className = `cat-chip ${cat.toLowerCase() === selectedCategory.toLowerCase() ? 'active' : ''}`;
+        chip.textContent = cat;
+        chip.onclick = () => {
+          selectedCategory = cat;
+          document.getElementById('txt-selected-cat').textContent = `🏷️ Categoría: ${cat}`;
+          closeCategoryModal();
+        };
+        grid.appendChild(chip);
+      });
+      document.getElementById('category-modal').style.display = 'flex';
+    }
+
+    function closeCategoryModal() {
+      document.getElementById('category-modal').style.display = 'none';
+    }
+
+    /* MODO GRABACIÓN */
+    async function enterRecordMode() {
+      getAudioContext(); // Desbloquear audio en móviles
+
+      // Asegurar que todos los audios estén en memoria RAM
+      for (const [key, file] of Object.entries(mediaStore)) {
+        if (file && key !== 'bgVideo' && !key.includes('Img') && !audioBufferCache[key]) {
+          await preloadAudioToBuffer(key, file);
+        }
+      }
+
+      const videoPlayer = document.getElementById('bg-video-player');
+      if (mediaStore.bgVideo) {
+        videoPlayer.src = URL.createObjectURL(mediaStore.bgVideo);
+        videoPlayer.play().catch(() => {});
+      } else {
+        videoPlayer.removeAttribute('src');
+      }
+
+      currentQuestionIndex = 0;
+      document.getElementById('record-screen').style.display = 'flex';
+      stepStartIntro();
+    }
+
+    function exitRecordMode() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      document.getElementById('record-screen').style.display = 'none';
+      document.getElementById('bg-video-player').pause();
+    }
+
+    // PASO 1: Iniciar Intro (Placa Grande ✨ DESAFÍO VIRAL ✨)
+    function stepStartIntro() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+
+      const introText = document.getElementById('intro-text').value || '¿Cuánto sabes de cultura general?';
+      const stage = document.getElementById('quiz-stage');
+
+      stage.innerHTML = `
+        <div class="white-card" id="card-welcome">
+          <div class="pill-badge">✨ DESAFÍO VIRAL ✨</div>
+          <div class="welcome-title">${escapeHtml(introText)}</div>
+        </div>
+      `;
+
+      playVoiceInstant('introAudio');
+    }
+
+    // PASO 2: Revelar Categoría (1.8s + SFX al 10%)
+    function stepRevealCategory() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+
+      const introText = document.getElementById('intro-text').value || '¿Cuánto sabes de cultura general?';
+      const stage = document.getElementById('quiz-stage');
+
+      const reelItems = [];
+      const pool = CATEGORIES_LIST.filter(c => c.toLowerCase() !== selectedCategory.toLowerCase());
+      
+      for (let i = 0; i < 16; i++) {
+        reelItems.push(pool[Math.floor(Math.random() * pool.length)]);
+      }
+      reelItems.push(selectedCategory);
+
+      const itemsHtml = reelItems.map((item, idx) => {
+        const isTarget = (idx === reelItems.length - 1);
+        return `<div class="slot-item ${isTarget ? 'is-target' : ''}" id="${isTarget ? 'target-slot-item' : ''}">${escapeHtml(item)}</div>`;
+      }).join('');
+
+      stage.innerHTML = `
+        <div class="white-card" id="card-welcome">
+          <div class="pill-badge">✨ DESAFÍO VIRAL ✨</div>
+          <div class="welcome-title">${escapeHtml(introText)}</div>
+        </div>
+
+        <div class="white-card category-card" id="card-category">
+          <div class="cat-subtitle">CATEGORÍA DE HOY:</div>
+          <div class="slot-viewport">
+            <div class="slot-reel" id="slot-reel">
+              ${itemsHtml}
+            </div>
+          </div>
+        </div>
+      `;
+
+      const reel = document.getElementById('slot-reel');
+      const itemHeight = 48;
+      const targetY = (reelItems.length - 1) * itemHeight;
+
+      // Reproducción instantánea sin ningún retraso
+      playVoiceInstant('catAudio');
+      playCatSfxInstant('catSfx');
+
+      setTimeout(() => {
+        reel.style.transform = `translateY(-${targetY}px)`;
+      }, 50);
+
+      setTimeout(() => {
+        const targetItem = document.getElementById('target-slot-item');
+        if (targetItem) {
+          targetItem.classList.add('is-winner');
+        }
+      }, 1850);
+    }
+
+    // PASO 3: Mostrar Pregunta
+    function getQuestionData(idx) {
+      const n = idx + 1;
+      const text = document.getElementById(`q${n}-text`).value || `Pregunta número ${n}`;
+      const optA = document.getElementById(`q${n}-optA`).value || 'Opción A';
+      const optB = document.getElementById(`q${n}-optB`).value || 'Opción B';
+      const optC = document.getElementById(`q${n}-optC`).value || 'Opción C';
+      
+      const radios = document.getElementsByName(`q${n}-correct`);
+      let correct = 'A';
+      for (const r of radios) {
+        if (r.checked) { correct = r.value; break; }
+      }
+
+      return {
+        text, optA, optB, optC, correct,
+        img: mediaStore[`q${n}Img`],
+        audioKey: `q${n}Audio`,
+        ansAudioKey: `q${n}AnsAudio`
+      };
+    }
+
+    function stepShowQuestion() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+
+      if (currentQuestionIndex > 2) {
+        stepShowOutro();
+        return;
+      }
+
+      const q = getQuestionData(currentQuestionIndex);
+      const stage = document.getElementById('quiz-stage');
+
+      let imgHtml = '';
+      if (q.img) {
+        imgHtml = `
+          <div class="question-img-wrap" style="display: block;">
+            <img src="${URL.createObjectURL(q.img)}" alt="Ilustración" />
+          </div>
+        `;
+      }
+
+      stage.innerHTML = `
+        <div class="white-card">
+          ${imgHtml}
+          <div class="question-text">${escapeHtml(q.text)}</div>
+
+          <div class="timer-container" id="timer-box">
+            <div class="timer-bar-bg">
+              <div class="timer-bar-fill" id="timer-fill"></div>
+            </div>
+            <div class="timer-badge" id="timer-number">3 SEGUNDOS</div>
+          </div>
+
+          <div class="quiz-options">
+            <div class="quiz-opt-btn" id="opt-btn-A">
+              <div class="opt-letter">A</div>
+              <span>${escapeHtml(q.optA)}</span>
+            </div>
+            <div class="quiz-opt-btn" id="opt-btn-B">
+              <div class="opt-letter">B</div>
+              <span>${escapeHtml(q.optB)}</span>
+            </div>
+            <div class="quiz-opt-btn" id="opt-btn-C">
+              <div class="opt-letter">C</div>
+              <span>${escapeHtml(q.optC)}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      playVoiceInstant(q.audioKey);
+    }
+
+    // PASO 4: Iniciar Cuenta Regresiva (3s + SFX sin cortarse)
+    function stepStartCountdown() {
+      const timerBox = document.getElementById('timer-box');
+      const timerFill = document.getElementById('timer-fill');
+      const timerNum = document.getElementById('timer-number');
+      if (!timerBox || !timerFill) return;
+
+      timerBox.style.display = 'block';
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '100%';
+      
+      void timerFill.offsetWidth;
+
+      timerFill.style.transition = 'width 3s linear';
+      timerFill.style.width = '0%';
+
+      let secondsLeft = 3;
+      timerNum.textContent = `3 SEGUNDOS`;
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+
+      // Reproducción instantánea del SFX cuenta regresiva
+      playTimerSfxInstant('timerSfx');
+
+      countdownInterval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+          timerNum.textContent = `${secondsLeft} SEGUNDOS`;
+        }
+      }, 1000);
+
+      countdownTimer = setTimeout(() => {
+        clearInterval(countdownInterval);
+        timerNum.textContent = `¡TIEMPO!`;
+        revealAnswer();
+      }, 3000);
+    }
+
+    function revealAnswer() {
+      const q = getQuestionData(currentQuestionIndex);
+      ['A', 'B', 'C'].forEach(opt => {
+        const btn = document.getElementById(`opt-btn-${opt}`);
+        if (!btn) return;
+        if (opt === q.correct) {
+          btn.classList.add('is-correct');
+        } else {
+          btn.classList.add('is-wrong');
+        }
+      });
+
+      // Se dispara la locución de la respuesta correcta al instante SIN cortar el SFX de fondo
+      playVoiceInstant(q.ansAudioKey);
+    }
+
+    // PASO 5: Siguiente o Final
+    function stepNextOrFinish() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex <= 2) {
+        stepShowQuestion();
+      } else {
+        stepShowOutro();
+      }
+    }
+
+    // Outro con Placa Grande 🏆 RESULTADOS 🏆
+    function stepShowOutro() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+
+      const outroText = document.getElementById('outro-text').value || '¡Gracias por participar! Sígueme para más trivias.';
+      const stage = document.getElementById('quiz-stage');
+
+      stage.innerHTML = `
+        <div class="white-card">
+          <div class="pill-badge badge-results">🏅 QUIZ TERMINADO 🏅</div>
+          <div class="welcome-title">${escapeHtml(outroText)}</div>
+        </div>
+      `;
+
+      playVoiceInstant('outroAudio');
+    }
+
+    /* INDEXEDDB & PERSISTENCIA */
+    const DB_NAME = 'TikTokQuizDB_v5';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'projects';
+
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+          }
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
+        req.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    function getCurrentFormData() {
+      const getVal = id => document.getElementById(id).value;
+      const getRadio = name => {
+        const radios = document.getElementsByName(name);
+        for (const r of radios) if (r.checked) return r.value;
+        return 'A';
+      };
+
+      return {
+        introText: getVal('intro-text'),
+        selectedCategory,
+        outroText: getVal('outro-text'),
+        q1: { text: getVal('q1-text'), optA: getVal('q1-optA'), optB: getVal('q1-optB'), optC: getVal('q1-optC'), correct: getRadio('q1-correct') },
+        q2: { text: getVal('q2-text'), optA: getVal('q2-optA'), optB: getVal('q2-optB'), optC: getVal('q2-optC'), correct: getRadio('q2-correct') },
+        q3: { text: getVal('q3-text'), optA: getVal('q3-optA'), optB: getVal('q3-optB'), optC: getVal('q3-optC'), correct: getRadio('q3-correct') },
+        files: { ...mediaStore }
+      };
+    }
+
+    async function saveCurrentProject() {
+      const projectName = prompt('Nombre del proyecto:', `${selectedCategory} - Quiz`);
+      if (!projectName) return;
+
+      const data = getCurrentFormData();
+      const projectRecord = {
+        name: projectName,
+        date: new Date().toLocaleString(),
+        payload: data
+      };
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).add(projectRecord);
+        tx.oncomplete = () => alert('✅ ¡Proyecto guardado en la biblioteca!');
+      } catch (err) {
+        alert('Error al guardar proyecto.');
+      }
+    }
+
+    async function openLibraryModal() {
+      document.getElementById('library-modal').style.display = 'flex';
+      renderProjectsList();
+    }
+    function closeLibraryModal() {
+      document.getElementById('library-modal').style.display = 'none';
+    }
+
+    async function renderProjectsList() {
+      const container = document.getElementById('projects-list');
+      container.innerHTML = '<div style="text-align:center; padding: 20px; color:#888;">Cargando...</div>';
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const req = tx.objectStore(STORE_NAME).getAll();
+
+        req.onsuccess = () => {
+          const list = req.result;
+          if (!list || list.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:20px; color:#777;">No hay proyectos guardados.</div>';
+            return;
+          }
+
+          container.innerHTML = '';
+          list.reverse().forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'project-item';
+            div.innerHTML = `
+              <div class="project-info">
+                <h4>${escapeHtml(item.name)}</h4>
+                <span>📅 ${item.date}</span>
+              </div>
+              <div class="project-actions">
+                <button class="btn-proj-load" onclick="loadProjectById(${item.id})">Cargar</button>
+                <button class="btn-proj-del" onclick="deleteProjectById(${item.id})">Eliminar</button>
+              </div>
+            `;
+            container.appendChild(div);
+          });
+        };
+      } catch (err) {
+        container.innerHTML = '<div style="text-align:center; padding:20px;">Error al cargar.</div>';
+      }
+    }
+
+    async function loadProjectById(id) {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const req = tx.objectStore(STORE_NAME).get(id);
+
+        req.onsuccess = async () => {
+          const item = req.result;
+          if (!item) return;
+
+          const p = item.payload;
+          document.getElementById('intro-text').value = p.introText || '';
+          document.getElementById('outro-text').value = p.outroText || '';
+
+          if (p.selectedCategory) {
+            selectedCategory = p.selectedCategory;
+            document.getElementById('txt-selected-cat').textContent = `🏷️ Categoría: ${selectedCategory}`;
+          }
+
+          const loadQ = (n, qData) => {
+            if (!qData) return;
+            document.getElementById(`q${n}-text`).value = qData.text || '';
+            document.getElementById(`q${n}-optA`).value = qData.optA || '';
+            document.getElementById(`q${n}-optB`).value = qData.optB || '';
+            document.getElementById(`q${n}-optC`).value = qData.optC || '';
+            const radios = document.getElementsByName(`q${n}-correct`);
+            for (const r of radios) r.checked = (r.value === qData.correct);
+          };
+
+          loadQ(1, p.q1);
+          loadQ(2, p.q2);
+          loadQ(3, p.q3);
+
+          if (p.files) {
+            Object.assign(mediaStore, p.files);
+
+            // Precargar todos los audios restaurados a la memoria RAM
+            for (const [key, file] of Object.entries(p.files)) {
+              if (file && key !== 'bgVideo' && !key.includes('Img')) {
+                await preloadAudioToBuffer(key, file);
+              }
+            }
+
+            const updateLabel = (id, file, txt) => {
+              const lbl = document.getElementById(id);
+              if (file) {
+                lbl.textContent = `✓ ${file.name || 'Cargado'}`;
+                lbl.classList.add('loaded');
+              } else {
+                lbl.textContent = txt;
+                lbl.classList.remove('loaded');
+              }
+            };
+            updateLabel('lbl-bg-video', mediaStore.bgVideo, 'Cargar Video MP4 / GIF de fondo');
+            updateLabel('lbl-timer-sfx', mediaStore.timerSfx, '🎵 Cargar SFX Cuenta Regresiva + Revelación (Vol 10%)');
+            updateLabel('lbl-intro-audio', mediaStore.introAudio, 'Cargar Audio Bienvenida (ElevenLabs)');
+            updateLabel('lbl-cat-audio', mediaStore.catAudio, 'Cargar Audio Categoría');
+            updateLabel('lbl-cat-sfx', mediaStore.catSfx, '🎵 Cargar SFX / Fondo Ruleta Categoría (Vol 10%)');
+            updateLabel('lbl-q1-img', mediaStore.q1Img, 'Cargar Imagen Ilustrativa (Opcional)');
+            updateLabel('lbl-q1-audio', mediaStore.q1Audio, 'Cargar Audio Pregunta 1 (ElevenLabs)');
+            updateLabel('lbl-q1-ans-audio', mediaStore.q1AnsAudio, '🔊 Cargar Audio Respuesta Correcta P1');
+            updateLabel('lbl-q2-img', mediaStore.q2Img, 'Cargar Imagen Ilustrativa (Opcional)');
+            updateLabel('lbl-q2-audio', mediaStore.q2Audio, 'Cargar Audio Pregunta 2 (ElevenLabs)');
+            updateLabel('lbl-q2-ans-audio', mediaStore.q2AnsAudio, '🔊 Cargar Audio Respuesta Correcta P2');
+            updateLabel('lbl-q3-img', mediaStore.q3Img, 'Cargar Imagen Ilustrativa (Opcional)');
+            updateLabel('lbl-q3-audio', mediaStore.q3Audio, 'Cargar Audio Pregunta 3 (ElevenLabs)');
+            updateLabel('lbl-q3-ans-audio', mediaStore.q3AnsAudio, '🔊 Cargar Audio Respuesta Correcta P3');
+            updateLabel('lbl-outro-audio', mediaStore.outroAudio, 'Cargar Audio Outro (MP3/WAV)');
+          }
+
+          closeLibraryModal();
+          alert(`✅ Proyecto "${item.name}" cargado.`);
+        };
+      } catch (err) {
+        alert('Error al restaurar proyecto.');
+      }
+    }
+
+    async function deleteProjectById(id) {
+      if (!confirm('¿Eliminar proyecto permanentemente?')) return;
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).delete(id);
+        tx.oncomplete = () => renderProjectsList();
+      } catch (err) {}
+    }
+
+    setInterval(() => {
+      const data = getCurrentFormData();
+      localStorage.setItem('quiz_draft_v5', JSON.stringify({ ...data, files: null }));
+    }, 4000);
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const draft = localStorage.getItem('quiz_draft_v5');
+      if (draft) {
+        try {
+          const p = JSON.parse(draft);
+          if (p.introText) document.getElementById('intro-text').value = p.introText;
+          if (p.outroText) document.getElementById('outro-text').value = p.outroText;
+          if (p.selectedCategory) {
+            selectedCategory = p.selectedCategory;
+            document.getElementById('txt-selected-cat').textContent = `🏷️ Categoría: ${selectedCategory}`;
+          }
+          const loadQ = (n, qData) => {
+            if (!qData) return;
+            if (qData.text) document.getElementById(`q${n}-text`).value = qData.text;
+            if (qData.optA) document.getElementById(`q${n}-optA`).value = qData.optA;
+            if (qData.optB) document.getElementById(`q${n}-optB`).value = qData.optB;
+            if (qData.optC) document.getElementById(`q${n}-optC`).value = qData.optC;
+            if (qData.correct) {
+              const radios = document.getElementsByName(`q${n}-correct`);
+              for (const r of radios) r.checked = (r.value === qData.correct);
+            }
+          };
+          loadQ(1, p.q1);
+          loadQ(2, p.q2);
+          loadQ(3, p.q3);
+        } catch (e) {}
+      }
+    });
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+  </script>
+</body>
+</html>
