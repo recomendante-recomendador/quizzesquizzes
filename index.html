@@ -505,7 +505,7 @@
 
     @keyframes pulseCorrect {
       from { transform: scale(1.02); }
-      to { transform: scale(1.06); }
+      to { transform: scale(1.04); }
     }
 
     /* Botonera Inferior */
@@ -684,7 +684,7 @@
       </div>
 
       <div class="file-input-wrapper">
-        <label for="cat-sfx-input" class="file-custom-btn sfx-btn" id="lbl-cat-sfx">🎵 Cargar SFX / Fondo Ruleta Categoría (Vol 10%)</label>
+        <label for="cat-sfx-input" class="file-custom-btn sfx-btn" id="lbl-cat-sfx">🎵 Cargar SFX / Fondo Ruleta Categoría (Vol 40%)</label>
         <input type="file" id="cat-sfx-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-cat-sfx', 'catSfx')" />
       </div>
     </div>
@@ -998,7 +998,7 @@
       source.buffer = buffer;
 
       const gain = ctx.createGain();
-      gain.gain.value = 0.4; // SFX al 40%
+      gain.gain.value = 0.5; // SFX al 50%
 
       source.connect(gain);
       gain.connect(ctx.destination);
@@ -1020,7 +1020,7 @@
       source.buffer = buffer;
 
       const gain = ctx.createGain();
-      gain.gain.value = 0.4; // SFX al 40%
+      gain.gain.value = 0.5; // SFX al 50%
 
       source.connect(gain);
       gain.connect(ctx.destination);
@@ -1135,7 +1135,7 @@
       playVoiceInstant('introAudio');
     }
 
-    // PASO 2: Revelar Categoría (1.8s + SFX al 10%)
+    // PASO 2: Revelar Categoría (1.5s + SFX al 10%)
     function stepRevealCategory() {
       stopAllAudio();
       clearInterval(countdownInterval);
