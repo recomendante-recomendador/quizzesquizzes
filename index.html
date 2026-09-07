@@ -454,8 +454,8 @@
 
     @keyframes stickerWiggle {
       0%   { transform: scale(1) rotate(0deg); }
-      25%  { transform: scale(1) rotate(20deg); }
-      75%  { transform: scale(1) rotate(-20deg); }
+      25%  { transform: scale(1) rotate(10deg); }
+      75%  { transform: scale(1) rotate(-10deg); }
       100% { transform: scale(1) rotate(0deg); }
     }
 
@@ -561,20 +561,10 @@
       filter: drop-shadow(0 1px 0 rgba(255,255,255,0.5)) drop-shadow(0 2px 8px rgba(0,0,0,0.55));
       animation: pulseWinner 0.5s infinite alternate ease-in-out;
     }
-    /* Contorno claro detrás del texto para legibilidad extra en colores claros (amarillo/verde) */
-    .slot-item.is-winner::before {
-      content: attr(data-text);
-      position: absolute;
-      inset: 0;
-      padding: 0 10px;
-      color: transparent;
-      -webkit-text-stroke: 3px rgba(0,0,0,0.55);
-      z-index: -1;
-    }
 
     @keyframes pulseWinner {
       from { transform: scale(1) rotate(-0.5deg); }
-      to { transform: scale(1.06) rotate(0.5deg); }
+      to { transform: scale(1.04) rotate(0.5deg); }
     }
 
     /* IMAGEN DE PREGUNTA CON EFECTO FLASH Y CAMBIO SUAVE */
