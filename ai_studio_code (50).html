@@ -1,0 +1,3928 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Viral Content Studio Pro: Quiz, ¿Qué prefieres? & Posts</title>
+  <!-- Tipografías Virales -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;0,900;1,900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- html2canvas para exportar posts en Alta Resolución -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #0d0f17;
+      --panel-bg: #161822;
+      --card-white: rgba(255, 255, 255, 0.97);
+      --primary: #00F0FF;
+      --accent: #FF007F;
+      --gold: #FFC400;
+      --correct: #00E676;
+      --wrong: #FF1744;
+      --wyr-red: #ff1e42;
+      --wyr-red-dark: #7a0014;
+      --wyr-blue: #0077ff;
+      --wyr-blue-dark: #002d6b;
+      --text-dark: #0f172a;
+      --text-muted: #8F9CAE;
+      --font-display: 'Montserrat', sans-serif;
+      --font-body: 'Poppins', sans-serif;
+      --cat-winner-color: #FFC400;
+      --cat-winner-color-2: #B8860B;
+      --cat-wheel-bg: #1E2230;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #fff;
+      font-family: var(--font-body);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    input, textarea, select, button {
+      font-family: inherit;
+    }
+
+    /* SWITCH PRINCIPAL DE 3 MODOS */
+    .mode-switch-wrapper {
+      max-width: 540px;
+      margin: 12px auto 0 auto;
+      padding: 0 12px;
+    }
+
+    .mode-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      background: #111420;
+      padding: 4px;
+      border-radius: 14px;
+      border: 1px solid #282f48;
+      gap: 4px;
+    }
+
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 10px 4px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .mode-btn.active {
+      background: linear-gradient(135deg, var(--primary), #00a8ff);
+      color: #000;
+      box-shadow: 0 2px 10px rgba(0, 240, 255, 0.35);
+    }
+
+    .mode-btn.active.wyr-active {
+      background: linear-gradient(135deg, #ff1e42, #0077ff);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(255, 30, 66, 0.4);
+    }
+
+    /* PANEL DE CONTROL */
+    .setup-container {
+      padding: 14px 14px 90px 14px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #282c3f;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-lib { background: #2b3044; color: #fff; }
+    .btn-save { background: var(--primary); color: #000; }
+    .btn-save-wyr { background: linear-gradient(135deg, #ff1e42, #0077ff); color: #fff; }
+
+    .card-setup {
+      background: var(--panel-bg);
+      border: 1px solid #282d3f;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .card-setup-title {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    textarea, input[type="text"], select {
+      width: 100%;
+      background: #0d0f17;
+      border: 1px solid #272d42;
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: #fff;
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+      user-select: text;
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-bottom: 12px;
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .slider-header span.slider-val {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+      margin-top: 2px;
+    }
+
+    .file-input-wrapper {
+      margin-bottom: 8px;
+    }
+    .file-input-wrapper input[type="file"] { display: none; }
+    .file-custom-btn {
+      display: block;
+      background: #1e2230;
+      border: 1px dashed #3a415a;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      text-align: center;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-custom-btn.loaded {
+      border: 1px solid var(--correct);
+      color: var(--correct);
+      background: rgba(0, 230, 118, 0.08);
+    }
+    .file-custom-btn.sfx-btn {
+      border-color: #818cf8;
+      color: #c7d2fe;
+    }
+
+    .btn-select-category, .btn-select-message {
+      width: 100%;
+      background: #202638;
+      border: 1px solid var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+      line-height: 1.3;
+    }
+    .btn-select-message.selected {
+      border-color: var(--correct);
+      background: rgba(0, 230, 118, 0.08);
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .opt-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f121b;
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1px solid #23283a;
+    }
+    .opt-row input[type="radio"] { accent-color: var(--correct); }
+    .opt-row input[type="text"] { margin-bottom: 0; background: transparent; border: none; padding: 4px; }
+
+    .btn-record-mode {
+      position: sticky;
+      bottom: 12px;
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #ff5252);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 900;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      box-shadow: 0 6px 20px rgba(255, 0, 127, 0.4);
+      cursor: pointer;
+      text-transform: uppercase;
+      z-index: 10;
+    }
+
+    .btn-record-mode.wyr-theme {
+      background: linear-gradient(135deg, #ff1e42, #0077ff);
+      box-shadow: 0 6px 20px rgba(255, 30, 66, 0.4);
+    }
+
+    .btn-export-image {
+      background: linear-gradient(135deg, #00E676, #00b0ff);
+      box-shadow: 0 6px 20px rgba(0, 230, 118, 0.35);
+      color: #000;
+    }
+
+    .wyr-opt-group {
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .wyr-opt-group.red-side { background: rgba(255, 30, 66, 0.08); border-left: 4px solid var(--wyr-red); }
+    .wyr-opt-group.blue-side { background: rgba(0, 119, 255, 0.08); border-left: 4px solid var(--wyr-blue); }
+
+    /* MODO GRABACIÓN 9:16 */
+    #record-screen {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: #000;
+      z-index: 999;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .bg-media-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+    #bg-video-player, #bg-img-player {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+    }
+    .video-overlay-dim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
+      z-index: 1;
+    }
+
+    .btn-exit-record {
+      position: absolute;
+      top: max(12px, env(safe-area-inset-top));
+      right: 12px;
+      z-index: 50;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quiz-stage {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 395px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 16px 85px 16px;
+      gap: 14px;
+    }
+
+    .white-card {
+      position: relative;
+      background: var(--card-white);
+      color: var(--text-dark);
+      border-radius: 20px;
+      padding: 20px 16px;
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0,0,0,0.1);
+      width: 100%;
+      text-align: center;
+      animation: popIn 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      z-index: 10;
+      overflow: hidden;
+      will-change: transform, opacity;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.88) translateY(16px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Animación de salida fluida para tarjetas */
+    .card-exit {
+      animation: popOut 0.18s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+    }
+
+    @keyframes popOut {
+      0% { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.9) translateY(-12px); }
+    }
+
+    /* Destello sutil que recorre la tarjeta al aparecer */
+    .white-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(115deg, transparent, rgba(255,255,255,0.55), transparent);
+      transform: skewX(-20deg);
+      animation: cardShine 1.1s ease-out 0.15s forwards;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    @keyframes cardShine {
+      0% { left: -60%; opacity: 1; }
+      100% { left: 130%; opacity: 0; }
+    }
+
+    /* STICKERS POP FLOTANTES (GANCHO 3s) */
+    .hook-stickers-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 25;
+      display: none;
+    }
+    .hook-sticker {
+      position: absolute;
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+      transform: scale(0) rotate(0deg);
+      opacity: 0;
+      transition: transform 0.22s cubic-bezier(0.4, 0, 1, 1), opacity 0.2s ease;
+      will-change: transform, opacity;
+    }
+    .hook-sticker.show {
+      opacity: 1;
+      animation: stickerPopRotate 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.35) forwards,
+                 stickerWiggle 2.6s ease-in-out 0.35s infinite;
+    }
+    /* Salida animada de stickers */
+    .hook-sticker.hiding {
+      opacity: 0 !important;
+      transform: scale(0) rotate(-15deg) !important;
+      animation: none !important;
+    }
+
+    @keyframes stickerPopRotate {
+      0% { transform: scale(0) rotate(0deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes stickerWiggle {
+      0%   { transform: scale(1) rotate(0deg); }
+      25%  { transform: scale(1) rotate(10deg); }
+      75%  { transform: scale(1) rotate(-10deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .hook-sticker.pos-1 { top: 28%; left: 8%; }
+    .hook-sticker.pos-2 { top: 26%; right: 9%; }
+    .hook-sticker.pos-3 { bottom: 32%; left: 9%; }
+    .hook-sticker.pos-4 { bottom: 34%; right: 8%; }
+
+    .pill-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), #ff0055);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 900;
+      padding: 6px 18px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 14px rgba(255, 0, 127, 0.45);
+    }
+    .pill-badge.wyr-badge {
+      background: linear-gradient(135deg, #ff1e42, #0077ff);
+      box-shadow: 0 4px 14px rgba(255, 30, 66, 0.45);
+    }
+    .pill-badge.badge-results {
+      font-size: 0.95rem;
+      padding: 8px 22px;
+    }
+
+    .welcome-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 900;
+      line-height: 1.25;
+      color: #0f172a;
+    }
+
+    /* Ruleta Quiz */
+    .category-card { padding: 16px 14px; }
+    .cat-subtitle {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #64748b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .slot-viewport {
+      height: 48px;
+      overflow: hidden;
+      position: relative;
+      background: var(--cat-wheel-bg);
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.12);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.35);
+      animation: slotShake 0.9s ease-out;
+    }
+
+    @keyframes slotShake {
+      0% { transform: translateX(0); }
+      15% { transform: translateX(-2px); }
+      30% { transform: translateX(2px); }
+      45% { transform: translateX(-2px); }
+      60% { transform: translateX(2px); }
+      75% { transform: translateX(-1px); }
+      100% { transform: translateX(0); }
+    }
+
+    .slot-reel {
+      display: flex;
+      flex-direction: column;
+      transform: translateY(0px);
+      transition: transform 1.4s cubic-bezier(0.12, 0.85, 0.25, 1);
+    }
+
+    .slot-item {
+      height: 48px;
+      line-height: 48px;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 10px;
+    }
+
+    .slot-item.is-winner {
+      position: relative;
+      background: linear-gradient(180deg, var(--cat-winner-color), var(--cat-winner-color-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      filter: drop-shadow(0 1px 0 rgba(255,255,255,0.5)) drop-shadow(0 2px 8px rgba(0,0,0,0.55));
+      animation: pulseWinner 0.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseWinner {
+      from { transform: scale(1) rotate(-0.5deg); }
+      to { transform: scale(1.04) rotate(0.5deg); }
+    }
+
+    /* IMAGEN DE PREGUNTA */
+    .question-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 155px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: #000;
+      display: none;
+    }
+    .question-img-wrap img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.45s ease;
+      animation: kenBurns 6s ease-in-out infinite alternate;
+      transform-origin: center center;
+    }
+    .question-img-wrap img#q-base-img {
+      opacity: 1;
+      z-index: 1;
+    }
+    .question-img-wrap img#q-ans-img {
+      opacity: 0;
+      z-index: 2;
+      animation-delay: 0.15s;
+    }
+
+    @keyframes kenBurns {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.07); }
+    }
+    .question-img-wrap .flash-overlay {
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .question-img-wrap.do-flash .flash-overlay {
+      animation: microFlash 0.45s ease forwards;
+    }
+
+    @keyframes microFlash {
+      0% { opacity: 0; }
+      50% { opacity: 0.50; }
+      100% { opacity: 0; }
+    }
+
+    .question-text {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 900;
+      line-height: 1.28;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+
+    .timer-container {
+      width: 100%;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .timer-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    /* MEJORA: Barra con degradado fluido Verde -> Amarillo -> Rojo */
+    .timer-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #00E676 0%, #FFD600 50%, #FF1744 100%);
+      border-radius: 999px;
+      transition: width 3s linear;
+    }
+
+    .timer-badge {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #dc2626;
+      margin-top: 4px;
+      display: inline-block;
+      animation: timerPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .quiz-options {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* MEJORA: Cascada de opciones (Staggered 150ms) */
+    .quiz-opt-btn {
+      width: 100%;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      color: #1e293b;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 800;
+      padding: 10px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(14px) scale(0.96);
+      animation: optCascade 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
+    }
+
+    .quiz-opt-btn:nth-child(1) { animation-delay: 0.05s; }
+    .quiz-opt-btn:nth-child(2) { animation-delay: 0.20s; }
+    .quiz-opt-btn:nth-child(3) { animation-delay: 0.35s; }
+
+    @keyframes optCascade {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .opt-letter {
+      background: #334155;
+      color: #fff;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .quiz-opt-btn.is-correct {
+      background: var(--correct) !important;
+      border-color: #059669 !important;
+      color: #064e3b !important;
+      transform: scale(1.03);
+      box-shadow: 0 0 20px rgba(0, 230, 118, 0.7);
+      animation: correctGlow 0.9s ease-in-out infinite alternate;
+    }
+    .quiz-opt-btn.is-correct .opt-letter {
+      background: #064e3b;
+      color: #fff;
+    }
+
+    @keyframes correctGlow {
+      from { box-shadow: 0 0 14px rgba(0, 230, 118, 0.55); transform: scale(1.03); }
+      to   { box-shadow: 0 0 28px rgba(0, 230, 118, 0.95); transform: scale(1.055); }
+    }
+
+    .quiz-opt-btn.is-wrong {
+      background: #fee2e2 !important;
+      border-color: #fca5a5 !important;
+      color: #991b1b !important;
+      opacity: 0.45;
+      transform: scale(0.96);
+      animation: wrongShake 0.35s ease-in-out;
+    }
+
+    @keyframes wrongShake {
+      0%, 100% { transform: scale(0.96) translateX(0); }
+      25% { transform: scale(0.96) translateX(-4px); }
+      75% { transform: scale(0.96) translateX(4px); }
+    }
+
+    /* MODO ¿QUÉ PREFIERES? (WYR) */
+    .wyr-stage-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      animation: popIn 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+      will-change: transform, opacity;
+    }
+
+    .wyr-header-card {
+      position: relative;
+      background: var(--card-white);
+      color: var(--text-dark);
+      border-radius: 18px;
+      padding: 14px 16px 16px 16px;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .wyr-header-title {
+      font-family: var(--font-display);
+      font-size: 1.18rem;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.25;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .wyr-top-timer-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+    }
+
+    .wyr-top-timer-fill {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #ff1e42, var(--gold), #00e676);
+      transition: width 5s linear;
+    }
+
+    .wyr-split-container {
+      position: relative;
+      width: 100%;
+      height: 460px;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.6);
+      border: 3px solid rgba(255,255,255,0.85);
+    }
+
+    .wyr-half {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      gap: 12px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.25, 1);
+      opacity: 0;
+      animation: optCascade 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+    }
+
+    .wyr-half.half-red {
+      background: linear-gradient(135deg, #ff1e42, #b80024);
+      border-bottom: 2px solid rgba(255,255,255,0.3);
+      animation-delay: 0.05s;
+    }
+
+    .wyr-half.half-blue {
+      background: linear-gradient(135deg, #0077ff, #0044b3);
+      border-top: 2px solid rgba(255,255,255,0.3);
+      animation-delay: 0.20s;
+    }
+
+    .wyr-half.is-loser {
+      filter: brightness(0.68) saturate(0.85);
+      opacity: 0.88;
+    }
+
+    .wyr-half.is-winner {
+      filter: brightness(1.08) saturate(1.1);
+      box-shadow: inset 0 0 25px rgba(255,255,255,0.4);
+    }
+
+    .wyr-half-img {
+      width: 125px;
+      height: 125px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 2.5px solid rgba(255,255,255,0.95);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+      flex-shrink: 0;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .wyr-half-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .wyr-half-text {
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      font-weight: 900;
+      line-height: 1.25;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    .wyr-percentage-badge {
+      display: none;
+      align-self: flex-start;
+      margin-top: 8px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      border: 2px solid var(--gold);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 4px 14px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .wyr-vs-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      background: #fff;
+      color: #000;
+      border-radius: 50%;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      border: 3px solid #111;
+      z-index: 10;
+    }
+
+    /* CONTROLES INFERIORES */
+    .thumb-controls {
+      position: absolute;
+      bottom: max(10px, env(safe-area-inset-bottom));
+      left: 10px;
+      right: 10px;
+      z-index: 100;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      background: rgba(13, 15, 23, 0.88);
+      backdrop-filter: blur(10px);
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .ctrl-btn {
+      background: #202538;
+      border: 1px solid #3b4362;
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 6px 2px;
+      border-radius: 9px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1;
+      height: 44px;
+    }
+    .ctrl-btn:active {
+      transform: scale(0.92);
+      background: var(--primary);
+      color: #000;
+    }
+    .ctrl-btn span.icon { font-size: 0.95rem; }
+
+    /* MODO POST IMAGEN */
+    .ratio-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .ratio-btn {
+      background: #10131e;
+      border: 1px solid #2c334d;
+      color: #cbd5e1;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 8px 4px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .ratio-btn.active {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(0, 240, 255, 0.1);
+    }
+
+    .post-preview-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      margin: 14px auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+      background: #000;
+      border: 1px solid #333a52;
+    }
+
+    .post-canvas-container {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+      background: #0d0f17;
+      overflow: hidden;
+    }
+
+    .post-canvas-container.ratio-1-1 { aspect-ratio: 1 / 1; }
+    .post-canvas-container.ratio-4-5 { aspect-ratio: 4 / 5; }
+
+    .post-bg-media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      transition: filter 0.1s ease;
+    }
+    .post-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+      z-index: 2;
+    }
+
+    .curiosity-card {
+      position: relative;
+      z-index: 10;
+      background: var(--card-white);
+      color: var(--text-dark);
+      border-radius: 20px;
+      padding: 20px 18px 18px 18px;
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      text-align: left;
+    }
+
+    .curiosity-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      min-height: 38px;
+    }
+
+    .curiosity-pill {
+      background: linear-gradient(135deg, var(--accent), #ff0055);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 900;
+      padding: 6px 14px;
+      border-radius: 999px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(255, 0, 127, 0.4);
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    .card-logo-container {
+      max-width: 65px;
+      max-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .card-logo-container img {
+      max-width: 100%;
+      max-height: 42px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    }
+
+    .curiosity-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 900;
+      line-height: 1.25;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+
+    .curiosity-img-box {
+      width: 100%;
+      height: 155px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: #0f172a;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+    }
+    .curiosity-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .curiosity-body-text {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      line-height: 1.45;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .curiosity-footer-tag {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px dashed #cbd5e1;
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      font-family: var(--font-display);
+      text-align: center;
+    }
+
+    /* MODALES */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-box {
+      background: var(--panel-bg);
+      border: 1px solid #33384c;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 18px;
+      padding: 16px;
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .modal-title { font-family: var(--font-display); font-size: 1rem; font-weight: 800; }
+    .modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .cat-chip {
+      background: #111420;
+      border: 1px solid #282f48;
+      color: #cbd5e1;
+      padding: 10px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+    }
+    .cat-chip:active, .cat-chip.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    .projects-list, .messages-list {
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 2px;
+    }
+    .project-item, .msg-item {
+      background: #0f111a;
+      border: 1px solid #262c3e;
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .project-info h4, .msg-info h4 { font-size: 0.8rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .project-info span, .msg-info span { font-size: 0.65rem; color: var(--text-muted); }
+    .project-type-tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .tag-quiz { background: rgba(0, 240, 255, 0.15); color: var(--primary); border: 1px solid var(--primary); }
+    .tag-wyr { background: rgba(255, 30, 66, 0.15); color: #ff8095; border: 1px solid #ff1e42; }
+
+    .project-actions, .msg-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+    .btn-proj-load { background: var(--primary); color: #000; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 700; font-size: 0.72rem; cursor: pointer; }
+    .btn-proj-del { background: rgba(255, 23, 68, 0.2); color: var(--wrong); border: 1px solid var(--wrong); padding: 6px 8px; border-radius: 6px; font-weight: 700; font-size: 0.72rem; cursor: pointer; }
+    .btn-preview-audio { background: #262e45; color: #cbd5e1; border: 1px solid #3d4766; padding: 6px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .color-picker-row input[type="color"] {
+      width: 44px;
+      height: 38px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+    }
+    .color-picker-row input[type="text"] {
+      margin-bottom: 0;
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SELECTOR DE 3 MODOS -->
+  <div class="mode-switch-wrapper">
+    <div class="mode-switcher">
+      <button class="mode-btn active" id="btn-mode-shorts" onclick="switchMode('shorts')">
+        🎬 Quiz 9:16
+      </button>
+      <button class="mode-btn" id="btn-mode-wyr" onclick="switchMode('wyr')">
+        ⚖️ ¿Qué Prefieres?
+      </button>
+      <button class="mode-btn" id="btn-mode-image" onclick="switchMode('image')">
+        🖼️ Post Imagen
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODO 1: PANEL DE CONTROL DE QUIZ (SHORTS / REELS)
+       ======================================================== -->
+  <div id="setup-screen" class="setup-container">
+    <div class="header-bar">
+      <div class="logo">⚡ QUIZ MAKER 9:16</div>
+      <div class="top-actions">
+        <button type="button" class="btn-sm btn-lib" onclick="openLibraryModal()">📂 Biblioteca</button>
+        <button type="button" class="btn-sm btn-save" onclick="saveCurrentQuizProject()">💾 Guardar</button>
+      </div>
+    </div>
+
+    <!-- Fondo de Video o GIF Global -->
+    <div class="card-setup">
+      <div class="card-setup-title">🎬 Video o GIF de Fondo</div>
+      <div class="file-input-wrapper">
+        <label for="bg-video-input" class="file-custom-btn" id="lbl-bg-video">Cargar Video MP4 o GIF de fondo</label>
+        <input type="file" id="bg-video-input" accept="video/mp4,video/*,image/gif,image/*" onchange="handleFileSelected(event, 'lbl-bg-video', 'bgVideo')" />
+      </div>
+    </div>
+
+    <!-- SFX Cuenta Regresiva Global (Permanente) -->
+    <div class="card-setup">
+      <div class="card-setup-title">⏱️ SFX Cuenta Regresiva (Permanente)</div>
+      <div class="file-input-wrapper">
+        <label for="timer-sfx-input" class="file-custom-btn sfx-btn" id="lbl-timer-sfx">🎵 Cargar SFX Cuenta Regresiva (Vol 70%)</label>
+        <input type="file" id="timer-sfx-input" accept="audio/*" onchange="handleQuizPersistentAudioUpload(event, 'quiz_timer_sfx', 'lbl-timer-sfx', 'timerSfx')" />
+      </div>
+    </div>
+
+    <!-- STICKERS FLOTANTES GANCHO QUIZ (Permanente) -->
+    <div class="card-setup" style="border-left: 4px solid var(--accent);">
+      <div class="card-setup-title">✨ Stickers Pop de Bienvenida Quiz (Gancho 3s)</div>
+      <p style="font-size:0.7rem; color:var(--text-muted); margin-bottom:8px; line-height: 1.3;">
+        Sube 4 stickers PNG exclusivos para Quiz y su sonido Pop. Aparecen en secuencia y se guardan para siempre.
+      </p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
+        <div class="file-input-wrapper">
+          <label for="sticker-1-input" class="file-custom-btn" id="lbl-sticker-1">1. Superior Izq</label>
+          <input type="file" id="sticker-1-input" accept="image/png,image/webp" onchange="handleStickerUpload(event, 0)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="sticker-2-input" class="file-custom-btn" id="lbl-sticker-2">2. Superior Der</label>
+          <input type="file" id="sticker-2-input" accept="image/png,image/webp" onchange="handleStickerUpload(event, 1)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="sticker-3-input" class="file-custom-btn" id="lbl-sticker-3">3. Inferior Izq</label>
+          <input type="file" id="sticker-3-input" accept="image/png,image/webp" onchange="handleStickerUpload(event, 2)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="sticker-4-input" class="file-custom-btn" id="lbl-sticker-4">4. Inferior Der</label>
+          <input type="file" id="sticker-4-input" accept="image/png,image/webp" onchange="handleStickerUpload(event, 3)" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="sticker-pop-sfx-input" class="file-custom-btn sfx-btn" id="lbl-sticker-pop-sfx">🎵 Sonido Pop para Quiz</label>
+        <input type="file" id="sticker-pop-sfx-input" accept="audio/*" onchange="handleStickerPopSfxUpload(event)" />
+      </div>
+    </div>
+
+    <!-- CARPETA PERMANENTE DE VOCES DE CATEGORÍA -->
+    <div class="card-setup" style="border-left: 4px solid var(--primary);">
+      <div class="card-setup-title">📁 Banco de Voces de Categorías (Permanente)</div>
+      <label>1. Selecciona la Categoría a vincular audio</label>
+      <select id="bank-cat-select" onchange="updateBankCatUI()"></select>
+
+      <div class="file-input-wrapper">
+        <label for="bank-cat-audio-input" class="file-custom-btn" id="lbl-bank-cat-audio">Subir Audio para categoría seleccionada</label>
+        <input type="file" id="bank-cat-audio-input" accept="audio/*" onchange="handleBankCategoryAudioUpload(event)" />
+      </div>
+      <div id="bank-counter-status" style="font-size:0.68rem; color:var(--gold); font-weight:700; margin-top:2px;"></div>
+    </div>
+
+    <!-- Intro & Categoría del Quiz -->
+    <div class="card-setup">
+      <div class="card-setup-title">👋 Pantalla 1: Intro y Categoría</div>
+      <label>1. Pregunta de Bienvenida / Gancho (Permanente)</label>
+      <textarea id="intro-text" rows="2" placeholder="Ej: ¿Cuánto sabes de Cultura General?" oninput="saveQuizPersistentTexts()"></textarea>
+      
+      <div class="file-input-wrapper">
+        <label for="intro-audio-input" class="file-custom-btn" id="lbl-intro-audio">Cargar Audio Bienvenida (Permanente)</label>
+        <input type="file" id="intro-audio-input" accept="audio/*" onchange="handleQuizPersistentAudioUpload(event, 'quiz_intro_audio', 'lbl-intro-audio', 'introAudio')" />
+      </div>
+
+      <label style="margin-top: 8px;">2. Selección de Categoría para este Quiz</label>
+      <button type="button" class="btn-select-category" onclick="openCategoryModal()">
+        <span id="txt-selected-cat">🏷️ Categoría: Países del mundo</span>
+        <span style="font-size: 0.75rem; color: var(--primary);">Cambiar ▾</span>
+      </button>
+
+      <label>Color de la Categoría Ganadora (Degradado)</label>
+      <div class="color-picker-row">
+        <input type="color" id="cat-color-picker" value="#FFC400" onchange="syncCatWinnerColor(this.value)" />
+        <input type="text" id="cat-color-hex" value="#FFC400" placeholder="#FFC400" oninput="syncCatWinnerColor(this.value)" />
+      </div>
+      <label style="margin-top: 6px;">Color 2 (tono oscuro del degradado, opcional)</label>
+      <div class="color-picker-row">
+        <input type="color" id="cat-color-picker-2" value="#B8860B" onchange="syncCatWinnerColor2(this.value)" />
+        <input type="text" id="cat-color-hex-2" value="#B8860B" placeholder="#B8860B" oninput="syncCatWinnerColor2(this.value)" />
+      </div>
+
+      <label style="margin-top: 6px;">Fondo de la Ruleta de Categoría</label>
+      <div class="color-picker-row">
+        <input type="color" id="cat-bg-color-picker" value="#1E2230" onchange="syncCatWheelBgColor(this.value)" />
+        <input type="text" id="cat-bg-color-hex" value="#1E2230" placeholder="#1E2230" oninput="syncCatWheelBgColor(this.value)" />
+      </div>
+
+      <label style="margin-top: 4px;">Audio Frase Base (Ej: "Categoría de hoy:") (Permanente)</label>
+      <div class="file-input-wrapper">
+        <label for="cat-prefix-audio-input" class="file-custom-btn sfx-btn" id="lbl-cat-prefix-audio">Cargar Audio "Categoría de hoy..." (Permanente)</label>
+        <input type="file" id="cat-prefix-audio-input" accept="audio/*" onchange="handleQuizPersistentAudioUpload(event, 'quiz_cat_prefix_audio', 'lbl-cat-prefix-audio', 'catPrefixAudio')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="cat-sfx-input" class="file-custom-btn sfx-btn" id="lbl-cat-sfx">🎵 Cargar SFX Ruleta Categoría (Permanente)</label>
+        <input type="file" id="cat-sfx-input" accept="audio/*" onchange="handleQuizPersistentAudioUpload(event, 'quiz_cat_sfx', 'lbl-cat-sfx', 'catSfx')" />
+      </div>
+    </div>
+
+    <!-- Preguntas 1, 2, 3 -->
+    <div class="card-setup">
+      <div class="card-setup-title">❓ Pregunta 1</div>
+      <label>Texto de la Pregunta</label>
+      <textarea id="q1-text" rows="2" placeholder="¿Cuál es la capital de Australia?"></textarea>
+
+      <label>Opciones</label>
+      <div class="options-grid">
+        <div class="opt-row">
+          <input type="radio" name="q1-correct" value="A" checked />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">A</span>
+          <input type="text" id="q1-optA" placeholder="Opción A" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q1-correct" value="B" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">B</span>
+          <input type="text" id="q1-optB" placeholder="Opción B" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q1-correct" value="C" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">C</span>
+          <input type="text" id="q1-optC" placeholder="Opción C" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q1-img-input" class="file-custom-btn" id="lbl-q1-img">1. Imagen Inicial de Pregunta</label>
+        <input type="file" id="q1-img-input" accept="image/*" onchange="handleQuizImageSelected(event, 'lbl-q1-img', 'q1Img')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q1-ans-img-input" class="file-custom-btn" id="lbl-q1-ans-img" style="border-color: #38bdf8;">2. Imagen de Respuesta Correcta (Transición)</label>
+        <input type="file" id="q1-ans-img-input" accept="image/*" onchange="handleQuizImageSelected(event, 'lbl-q1-ans-img', 'q1AnsImg')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q1-audio-input" class="file-custom-btn" id="lbl-q1-audio">Cargar Audio Pregunta 1</label>
+        <input type="file" id="q1-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q1-audio', 'q1Audio')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q1-ans-audio-input" class="file-custom-btn" id="lbl-q1-ans-audio">🔊 Cargar Audio Respuesta Correcta P1</label>
+        <input type="file" id="q1-ans-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q1-ans-audio', 'q1AnsAudio')" />
+      </div>
+    </div>
+
+    <div class="card-setup">
+      <div class="card-setup-title">❓ Pregunta 2</div>
+      <label>Texto de la Pregunta</label>
+      <textarea id="q2-text" rows="2" placeholder="¿En qué continente se encuentra el desierto del Sahara?"></textarea>
+
+      <label>Opciones</label>
+      <div class="options-grid">
+        <div class="opt-row">
+          <input type="radio" name="q2-correct" value="A" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">A</span>
+          <input type="text" id="q2-optA" placeholder="Opción A" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q2-correct" value="B" checked />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">B</span>
+          <input type="text" id="q2-optB" placeholder="Opción B" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q2-correct" value="C" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">C</span>
+          <input type="text" id="q2-optC" placeholder="Opción C" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q2-img-input" class="file-custom-btn" id="lbl-q2-img">1. Imagen Inicial de Pregunta</label>
+        <input type="file" id="q2-img-input" accept="image/*" onchange="handleQuizImageSelected(event, 'lbl-q2-img', 'q2Img')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q2-ans-img-input" class="file-custom-btn" id="lbl-q2-ans-img" style="border-color: #38bdf8;">2. Imagen de Respuesta Correcta (Transición)</label>
+        <input type="file" id="q2-ans-img-input" accept="image/*" onchange="handleQuizImageSelected(event, 'lbl-q2-ans-img', 'q2AnsImg')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q2-audio-input" class="file-custom-btn" id="lbl-q2-audio">Cargar Audio Pregunta 2</label>
+        <input type="file" id="q2-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q2-audio', 'q2Audio')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q2-ans-audio-input" class="file-custom-btn" id="lbl-q2-ans-audio">🔊 Cargar Audio Respuesta Correcta P2</label>
+        <input type="file" id="q2-ans-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q2-ans-audio', 'q2AnsAudio')" />
+      </div>
+    </div>
+
+    <div class="card-setup">
+      <div class="card-setup-title">❓ Pregunta 3</div>
+      <label>Texto de la Pregunta</label>
+      <textarea id="q3-text" rows="2" placeholder="¿Cuál es el río más largo de América del Sur?"></textarea>
+
+      <label>Opciones</label>
+      <div class="options-grid">
+        <div class="opt-row">
+          <input type="radio" name="q3-correct" value="A" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">A</span>
+          <input type="text" id="q3-optA" placeholder="Opción A" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q3-correct" value="B" />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">B</span>
+          <input type="text" id="q3-optB" placeholder="Opción B" />
+        </div>
+        <div class="opt-row">
+          <input type="radio" name="q3-correct" value="C" checked />
+          <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">C</span>
+          <input type="text" id="q3-optC" placeholder="Opción C" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q3-img-input" class="file-custom-btn" id="lbl-q3-img">1. Imagen Inicial de Pregunta</label>
+        <input type="file" id="q3-img-input" accept="image/*" onchange="handleQuizImageSelected(event, 'lbl-q3-img', 'q3Img')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q3-ans-img-input" class="file-custom-btn" id="lbl-q3-ans-img" style="border-color: #38bdf8;">2. Imagen de Respuesta Correcta (Transición)</label>
+        <input type="file" id="q3-ans-img-input" accept="image/*" onchange="handleQuizImageSelected(event, 'lbl-q3-ans-img', 'q3AnsImg')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q3-audio-input" class="file-custom-btn" id="lbl-q3-audio">Cargar Audio Pregunta 3</label>
+        <input type="file" id="q3-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q3-audio', 'q3Audio')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q3-ans-audio-input" class="file-custom-btn" id="lbl-q3-ans-audio">🔊 Cargar Audio Respuesta Correcta P3</label>
+        <input type="file" id="q3-ans-audio-input" accept="audio/*" onchange="handleFileSelected(event, 'lbl-q3-ans-audio', 'q3AnsAudio')" />
+      </div>
+    </div>
+
+    <!-- Outro -->
+    <div class="card-setup">
+      <div class="card-setup-title">🏁 Pantalla Final: Outro</div>
+      <label>Texto de Cierre (Permanente)</label>
+      <textarea id="outro-text" rows="2" placeholder="¿Cuántas acertaste? Escríbelo en los comentarios. ¡Nos vemos luego!" oninput="saveQuizPersistentTexts()"></textarea>
+
+      <div class="file-input-wrapper">
+        <label for="outro-audio-input" class="file-custom-btn" id="lbl-outro-audio">Cargar Audio Outro (Permanente)</label>
+        <input type="file" id="outro-audio-input" accept="audio/*" onchange="handleQuizPersistentAudioUpload(event, 'quiz_outro_audio', 'lbl-outro-audio', 'outroAudio')" />
+      </div>
+    </div>
+
+    <button type="button" class="btn-record-mode" onclick="enterRecordMode('shorts')">
+      🎥 Entrar en Modo Grabación (Quiz)
+    </button>
+  </div>
+
+  <!-- ========================================================
+       MODO 2: PANEL DE CONTROL "¿QUÉ PREFIERES?" (9:16)
+       ======================================================== -->
+  <div id="wyr-setup-screen" class="setup-container" style="display: none;">
+    <div class="header-bar">
+      <div class="logo" style="background: linear-gradient(90deg, #ff1e42, #0077ff); -webkit-background-clip: text;">
+        ⚖️ ¿QUÉ PREFIERES? MAKER 9:16
+      </div>
+      <div class="top-actions">
+        <button type="button" class="btn-sm btn-lib" onclick="openLibraryModal()">📂 Biblioteca</button>
+        <button type="button" class="btn-sm btn-save-wyr" onclick="saveCurrentWyrProject()">💾 Guardar</button>
+      </div>
+    </div>
+
+    <!-- Video o GIF Fondo y SFX Permanente WYR -->
+    <div class="card-setup">
+      <div class="card-setup-title">🎬 Video o GIF de Fondo & SFX Conteo</div>
+      <label>Fondo en Bucle (Video MP4 o GIF)</label>
+      <div class="file-input-wrapper">
+        <label for="wyr-bg-video-input" class="file-custom-btn" id="lbl-wyr-bg-video">Cargar Video MP4 o GIF de fondo</label>
+        <input type="file" id="wyr-bg-video-input" accept="video/mp4,video/*,image/gif,image/*" onchange="handleWyrBgVideoSelected(event)" />
+      </div>
+
+      <label style="margin-top: 6px;">⏱️ SFX Conteo 5 Segundos (Permanente)</label>
+      <div class="file-input-wrapper">
+        <label for="wyr-timer-sfx-input" class="file-custom-btn sfx-btn" id="lbl-wyr-timer-sfx">⏱️ Cargar SFX 5 Segundos (Guardado permanente)</label>
+        <input type="file" id="wyr-timer-sfx-input" accept="audio/*" onchange="handleWyrTimerSfxUpload(event)" />
+      </div>
+    </div>
+
+    <!-- MEJORA: STICKERS FLOTANTES EXCLUSIVOS PARA ¿QUÉ PREFIERES? -->
+    <div class="card-setup" style="border-left: 4px solid var(--accent);">
+      <div class="card-setup-title">✨ Stickers Pop de Bienvenida (¿Qué Prefieres?)</div>
+      <p style="font-size:0.7rem; color:var(--text-muted); margin-bottom:8px; line-height: 1.3;">
+        Sube tus 4 stickers PNG exclusivos para ¿Qué prefieres? y su sonido Pop. Se guardan permanentemente de forma independiente.
+      </p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
+        <div class="file-input-wrapper">
+          <label for="wyr-sticker-1-input" class="file-custom-btn" id="lbl-wyr-sticker-1">1. Superior Izq</label>
+          <input type="file" id="wyr-sticker-1-input" accept="image/png,image/webp" onchange="handleWyrStickerUpload(event, 0)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="wyr-sticker-2-input" class="file-custom-btn" id="lbl-wyr-sticker-2">2. Superior Der</label>
+          <input type="file" id="wyr-sticker-2-input" accept="image/png,image/webp" onchange="handleWyrStickerUpload(event, 1)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="wyr-sticker-3-input" class="file-custom-btn" id="lbl-wyr-sticker-3">3. Inferior Izq</label>
+          <input type="file" id="wyr-sticker-3-input" accept="image/png,image/webp" onchange="handleWyrStickerUpload(event, 2)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="wyr-sticker-4-input" class="file-custom-btn" id="lbl-wyr-sticker-4">4. Inferior Der</label>
+          <input type="file" id="wyr-sticker-4-input" accept="image/png,image/webp" onchange="handleWyrStickerUpload(event, 3)" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="wyr-sticker-pop-sfx-input" class="file-custom-btn sfx-btn" id="lbl-wyr-sticker-pop-sfx">🎵 Sonido Pop para ¿Qué Prefieres?</label>
+        <input type="file" id="wyr-sticker-pop-sfx-input" accept="audio/*" onchange="handleWyrStickerPopSfxUpload(event)" />
+      </div>
+    </div>
+
+    <!-- BANCO PERMANENTE DE MENSAJES -->
+    <div class="card-setup" style="border-left: 4px solid var(--gold);">
+      <div class="card-setup-title">📁 Banco de Mensajes (Permanente)</div>
+      <label>1. Tipo de Mensaje</label>
+      <select id="bank-msg-type">
+        <option value="intro">👋 Saludo / Introducción</option>
+        <option value="question">❓ Pregunta ("¿Qué prefieres?", "¿Con cuál te quedas?")</option>
+        <option value="outro">🏁 Despedida / Outro</option>
+      </select>
+
+      <label>2. Texto del Mensaje</label>
+      <textarea id="bank-msg-text" rows="2" placeholder="Ej: ¿Qué tan difíciles son tus elecciones? ¡Ponte a prueba!"></textarea>
+
+      <label>3. Audio del Mensaje</label>
+      <div class="file-input-wrapper">
+        <label for="bank-msg-audio-input" class="file-custom-btn" id="lbl-bank-msg-audio">Subir Audio para este mensaje</label>
+        <input type="file" id="bank-msg-audio-input" accept="audio/*" onchange="handleBankMessageAudioSelected(event)" />
+      </div>
+
+      <button type="button" class="btn-sm btn-save" style="width:100%; padding:10px; margin-top:4px;" onclick="saveMessageToBank()">
+        💾 Guardar Mensaje en la Biblioteca
+      </button>
+      <div id="bank-msg-counter" style="font-size:0.68rem; color:var(--gold); font-weight:700; margin-top:8px;"></div>
+    </div>
+
+    <!-- Saludo / Intro -->
+    <div class="card-setup">
+      <div class="card-setup-title">👋 1. Saludo / Bienvenida</div>
+      <label>Seleccionar Mensaje de Saludo</label>
+      <button type="button" class="btn-select-message" id="btn-sel-wyr-intro" onclick="openMessagePickerModal('intro', 'wyr-intro')">
+        <span id="txt-wyr-intro">👉 Clic para seleccionar un Saludo guardado</span>
+        <span style="font-size: 0.75rem; color: var(--primary);">Elegir ▾</span>
+      </button>
+    </div>
+
+    <!-- Elecciones 1, 2, 3 -->
+    <div class="card-setup">
+      <div class="card-setup-title">🔴🔵 Elección 1</div>
+      <label>Pregunta / Gancho Superior</label>
+      <button type="button" class="btn-select-message" id="btn-sel-wyr-c1" onclick="openMessagePickerModal('question', 'wyr-c1')">
+        <span id="txt-wyr-c1">👉 Seleccionar Pregunta (Ej: "¿Qué prefieres?")</span>
+        <span style="font-size: 0.75rem; color: var(--primary);">Elegir ▾</span>
+      </button>
+
+      <div class="wyr-opt-group red-side">
+        <label style="color: #ff8095;">Opción A (Rojo - Arriba)</label>
+        <input type="text" id="wyr-c1-optA-text" placeholder="Ej: Viajar 100 años al pasado" value="Viajar 100 años al pasado" />
+        <div class="file-input-wrapper">
+          <label for="wyr-c1-optA-img-input" class="file-custom-btn" id="lbl-wyr-c1-optA-img">Subir Imagen Opción A</label>
+          <input type="file" id="wyr-c1-optA-img-input" accept="image/*" onchange="handleWyrChoiceImgSelected(event, 'lbl-wyr-c1-optA-img', 'c1OptAImg')" />
+        </div>
+        <label style="margin-top:4px;">Porcentaje Opción A</label>
+        <input type="text" id="wyr-c1-optA-pct" value="62%" placeholder="Ej: 62%" />
+      </div>
+
+      <div class="wyr-opt-group blue-side">
+        <label style="color: #70b4ff;">Opción B (Azul - Abajo)</label>
+        <input type="text" id="wyr-c1-optB-text" placeholder="Ej: Viajar 100 años al futuro" value="Viajar 100 años al futuro" />
+        <div class="file-input-wrapper">
+          <label for="wyr-c1-optB-img-input" class="file-custom-btn" id="lbl-wyr-c1-optB-img">Subir Imagen Opción B</label>
+          <input type="file" id="wyr-c1-optB-img-input" accept="image/*" onchange="handleWyrChoiceImgSelected(event, 'lbl-wyr-c1-optB-img', 'c1OptBImg')" />
+        </div>
+        <label style="margin-top:4px;">Porcentaje Opción B</label>
+        <input type="text" id="wyr-c1-optB-pct" value="38%" placeholder="Ej: 38%" />
+      </div>
+    </div>
+
+    <div class="card-setup">
+      <div class="card-setup-title">🔴🔵 Elección 2</div>
+      <label>Pregunta / Gancho Superior</label>
+      <button type="button" class="btn-select-message" id="btn-sel-wyr-c2" onclick="openMessagePickerModal('question', 'wyr-c2')">
+        <span id="txt-wyr-c2">👉 Seleccionar Pregunta (Ej: "¿Con cuál te quedas?")</span>
+        <span style="font-size: 0.75rem; color: var(--primary);">Elegir ▾</span>
+      </button>
+
+      <div class="wyr-opt-group red-side">
+        <label style="color: #ff8095;">Opción A (Rojo - Arriba)</label>
+        <input type="text" id="wyr-c2-optA-text" placeholder="Ej: Ser invisible cuando quieras" value="Ser invisible cuando quieras" />
+        <div class="file-input-wrapper">
+          <label for="wyr-c2-optA-img-input" class="file-custom-btn" id="lbl-wyr-c2-optA-img">Subir Imagen Opción A</label>
+          <input type="file" id="wyr-c2-optA-img-input" accept="image/*" onchange="handleWyrChoiceImgSelected(event, 'lbl-wyr-c2-optA-img', 'c2OptAImg')" />
+        </div>
+        <label style="margin-top:4px;">Porcentaje Opción A</label>
+        <input type="text" id="wyr-c2-optA-pct" value="74%" placeholder="Ej: 74%" />
+      </div>
+
+      <div class="wyr-opt-group blue-side">
+        <label style="color: #70b4ff;">Opción B (Azul - Abajo)</label>
+        <input type="text" id="wyr-c2-optB-text" placeholder="Ej: Poder volar a cualquier velocidad" value="Poder volar a cualquier velocidad" />
+        <div class="file-input-wrapper">
+          <label for="wyr-c2-optB-img-input" class="file-custom-btn" id="lbl-wyr-c2-optB-img">Subir Imagen Opción B</label>
+          <input type="file" id="wyr-c2-optB-img-input" accept="image/*" onchange="handleWyrChoiceImgSelected(event, 'lbl-wyr-c2-optB-img', 'c2OptBImg')" />
+        </div>
+        <label style="margin-top:4px;">Porcentaje Opción B</label>
+        <input type="text" id="wyr-c2-optB-pct" value="26%" placeholder="Ej: 26%" />
+      </div>
+    </div>
+
+    <div class="card-setup">
+      <div class="card-setup-title">🔴🔵 Elección 3</div>
+      <label>Pregunta / Gancho Superior</label>
+      <button type="button" class="btn-select-message" id="btn-sel-wyr-c3" onclick="openMessagePickerModal('question', 'wyr-c3')">
+        <span id="txt-wyr-c3">👉 Seleccionar Pregunta (Ej: "¿Cuál eliges?")</span>
+        <span style="font-size: 0.75rem; color: var(--primary);">Elegir ▾</span>
+      </button>
+
+      <div class="wyr-opt-group red-side">
+        <label style="color: #ff8095;">Opción A (Rojo - Arriba)</label>
+        <input type="text" id="wyr-c3-optA-text" placeholder="Ej: Saber todos los idiomas del planeta" value="Saber todos los idiomas del planeta" />
+        <div class="file-input-wrapper">
+          <label for="wyr-c3-optA-img-input" class="file-custom-btn" id="lbl-wyr-c3-optA-img">Subir Imagen Opción A</label>
+          <input type="file" id="wyr-c3-optA-img-input" accept="image/*" onchange="handleWyrChoiceImgSelected(event, 'lbl-wyr-c3-optA-img', 'c3OptAImg')" />
+        </div>
+        <label style="margin-top:4px;">Porcentaje Opción A</label>
+        <input type="text" id="wyr-c3-optA-pct" value="81%" placeholder="Ej: 81%" />
+      </div>
+
+      <div class="wyr-opt-group blue-side">
+        <label style="color: #70b4ff;">Opción B (Azul - Abajo)</label>
+        <input type="text" id="wyr-c3-optB-text" placeholder="Ej: Tocar todos los instrumentos musicales" value="Tocar todos los instrumentos musicales" />
+        <div class="file-input-wrapper">
+          <label for="wyr-c3-optB-img-input" class="file-custom-btn" id="lbl-wyr-c3-optB-img">Subir Imagen Opción B</label>
+          <input type="file" id="wyr-c3-optB-img-input" accept="image/*" onchange="handleWyrChoiceImgSelected(event, 'lbl-wyr-c3-optB-img', 'c3OptBImg')" />
+        </div>
+        <label style="margin-top:4px;">Porcentaje Opción B</label>
+        <input type="text" id="wyr-c3-optB-pct" value="19%" placeholder="Ej: 19%" />
+      </div>
+    </div>
+
+    <!-- Despedida / Outro WYR -->
+    <div class="card-setup">
+      <div class="card-setup-title">🏁 Despedida / Outro</div>
+      <label>Seleccionar Mensaje de Despedida</label>
+      <button type="button" class="btn-select-message" id="btn-sel-wyr-outro" onclick="openMessagePickerModal('outro', 'wyr-outro')">
+        <span id="txt-wyr-outro">👉 Clic para seleccionar una Despedida guardada</span>
+        <span style="font-size: 0.75rem; color: var(--primary);">Elegir ▾</span>
+      </button>
+    </div>
+
+    <button type="button" class="btn-record-mode wyr-theme" onclick="enterRecordMode('wyr')">
+      🎥 Entrar en Modo Grabación (¿Qué prefieres?)
+    </button>
+  </div>
+
+  <!-- ========================================================
+       MODO 3: PANEL DE CONTROL DE IMAGEN (FB & YT COMMUNITY)
+       ======================================================== -->
+  <div id="image-setup-screen" class="setup-container" style="display: none;">
+    <div class="header-bar">
+      <div class="logo" style="background: linear-gradient(90deg, #00E676, var(--primary)); -webkit-background-clip: text;">
+        🖼️ POST MAKER PRO
+      </div>
+      <div class="top-actions">
+        <button type="button" class="btn-sm btn-save" onclick="downloadCuriosityPost()">📥 Exportar PNG</button>
+      </div>
+    </div>
+
+    <div class="card-setup">
+      <div class="card-setup-title">📐 Formato de Publicación</div>
+      <div class="ratio-selector">
+        <button type="button" class="ratio-btn active" id="btn-ratio-1-1" onclick="setImageRatio('1:1')">1:1 Cuadrado (YT/FB)</button>
+        <button type="button" class="ratio-btn" id="btn-ratio-4-5" onclick="setImageRatio('4:5')">4:5 Vertical (Feed FB)</button>
+      </div>
+    </div>
+
+    <div class="card-setup" style="border-left: 4px solid var(--gold);">
+      <div class="card-setup-title">👑 Logo de tu Marca (Permanente)</div>
+      <label>Logo transparente</label>
+      <div class="file-input-wrapper">
+        <label for="post-logo-input" class="file-custom-btn" id="lbl-post-logo">Subir Logo PNG Transparente</label>
+        <input type="file" id="post-logo-input" accept="image/png,image/webp" onchange="handleBrandLogoUpload(event)" />
+      </div>
+    </div>
+
+    <div class="card-setup">
+      <div class="card-setup-title">🌌 1. Fondo del Post</div>
+      <label>Cargar Imagen de Fondo o Video MP4</label>
+      <div class="file-input-wrapper">
+        <label for="post-bg-input" class="file-custom-btn" id="lbl-post-bg">Subir Imagen JPG/PNG o Video MP4</label>
+        <input type="file" id="post-bg-input" accept="image/*,video/mp4" onchange="handlePostBgUpload(event)" />
+      </div>
+
+      <div class="slider-group" style="margin-top: 8px;">
+        <div class="slider-header">
+          <label style="margin-bottom:0;">Brillo del Fondo</label>
+          <span class="slider-val" id="val-bg-brightness">100%</span>
+        </div>
+        <input type="range" id="range-bg-brightness" min="15" max="150" value="100" oninput="updatePostPreview(); triggerPostAutosave();" />
+      </div>
+    </div>
+
+    <div class="card-setup" style="border-left: 4px solid var(--primary);">
+      <div class="card-setup-title">🎨 2. Tamaño de Letra y Espaciado</div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <label style="margin-bottom:0;">Tamaño del Título</label>
+          <span class="slider-val" id="val-title-size">18px</span>
+        </div>
+        <input type="range" id="range-title-size" min="12" max="28" value="18" oninput="updatePostPreview(); triggerPostAutosave();" />
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <label style="margin-bottom:0;">Tamaño de la Explicación (Cuerpo)</label>
+          <span class="slider-val" id="val-body-size">13.5px</span>
+        </div>
+        <input type="range" id="range-body-size" min="10" max="20" value="13.5" step="0.5" oninput="updatePostPreview(); triggerPostAutosave();" />
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <label style="margin-bottom:0;">Separación entre Palabras</label>
+          <span class="slider-val" id="val-word-spacing">0px</span>
+        </div>
+        <input type="range" id="range-word-spacing" min="0" max="14" value="0" step="0.5" oninput="updatePostPreview(); triggerPostAutosave();" />
+      </div>
+    </div>
+
+    <div class="card-setup">
+      <div class="card-setup-title">💡 3. Datos de la Curiosidad</div>
+      <label>Insignia / Gancho Superior</label>
+      <input type="text" id="post-badge-text" value="💡 ¿SABÍAS QUE...?" oninput="updatePostPreview(); triggerPostAutosave();" />
+
+      <label>Título de la Curiosidad</label>
+      <textarea id="post-title-text" rows="2" oninput="updatePostPreview(); triggerPostAutosave();">Las nutrias marinas se toman de las manos cuando duermen para no separarse flotando</textarea>
+
+      <label>Imagen de Ilustración</label>
+      <div class="file-input-wrapper">
+        <label for="post-illust-input" class="file-custom-btn" id="lbl-post-illust">Subir Imagen Ilustrativa</label>
+        <input type="file" id="post-illust-input" accept="image/*" onchange="handlePostIllustrationUpload(event)" />
+      </div>
+
+      <label style="margin-top: 6px;">Explicación de la Curiosidad</label>
+      <textarea id="post-body-text" rows="4" oninput="updatePostPreview(); triggerPostAutosave();">Tienen una adaptación especial donde se sujetan de las patas delanteras para evitar que las corrientes oceánicas las alejen de su grupo familiar.</textarea>
+
+      <label>Pie de Foto / Llamado a la Acción</label>
+      <input type="text" id="post-footer-text" value="👉 SÍGUEME PARA MÁS CURIOSIDADES DIARIAS" oninput="updatePostPreview(); triggerPostAutosave();" />
+    </div>
+
+    <!-- Vista Previa en Vivo -->
+    <div class="card-setup-title" style="margin-top: 18px;">👁️ Vista Previa en Vivo</div>
+    <div class="post-preview-wrapper">
+      <div class="post-canvas-container ratio-1-1" id="post-render-node">
+        <img id="post-bg-img" class="post-bg-media" src="" style="display: none;" />
+        <video id="post-bg-video" class="post-bg-media" autoplay loop muted playsinline style="display: none;"></video>
+        <div class="post-bg-overlay"></div>
+
+        <div class="curiosity-card">
+          <div class="curiosity-top-row">
+            <div class="curiosity-pill" id="prev-badge">💡 ¿SABÍAS QUE...?</div>
+            <div class="card-logo-container">
+              <img id="prev-brand-logo" alt="Logo" style="display: none;" />
+            </div>
+          </div>
+
+          <div class="curiosity-title" id="prev-title">
+            Las nutrias marinas se toman de las manos cuando duermen para no separarse flotando
+          </div>
+
+          <div class="curiosity-img-box" id="prev-img-wrap">
+            <img id="prev-illustration" src="https://images.unsplash.com/photo-1579613832125-5d34a13ffe0a?w=800&auto=format&fit=crop&q=80" alt="Curiosidad" />
+          </div>
+
+          <div class="curiosity-body-text" id="prev-body">
+            Tienen una adaptación especial donde se sujetan de las patas delanteras para evitar que las corrientes oceánicas las alejen de su grupo familiar.
+          </div>
+
+          <div class="curiosity-footer-tag">
+            <span id="prev-footer">👉 SÍGUEME PARA MÁS CURIOSIDADES DIARIAS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn-record-mode btn-export-image" onclick="downloadCuriosityPost()">
+      📥 Guardar Imagen en Alta Calidad (PNG)
+    </button>
+  </div>
+
+  <!-- ========================================================
+       MODO GRABACIÓN DE PANTALLA UNIFICADO (9:16)
+       ======================================================== -->
+  <div id="record-screen">
+    <!-- MEJORA: Contenedor con soporte dual para Video MP4 y GIF/Imágenes en bucle -->
+    <div class="bg-media-container">
+      <video id="bg-video-player" autoplay loop muted playsinline style="display: none;"></video>
+      <img id="bg-img-player" alt="Fondo" style="display: none;" />
+      <div class="video-overlay-dim"></div>
+    </div>
+
+    <!-- Capa de Stickers Flotantes (Gancho 3s) -->
+    <div class="hook-stickers-layer" id="hook-stickers-layer">
+      <img id="hook-stk-1" class="hook-sticker pos-1" src="" alt="" />
+      <img id="hook-stk-2" class="hook-sticker pos-2" src="" alt="" />
+      <img id="hook-stk-3" class="hook-sticker pos-3" src="" alt="" />
+      <img id="hook-stk-4" class="hook-sticker pos-4" src="" alt="" />
+    </div>
+
+    <button class="btn-exit-record" title="Volver al panel" onclick="exitRecordMode()">✕</button>
+
+    <div class="quiz-stage" id="quiz-stage"></div>
+
+    <!-- Barra de Controles Dinámica -->
+    <div class="thumb-controls" id="stage-thumb-controls"></div>
+  </div>
+
+  <!-- Modal Selector de Mensajes -->
+  <div class="modal-backdrop" id="message-picker-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="msg-modal-title">📁 Seleccionar Mensaje</div>
+        <button class="modal-close" onclick="closeMessagePickerModal()">✕</button>
+      </div>
+      <div class="messages-list" id="messages-picker-list"></div>
+    </div>
+  </div>
+
+  <!-- Modal Categorías Quiz -->
+  <div class="modal-backdrop" id="category-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">🏷️ Elige la Categoría</div>
+        <button class="modal-close" onclick="closeCategoryModal()">✕</button>
+      </div>
+      <div class="category-grid" id="category-grid"></div>
+    </div>
+  </div>
+
+  <!-- Modal Biblioteca Proyectos -->
+  <div class="modal-backdrop" id="library-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">📚 Proyectos Guardados</div>
+        <button class="modal-close" onclick="closeLibraryModal()">✕</button>
+      </div>
+      <div class="projects-list" id="projects-list"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       JAVASCRIPT PRINCIPAL
+       ======================================================== -->
+  <script>
+    /* 1. NAVEGACIÓN ENTRE MODOS */
+    let currentAppMode = 'shorts';
+
+    function switchMode(mode) {
+      currentAppMode = mode;
+      const btnShorts = document.getElementById('btn-mode-shorts');
+      const btnWyr = document.getElementById('btn-mode-wyr');
+      const btnImage = document.getElementById('btn-mode-image');
+
+      const setupQuiz = document.getElementById('setup-screen');
+      const setupWyr = document.getElementById('wyr-setup-screen');
+      const setupImg = document.getElementById('image-setup-screen');
+
+      [btnShorts, btnWyr, btnImage].forEach(b => b.classList.remove('active', 'wyr-active'));
+      [setupQuiz, setupWyr, setupImg].forEach(s => s.style.display = 'none');
+
+      if (mode === 'shorts') {
+        btnShorts.classList.add('active');
+        setupQuiz.style.display = 'block';
+      } else if (mode === 'wyr') {
+        btnWyr.classList.add('active', 'wyr-active');
+        setupWyr.style.display = 'block';
+      } else {
+        btnImage.classList.add('active');
+        setupImg.style.display = 'block';
+        updatePostPreview();
+      }
+    }
+
+    /* ========================================================
+       2. MOTOR DE AUDIO (WEB AUDIO API CERO LATENCIA)
+       ======================================================== */
+    let audioCtx = null;
+    const audioBufferCache = {};
+    let activeVoiceSources = [];
+    let currentCatSfxSource = null;
+    let currentTimerSfxSource = null;
+    let previewAudioSource = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    async function preloadAudioToBuffer(key, blob) {
+      if (!blob) {
+        audioBufferCache[key] = null;
+        return;
+      }
+      try {
+        const ctx = getAudioContext();
+        const arrayBuffer = await blob.arrayBuffer();
+        const decodedBuffer = await ctx.decodeAudioData(arrayBuffer);
+        audioBufferCache[key] = decodedBuffer;
+      } catch (err) {
+        console.warn('Error decodificando audio:', key, err);
+      }
+    }
+
+    function stopVoiceChain() {
+      activeVoiceSources.forEach(src => {
+        try { src.stop(); } catch(e){}
+      });
+      activeVoiceSources = [];
+    }
+
+    function playVoiceInstant(key) {
+      stopVoiceChain();
+      const ctx = getAudioContext();
+      const buffer = audioBufferCache[key];
+      if (!buffer) return;
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.value = 1.0;
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(0);
+      activeVoiceSources.push(source);
+    }
+
+    function playSfxInstant(key, vol = 0.7) {
+      const ctx = getAudioContext();
+      const buffer = audioBufferCache[key];
+      if (!buffer) return;
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.value = vol;
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(0);
+      return source;
+    }
+
+    function playPreviewAudio(blob) {
+      if (previewAudioSource) {
+        try { previewAudioSource.stop(); } catch(e){}
+      }
+      if (!blob) return;
+      const ctx = getAudioContext();
+      blob.arrayBuffer().then(ab => ctx.decodeAudioData(ab)).then(buf => {
+        previewAudioSource = ctx.createBufferSource();
+        previewAudioSource.buffer = buf;
+        previewAudioSource.connect(ctx.destination);
+        previewAudioSource.start(0);
+      });
+    }
+
+    function stopAllAudio() {
+      stopVoiceChain();
+      if (currentCatSfxSource) {
+        try { currentCatSfxSource.stop(); } catch(e){}
+        currentCatSfxSource = null;
+      }
+      if (currentTimerSfxSource) {
+        try { currentTimerSfxSource.stop(); } catch(e){}
+        currentTimerSfxSource = null;
+      }
+      if (previewAudioSource) {
+        try { previewAudioSource.stop(); } catch(e){}
+      }
+    }
+
+    /* ========================================================
+       3. GESTOR DE PRECARGA DE IMÁGENES
+       ======================================================== */
+    const imagePreloadCache = {};
+
+    function preloadImageBlob(key, blob) {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.src = url;
+      imagePreloadCache[key] = url;
+    }
+
+    function getPreloadedImageUrl(key, fallbackBlob) {
+      if (imagePreloadCache[key]) return imagePreloadCache[key];
+      if (fallbackBlob) {
+        preloadImageBlob(key, fallbackBlob);
+        return imagePreloadCache[key];
+      }
+      return '';
+    }
+
+    /* ========================================================
+       4. SISTEMA DE STICKERS POP-UP FLOTANTES
+       ======================================================== */
+    // Stickers independientes para Quiz y para WYR
+    const persistentStickers = [null, null, null, null];
+    const wyrPersistentStickers = [null, null, null, null];
+    let stickerTimeouts = [];
+
+    /* Quiz Stickers Handlers */
+    async function handleStickerUpload(event, index) {
+      const file = event.target.files[0];
+      const lbl = document.getElementById(`lbl-sticker-${index + 1}`);
+      if (!file) return;
+      persistentStickers[index] = file;
+      lbl.textContent = `✓ PNG ${index + 1}: ${file.name}`;
+      lbl.classList.add('loaded');
+      preloadImageBlob(`hook_stk_${index}`, file);
+      await saveSettingToDB(`hook_stk_${index}`, file);
+    }
+
+    async function handleStickerPopSfxUpload(event) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById('lbl-sticker-pop-sfx');
+      if (!file) return;
+      await saveSettingToDB('sticker_pop_sfx', file);
+      await preloadAudioToBuffer('sticker_pop_sfx', file);
+      lbl.textContent = `✓ Pop SFX: ${file.name}`;
+      lbl.classList.add('loaded');
+    }
+
+    /* WYR Stickers Handlers */
+    async function handleWyrStickerUpload(event, index) {
+      const file = event.target.files[0];
+      const lbl = document.getElementById(`lbl-wyr-sticker-${index + 1}`);
+      if (!file) return;
+      wyrPersistentStickers[index] = file;
+      lbl.textContent = `✓ PNG ${index + 1}: ${file.name}`;
+      lbl.classList.add('loaded');
+      preloadImageBlob(`wyr_hook_stk_${index}`, file);
+      await saveSettingToDB(`wyr_hook_stk_${index}`, file);
+    }
+
+    async function handleWyrStickerPopSfxUpload(event) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById('lbl-wyr-sticker-pop-sfx');
+      if (!file) return;
+      await saveSettingToDB('wyr_sticker_pop_sfx', file);
+      await preloadAudioToBuffer('wyr_sticker_pop_sfx', file);
+      lbl.textContent = `✓ Pop SFX WYR: ${file.name}`;
+      lbl.classList.add('loaded');
+    }
+
+    function triggerHookStickersPop(mode = 'shorts') {
+      clearHookStickers(false);
+      const layer = document.getElementById('hook-stickers-layer');
+      layer.style.display = 'block';
+
+      const list = (mode === 'wyr') ? wyrPersistentStickers : persistentStickers;
+      const sfxKey = (mode === 'wyr') ? 'wyr_sticker_pop_sfx' : 'sticker_pop_sfx';
+      const prefix = (mode === 'wyr') ? 'wyr_hook_stk_' : 'hook_stk_';
+
+      const delays = [0, 150, 300, 450];
+
+      delays.forEach((delay, idx) => {
+        const t = setTimeout(() => {
+          const imgEl = document.getElementById(`hook-stk-${idx + 1}`);
+          const file = list[idx];
+          if (file && imgEl) {
+            imgEl.classList.remove('hiding');
+            imgEl.src = getPreloadedImageUrl(`${prefix}${idx}`, file);
+            imgEl.classList.add('show');
+            playSfxInstant(sfxKey, 0.65);
+          }
+        }, delay);
+        stickerTimeouts.push(t);
+      });
+    }
+
+    function clearHookStickers(animateExit = true) {
+      stickerTimeouts.forEach(t => clearTimeout(t));
+      stickerTimeouts = [];
+
+      const layer = document.getElementById('hook-stickers-layer');
+      if (!layer) return;
+
+      if (animateExit) {
+        for (let i = 1; i <= 4; i++) {
+          const el = document.getElementById(`hook-stk-${i}`);
+          if (el && el.classList.contains('show')) {
+            el.classList.add('hiding');
+          }
+        }
+        setTimeout(() => {
+          layer.style.display = 'none';
+          for (let i = 1; i <= 4; i++) {
+            const el = document.getElementById(`hook-stk-${i}`);
+            if (el) el.classList.remove('show', 'hiding');
+          }
+        }, 220);
+      } else {
+        layer.style.display = 'none';
+        for (let i = 1; i <= 4; i++) {
+          const el = document.getElementById(`hook-stk-${i}`);
+          if (el) el.classList.remove('show', 'hiding');
+        }
+      }
+    }
+
+    /* TRANSICIONES ENTRE PANTALLAS (TRANSICIÓN DE SALIDA DE TARJETA) */
+    let transitionTimeout = null;
+    function renderStepWithTransition(renderCallback) {
+      clearTimeout(transitionTimeout);
+      const stage = document.getElementById('quiz-stage');
+      const currentCards = stage.querySelectorAll('.white-card, .wyr-stage-wrapper');
+
+      if (currentCards.length > 0) {
+        currentCards.forEach(c => c.classList.add('card-exit'));
+        clearHookStickers(true);
+
+        transitionTimeout = setTimeout(() => {
+          renderCallback();
+        }, 180);
+      } else {
+        renderCallback();
+      }
+    }
+
+    /* ========================================================
+       5. CATEGORÍAS EN ORDEN ALFABÉTICO (SIN PRESIDENTES NI PLANETAS)
+       ======================================================== */
+    const RAW_CATEGORIES = [
+      "Países del mundo", "Banderas", "Capitales", "Mitología", "Personajes históricos",
+      "Física", "Química", "Biología", "Astronomía", "Naturaleza",
+      "Animales", "Cuerpo humano", "Cine", "Series",
+      "Anime", "Superhéroes", "Videojuegos", "Actores", "Música",
+      "Artistas", "Fútbol", "Deportes", "Comida",
+      "Marcas", "Logotipos", "Ortografía", "Idioma español", "Inventos"
+    ];
+
+    // Ordenadas alfabéticamente en español
+    const CATEGORIES_LIST = [...RAW_CATEGORIES].sort((a, b) => a.localeCompare('es', { sensitivity: 'base' }));
+
+    let selectedCategory = "Países del mundo";
+    let catWinnerColor = "#FFC400";
+    let catWinnerColor2 = "#B8860B";
+    let catWheelBgColor = "#1E2230";
+
+    function syncCatWinnerColor(hex) {
+      if (!hex) return;
+      catWinnerColor = hex;
+      document.getElementById('cat-color-picker').value = hex;
+      document.getElementById('cat-color-hex').value = hex;
+      document.documentElement.style.setProperty('--cat-winner-color', hex);
+      saveSettingToDB('cat_winner_color', hex);
+    }
+
+    function syncCatWinnerColor2(hex) {
+      if (!hex) return;
+      catWinnerColor2 = hex;
+      document.getElementById('cat-color-picker-2').value = hex;
+      document.getElementById('cat-color-hex-2').value = hex;
+      document.documentElement.style.setProperty('--cat-winner-color-2', hex);
+      saveSettingToDB('cat_winner_color_2', hex);
+    }
+
+    function syncCatWheelBgColor(hex) {
+      if (!hex) return;
+      catWheelBgColor = hex;
+      document.getElementById('cat-bg-color-picker').value = hex;
+      document.getElementById('cat-bg-color-hex').value = hex;
+      document.documentElement.style.setProperty('--cat-wheel-bg', hex);
+      saveSettingToDB('cat_wheel_bg_color', hex);
+    }
+
+    /* ========================================================
+       6. BANCO DE MENSAJES Y MODO "¿QUÉ PREFIERES?" (WYR)
+       ======================================================== */
+    let wyrBankMessages = [];
+    let tempBankAudioFile = null;
+
+    const wyrActiveSelection = {
+      intro: { text: '¿Qué tan difíciles son tus elecciones? ¡Ponte a prueba!', audioKey: null },
+      c1: { text: '¿QUÉ PREFIERES?', audioKey: null },
+      c2: { text: '¿QUÉ PREFIERES?', audioKey: null },
+      c3: { text: '¿QUÉ PREFIERES?', audioKey: null },
+      outro: { text: '¿Coincidiste con la mayoría? ¡Deja tu comentario y sígueme!', audioKey: null },
+      bgVideo: null,
+      c1OptAImg: null, c1OptBImg: null,
+      c2OptAImg: null, c2OptBImg: null,
+      c3OptAImg: null, c3OptBImg: null
+    };
+
+    let currentWyrIndex = 0;
+    let wyrCountdownTimer = null;
+    let activePickerTarget = null;
+
+    function handleBankMessageAudioSelected(event) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById('lbl-bank-msg-audio');
+      if (file) {
+        tempBankAudioFile = file;
+        lbl.textContent = `✓ Audio: ${file.name}`;
+        lbl.classList.add('loaded');
+      }
+    }
+
+    async function saveMessageToBank() {
+      const type = document.getElementById('bank-msg-type').value;
+      const text = document.getElementById('bank-msg-text').value.trim();
+
+      if (!text) {
+        alert('Por favor escribe el texto del mensaje.');
+        return;
+      }
+      if (!tempBankAudioFile) {
+        alert('Por favor sube un archivo de audio para este mensaje.');
+        return;
+      }
+
+      const newMsg = {
+        type,
+        text,
+        audioBlob: tempBankAudioFile,
+        date: new Date().toLocaleDateString()
+      };
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_WYR_MESSAGES, 'readwrite');
+        const store = tx.objectStore(STORE_WYR_MESSAGES);
+        const req = store.add(newMsg);
+
+        req.onsuccess = (e) => {
+          newMsg.id = e.target.result;
+          wyrBankMessages.push(newMsg);
+          preloadAudioToBuffer('wyr_msg_' + newMsg.id, newMsg.audioBlob);
+
+          document.getElementById('bank-msg-text').value = '';
+          document.getElementById('lbl-bank-msg-audio').textContent = 'Subir Audio para este mensaje';
+          document.getElementById('lbl-bank-msg-audio').classList.remove('loaded');
+          tempBankAudioFile = null;
+
+          updateBankMessagesCounter();
+          alert('✅ ¡Mensaje y audio guardados en la biblioteca!');
+        };
+      } catch (err) {
+        alert('Error al guardar mensaje en la base de datos.');
+      }
+    }
+
+    function updateBankMessagesCounter() {
+      const intros = wyrBankMessages.filter(m => m.type === 'intro').length;
+      const questions = wyrBankMessages.filter(m => m.type === 'question').length;
+      const outros = wyrBankMessages.filter(m => m.type === 'outro').length;
+      document.getElementById('bank-msg-counter').textContent = 
+        `📁 Biblioteca activa: ${intros} Saludos | ${questions} Preguntas | ${outros} Despedidas`;
+    }
+
+    function openMessagePickerModal(typeFilter, targetKey) {
+      activePickerTarget = targetKey;
+      const modal = document.getElementById('message-picker-modal');
+      const listContainer = document.getElementById('messages-picker-list');
+      const titleEl = document.getElementById('msg-modal-title');
+
+      const titles = {
+        intro: '👋 Seleccionar Saludo',
+        question: '❓ Seleccionar Pregunta',
+        outro: '🏁 Seleccionar Despedida'
+      };
+      titleEl.textContent = titles[typeFilter] || '📁 Seleccionar Mensaje';
+
+      const filtered = wyrBankMessages.filter(m => m.type === typeFilter);
+
+      if (filtered.length === 0) {
+        listContainer.innerHTML = `
+          <div style="text-align:center; padding: 25px 10px; color: var(--text-muted); font-size: 0.8rem;">
+            No tienes mensajes guardados en esta categoría.<br><br>
+            <b>Sube uno arriba en "📁 Banco de Mensajes"</b> para poder elegirlo aquí.
+          </div>
+        `;
+      } else {
+        listContainer.innerHTML = '';
+        filtered.forEach(msg => {
+          const div = document.createElement('div');
+          div.className = 'msg-item';
+          div.innerHTML = `
+            <div class="msg-info">
+              <h4>${escapeHtml(msg.text)}</h4>
+              <span>🔊 Audio listo</span>
+            </div>
+            <div class="msg-actions">
+              <button class="btn-preview-audio" onclick="playPreviewAudioById(${msg.id})" title="Escuchar audio">▶️</button>
+              <button class="btn-proj-load" onclick="selectMessageForTarget(${msg.id})">Elegir</button>
+              <button class="btn-proj-del" onclick="deleteBankMessage(${msg.id})">✕</button>
+            </div>
+          `;
+          listContainer.appendChild(div);
+        });
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function closeMessagePickerModal() {
+      document.getElementById('message-picker-modal').style.display = 'none';
+      if (previewAudioSource) {
+        try { previewAudioSource.stop(); } catch(e){}
+      }
+    }
+
+    function playPreviewAudioById(msgId) {
+      const msg = wyrBankMessages.find(m => m.id === msgId);
+      if (msg && msg.audioBlob) {
+        playPreviewAudio(msg.audioBlob);
+      }
+    }
+
+    async function deleteBankMessage(msgId) {
+      if (!confirm('¿Eliminar este mensaje de la biblioteca?')) return;
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_WYR_MESSAGES, 'readwrite');
+        tx.objectStore(STORE_WYR_MESSAGES).delete(msgId);
+        tx.oncomplete = () => {
+          wyrBankMessages = wyrBankMessages.filter(m => m.id !== msgId);
+          updateBankMessagesCounter();
+          closeMessagePickerModal();
+        };
+      } catch (err) {}
+    }
+
+    function selectMessageForTarget(msgId) {
+      const msg = wyrBankMessages.find(m => m.id === msgId);
+      if (!msg) return;
+
+      const audioKey = 'wyr_msg_' + msg.id;
+
+      if (activePickerTarget === 'wyr-intro') {
+        wyrActiveSelection.intro.text = msg.text;
+        wyrActiveSelection.intro.audioKey = audioKey;
+        document.getElementById('txt-wyr-intro').textContent = `✓ ${msg.text}`;
+        document.getElementById('btn-sel-wyr-intro').classList.add('selected');
+      } else if (activePickerTarget === 'wyr-c1') {
+        wyrActiveSelection.c1.text = msg.text;
+        wyrActiveSelection.c1.audioKey = audioKey;
+        document.getElementById('txt-wyr-c1').textContent = `✓ ${msg.text}`;
+        document.getElementById('btn-sel-wyr-c1').classList.add('selected');
+      } else if (activePickerTarget === 'wyr-c2') {
+        wyrActiveSelection.c2.text = msg.text;
+        wyrActiveSelection.c2.audioKey = audioKey;
+        document.getElementById('txt-wyr-c2').textContent = `✓ ${msg.text}`;
+        document.getElementById('btn-sel-wyr-c2').classList.add('selected');
+      } else if (activePickerTarget === 'wyr-c3') {
+        wyrActiveSelection.c3.text = msg.text;
+        wyrActiveSelection.c3.audioKey = audioKey;
+        document.getElementById('txt-wyr-c3').textContent = `✓ ${msg.text}`;
+        document.getElementById('btn-sel-wyr-c3').classList.add('selected');
+      } else if (activePickerTarget === 'wyr-outro') {
+        wyrActiveSelection.outro.text = msg.text;
+        wyrActiveSelection.outro.audioKey = audioKey;
+        document.getElementById('txt-wyr-outro').textContent = `✓ ${msg.text}`;
+        document.getElementById('btn-sel-wyr-outro').classList.add('selected');
+      }
+
+      closeMessagePickerModal();
+    }
+
+    function handleWyrBgVideoSelected(event) {
+      const file = event.target.files[0];
+      const lbl = document.getElementById('lbl-wyr-bg-video');
+      if (file) {
+        wyrActiveSelection.bgVideo = file;
+        lbl.textContent = `✓ Fondo: ${file.name}`;
+        lbl.classList.add('loaded');
+      }
+    }
+
+    async function handleWyrTimerSfxUpload(event) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById('lbl-wyr-timer-sfx');
+      if (file) {
+        await saveSettingToDB('wyr_timer_sfx', file);
+        await preloadAudioToBuffer('wyr_persistent_timer_sfx', file);
+        lbl.textContent = `✓ SFX 5 Seg Guardado: ${file.name}`;
+        lbl.classList.add('loaded');
+      }
+    }
+
+    function handleWyrChoiceImgSelected(event, labelId, storeKey) {
+      const file = event.target.files[0];
+      const lbl = document.getElementById(labelId);
+      if (file) {
+        wyrActiveSelection[storeKey] = file;
+        lbl.textContent = `✓ Imagen: ${file.name}`;
+        lbl.classList.add('loaded');
+        preloadImageBlob('wyr_' + storeKey, file);
+      }
+    }
+
+    function getWyrChoiceData(idx) {
+      const n = idx + 1;
+      const title = wyrActiveSelection[`c${n}`].text || '¿QUÉ PREFIERES?';
+      const optAText = document.getElementById(`wyr-c${n}-optA-text`).value || 'Opción A';
+      const optAPct = document.getElementById(`wyr-c${n}-optA-pct`).value || '50%';
+      const optBText = document.getElementById(`wyr-c${n}-optB-text`).value || 'Opción B';
+      const optBPct = document.getElementById(`wyr-c${n}-optB-pct`).value || '50%';
+
+      const optAImg = wyrActiveSelection[`c${n}OptAImg`];
+      const optBImg = wyrActiveSelection[`c${n}OptBImg`];
+      const audioKey = wyrActiveSelection[`c${n}`].audioKey;
+
+      return {
+        title,
+        optAText, optAPct, optAImg,
+        optBText, optBPct, optBImg,
+        audioKey,
+        idxKeyA: `wyr_c${n}OptAImg`,
+        idxKeyB: `wyr_c${n}OptBImg`
+      };
+    }
+
+    function stepWyrIntro() {
+      stopAllAudio();
+      clearTimeout(wyrCountdownTimer);
+
+      renderStepWithTransition(() => {
+        const introText = wyrActiveSelection.intro.text;
+        const stage = document.getElementById('quiz-stage');
+
+        stage.innerHTML = `
+          <div class="white-card">
+            <div class="pill-badge wyr-badge">⚖️ ¿QUÉ PREFIERES? ⚖️</div>
+            <div class="welcome-title">${escapeHtml(introText)}</div>
+          </div>
+        `;
+
+        triggerHookStickersPop('wyr');
+
+        if (wyrActiveSelection.intro.audioKey) {
+          playVoiceInstant(wyrActiveSelection.intro.audioKey);
+        }
+      });
+    }
+
+    function stepWyrShowOptions() {
+      stopAllAudio();
+      clearTimeout(wyrCountdownTimer);
+
+      if (currentWyrIndex > 2) {
+        stepWyrOutro();
+        return;
+      }
+
+      renderStepWithTransition(() => {
+        const data = getWyrChoiceData(currentWyrIndex);
+        const stage = document.getElementById('quiz-stage');
+
+        const imgAUrl = data.optAImg ? getPreloadedImageUrl(data.idxKeyA, data.optAImg) : 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=400&auto=format&fit=crop&q=80';
+        const imgBUrl = data.optBImg ? getPreloadedImageUrl(data.idxKeyB, data.optBImg) : 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop&q=80';
+
+        stage.innerHTML = `
+          <div class="wyr-stage-wrapper">
+            <div class="wyr-header-card">
+              <div class="wyr-header-title">${escapeHtml(data.title)}</div>
+              <div class="wyr-top-timer-bar">
+                <div class="wyr-top-timer-fill" id="wyr-timer-fill" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <div class="wyr-split-container">
+              <div class="wyr-half half-red" id="wyr-half-A">
+                <img src="${imgAUrl}" class="wyr-half-img" alt="Opción A" />
+                <div class="wyr-half-content">
+                  <div class="wyr-half-text">${escapeHtml(data.optAText)}</div>
+                  <div class="wyr-percentage-badge" id="wyr-pct-A">${escapeHtml(data.optAPct)}</div>
+                </div>
+              </div>
+
+              <div class="wyr-vs-badge">VS</div>
+
+              <div class="wyr-half half-blue" id="wyr-half-B">
+                <img src="${imgBUrl}" class="wyr-half-img" alt="Opción B" />
+                <div class="wyr-half-content">
+                  <div class="wyr-half-text">${escapeHtml(data.optBText)}</div>
+                  <div class="wyr-percentage-badge" id="wyr-pct-B">${escapeHtml(data.optBPct)}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        if (data.audioKey) {
+          playVoiceInstant(data.audioKey);
+        }
+      });
+    }
+
+    function stepWyrCountdown() {
+      const timerFill = document.getElementById('wyr-timer-fill');
+      if (!timerFill) return;
+
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '100%';
+      void timerFill.offsetWidth;
+
+      timerFill.style.transition = 'width 5s linear';
+      timerFill.style.width = '0%';
+
+      clearTimeout(wyrCountdownTimer);
+
+      if (currentTimerSfxSource) {
+        try { currentTimerSfxSource.stop(); } catch(e){}
+      }
+      currentTimerSfxSource = playSfxInstant('wyr_persistent_timer_sfx', 0.85);
+
+      wyrCountdownTimer = setTimeout(() => {
+        revealWyrPercentages();
+      }, 5000);
+    }
+
+    function revealWyrPercentages() {
+      const data = getWyrChoiceData(currentWyrIndex);
+      const badgeA = document.getElementById('wyr-pct-A');
+      const badgeB = document.getElementById('wyr-pct-B');
+      const halfA = document.getElementById('wyr-half-A');
+      const halfB = document.getElementById('wyr-half-B');
+
+      if (!badgeA || !badgeB) return;
+
+      badgeA.style.display = 'inline-block';
+      badgeB.style.display = 'inline-block';
+
+      const numA = parseFloat(data.optAPct.replace('%', '')) || 50;
+      const numB = parseFloat(data.optBPct.replace('%', '')) || 50;
+
+      if (numA < numB) {
+        halfA.classList.add('is-loser');
+        halfB.classList.add('is-winner');
+      } else if (numB < numA) {
+        halfB.classList.add('is-loser');
+        halfA.classList.add('is-winner');
+      }
+    }
+
+    function stepWyrNextOrFinish() {
+      currentWyrIndex++;
+      if (currentWyrIndex <= 2) {
+        stepWyrShowOptions();
+      } else {
+        stepWyrOutro();
+      }
+    }
+
+    function stepWyrOutro() {
+      stopAllAudio();
+      clearTimeout(wyrCountdownTimer);
+
+      renderStepWithTransition(() => {
+        const outroText = wyrActiveSelection.outro.text;
+        const stage = document.getElementById('quiz-stage');
+
+        stage.innerHTML = `
+          <div class="white-card">
+            <div class="pill-badge wyr-badge">🏁 RESULTADOS FINALES 🏁</div>
+            <div class="welcome-title">${escapeHtml(outroText)}</div>
+          </div>
+        `;
+
+        if (wyrActiveSelection.outro.audioKey) {
+          playVoiceInstant(wyrActiveSelection.outro.audioKey);
+        }
+      });
+    }
+
+    /* ========================================================
+       7. MODO QUIZ (9:16)
+       ======================================================== */
+    const mediaStore = {
+      bgVideo: null,
+      timerSfx: null,
+      introAudio: null,
+      catPrefixAudio: null,
+      catSfx: null,
+      q1Img: null,
+      q1AnsImg: null,
+      q1Audio: null,
+      q1AnsAudio: null,
+      q2Img: null,
+      q2AnsImg: null,
+      q2Audio: null,
+      q2AnsAudio: null,
+      q3Img: null,
+      q3AnsImg: null,
+      q3Audio: null,
+      q3AnsAudio: null,
+      outroAudio: null
+    };
+
+    const categoryAudiosStore = {};
+    let countdownTimer = null;
+    let countdownInterval = null;
+    let currentQuestionIndex = 0;
+    let answerImageTransitionTimer = null;
+
+    async function handleFileSelected(event, labelId, storeKey) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const label = document.getElementById(labelId);
+      if (file) {
+        label.textContent = `✓ ${file.name}`;
+        label.classList.add('loaded');
+        mediaStore[storeKey] = file;
+
+        if (storeKey !== 'bgVideo' && !storeKey.includes('Img')) {
+          await preloadAudioToBuffer(storeKey, file);
+        }
+      }
+    }
+
+    function handleQuizImageSelected(event, labelId, storeKey) {
+      const file = event.target.files[0];
+      const label = document.getElementById(labelId);
+      if (file) {
+        label.textContent = `✓ Imagen: ${file.name}`;
+        label.classList.add('loaded');
+        mediaStore[storeKey] = file;
+        preloadImageBlob(storeKey, file);
+      }
+    }
+
+    async function handleQuizPersistentAudioUpload(event, dbKey, labelId, storeKey) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById(labelId);
+      if (!file) return;
+
+      lbl.textContent = `✓ ${file.name} (Guardado)`;
+      lbl.classList.add('loaded');
+      mediaStore[storeKey] = file;
+      await preloadAudioToBuffer(storeKey, file);
+      await saveSettingToDB(dbKey, file);
+    }
+
+    async function saveQuizPersistentTexts() {
+      const intro = document.getElementById('intro-text').value;
+      const outro = document.getElementById('outro-text').value;
+      await saveSettingToDB('quiz_intro_text', intro);
+      await saveSettingToDB('quiz_outro_text', outro);
+    }
+
+    function initBankSelect() {
+      const select = document.getElementById('bank-cat-select');
+      select.innerHTML = '';
+      CATEGORIES_LIST.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+      });
+      updateBankCatUI();
+    }
+
+    function updateBankCatUI() {
+      const select = document.getElementById('bank-cat-select');
+      const currentCat = select.value;
+      const lbl = document.getElementById('lbl-bank-cat-audio');
+
+      if (categoryAudiosStore[currentCat]) {
+        lbl.textContent = `✓ Audio vinculado a: "${currentCat}"`;
+        lbl.classList.add('loaded');
+      } else {
+        lbl.textContent = `Subir audio para "${currentCat}"`;
+        lbl.classList.remove('loaded');
+      }
+
+      const totalLoaded = Object.keys(categoryAudiosStore).length;
+      document.getElementById('bank-counter-status').textContent = `📁 Voces guardadas: ${totalLoaded} de ${CATEGORIES_LIST.length} categorías`;
+    }
+
+    async function handleBankCategoryAudioUpload(event) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const select = document.getElementById('bank-cat-select');
+      const catName = select.value;
+      if (!file) return;
+
+      categoryAudiosStore[catName] = file;
+      await saveCategoryAudioToDB(catName, file);
+      await preloadAudioToBuffer('bank_cat_' + catName, file);
+      updateBankCatUI();
+    }
+
+    /* MODAL DE CATEGORÍAS ALFABÉTICO */
+    function openCategoryModal() {
+      const grid = document.getElementById('category-grid');
+      grid.innerHTML = '';
+      CATEGORIES_LIST.forEach(cat => {
+        const chip = document.createElement('div');
+        const isSelected = cat.toLowerCase() === selectedCategory.toLowerCase();
+        const hasAudio = !!categoryAudiosStore[cat];
+        chip.className = `cat-chip ${isSelected ? 'active' : ''}`;
+        chip.textContent = `${cat} ${hasAudio ? '🔊' : ''}`;
+        chip.onclick = () => {
+          selectedCategory = cat;
+          document.getElementById('txt-selected-cat').textContent = `🏷️ Categoría: ${cat}`;
+          closeCategoryModal();
+        };
+        grid.appendChild(chip);
+      });
+      document.getElementById('category-modal').style.display = 'flex';
+    }
+
+    function closeCategoryModal() {
+      document.getElementById('category-modal').style.display = 'none';
+    }
+
+    function playCategoryChainedVoice(prefixKey, catName) {
+      stopVoiceChain();
+      const ctx = getAudioContext();
+      const prefixBuffer = audioBufferCache[prefixKey];
+      const catBuffer = audioBufferCache['bank_cat_' + catName];
+
+      let startTime = ctx.currentTime;
+
+      if (prefixBuffer) {
+        const prefixSource = ctx.createBufferSource();
+        prefixSource.buffer = prefixBuffer;
+        prefixSource.connect(ctx.destination);
+        prefixSource.start(startTime);
+        activeVoiceSources.push(prefixSource);
+        startTime += prefixBuffer.duration;
+      }
+
+      if (catBuffer) {
+        const catSource = ctx.createBufferSource();
+        catSource.buffer = catBuffer;
+        catSource.connect(ctx.destination);
+        catSource.start(startTime);
+        activeVoiceSources.push(catSource);
+      }
+    }
+
+    function stepStartIntro() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+
+      renderStepWithTransition(() => {
+        const introText = document.getElementById('intro-text').value || '¿Cuánto sabes de cultura general?';
+        const stage = document.getElementById('quiz-stage');
+
+        stage.innerHTML = `
+          <div class="white-card" id="card-welcome">
+            <div class="pill-badge">✨ DESAFÍO VIRAL ✨</div>
+            <div class="welcome-title">${escapeHtml(introText)}</div>
+          </div>
+        `;
+
+        triggerHookStickersPop('shorts');
+        playVoiceInstant('introAudio');
+      });
+    }
+
+    function stepRevealCategory() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+
+      renderStepWithTransition(() => {
+        const introText = document.getElementById('intro-text').value || '¿Cuánto sabes de cultura general?';
+        const stage = document.getElementById('quiz-stage');
+
+        const reelItems = [];
+        const pool = CATEGORIES_LIST.filter(c => c.toLowerCase() !== selectedCategory.toLowerCase());
+        
+        for (let i = 0; i < 16; i++) {
+          reelItems.push(pool[Math.floor(Math.random() * pool.length)]);
+        }
+        reelItems.push(selectedCategory);
+
+        const itemsHtml = reelItems.map((item, idx) => {
+          const isTarget = (idx === reelItems.length - 1);
+          return `<div class="slot-item ${isTarget ? 'is-target' : ''}" id="${isTarget ? 'target-slot-item' : ''}" data-text="${escapeHtml(item)}">${escapeHtml(item)}</div>`;
+        }).join('');
+
+        stage.innerHTML = `
+          <div class="white-card" id="card-welcome">
+            <div class="pill-badge">✨ DESAFÍO VIRAL ✨</div>
+            <div class="welcome-title">${escapeHtml(introText)}</div>
+          </div>
+
+          <div class="white-card category-card" id="card-category">
+            <div class="cat-subtitle">CATEGORÍA DE HOY:</div>
+            <div class="slot-viewport">
+              <div class="slot-reel" id="slot-reel">
+                ${itemsHtml}
+              </div>
+            </div>
+          </div>
+        `;
+
+        const reel = document.getElementById('slot-reel');
+        const itemHeight = 48;
+        const targetY = (reelItems.length - 1) * itemHeight;
+
+        playCategoryChainedVoice('catPrefixAudio', selectedCategory);
+        currentCatSfxSource = playSfxInstant('catSfx', 0.7);
+
+        setTimeout(() => {
+          reel.style.transform = `translateY(-${targetY}px)`;
+        }, 50);
+
+        setTimeout(() => {
+          const targetItem = document.getElementById('target-slot-item');
+          if (targetItem) {
+            targetItem.classList.add('is-winner');
+          }
+        }, 1400);
+      });
+    }
+
+    function getQuestionData(idx) {
+      const n = idx + 1;
+      const text = document.getElementById(`q${n}-text`).value || `Pregunta número ${n}`;
+      const optA = document.getElementById(`q${n}-optA`).value || 'Opción A';
+      const optB = document.getElementById(`q${n}-optB`).value || 'Opción B';
+      const optC = document.getElementById(`q${n}-optC`).value || 'Opción C';
+      
+      const radios = document.getElementsByName(`q${n}-correct`);
+      let correct = 'A';
+      for (const r of radios) {
+        if (r.checked) { correct = r.value; break; }
+      }
+
+      return {
+        text, optA, optB, optC, correct,
+        baseImg: mediaStore[`q${n}Img`],
+        ansImg: mediaStore[`q${n}AnsImg`],
+        baseImgKey: `q${n}Img`,
+        ansImgKey: `q${n}AnsImg`,
+        audioKey: `q${n}Audio`,
+        ansAudioKey: `q${n}AnsAudio`
+      };
+    }
+
+    function stepShowQuestion() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+
+      if (currentQuestionIndex > 2) {
+        stepShowOutro();
+        return;
+      }
+
+      renderStepWithTransition(() => {
+        const q = getQuestionData(currentQuestionIndex);
+        const stage = document.getElementById('quiz-stage');
+
+        let imgHtml = '';
+        if (q.baseImg || q.ansImg) {
+          const baseSrc = q.baseImg ? getPreloadedImageUrl(q.baseImgKey, q.baseImg) : (q.ansImg ? getPreloadedImageUrl(q.ansImgKey, q.ansImg) : '');
+          const ansSrc = q.ansImg ? getPreloadedImageUrl(q.ansImgKey, q.ansImg) : '';
+
+          imgHtml = `
+            <div class="question-img-wrap" id="question-img-wrap" style="display: block;">
+              <img id="q-base-img" src="${baseSrc}" alt="Ilustración" />
+              ${ansSrc ? `<img id="q-ans-img" src="${ansSrc}" alt="Respuesta Ilustrada" />` : ''}
+              <div class="flash-overlay"></div>
+            </div>
+          `;
+        }
+
+        stage.innerHTML = `
+          <div class="white-card">
+            ${imgHtml}
+            <div class="question-text">${escapeHtml(q.text)}</div>
+
+            <div class="timer-container" id="timer-box">
+              <div class="timer-bar-bg">
+                <div class="timer-bar-fill" id="timer-fill"></div>
+              </div>
+              <div class="timer-badge" id="timer-number">3 SEGUNDOS</div>
+            </div>
+
+            <div class="quiz-options">
+              <div class="quiz-opt-btn" id="opt-btn-A">
+                <div class="opt-letter">A</div>
+                <span>${escapeHtml(q.optA)}</span>
+              </div>
+              <div class="quiz-opt-btn" id="opt-btn-B">
+                <div class="opt-letter">B</div>
+                <span>${escapeHtml(q.optB)}</span>
+              </div>
+              <div class="quiz-opt-btn" id="opt-btn-C">
+                <div class="opt-letter">C</div>
+                <span>${escapeHtml(q.optC)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        playVoiceInstant(q.audioKey);
+      });
+    }
+
+    function stepStartCountdown() {
+      const timerBox = document.getElementById('timer-box');
+      const timerFill = document.getElementById('timer-fill');
+      const timerNum = document.getElementById('timer-number');
+      if (!timerBox || !timerFill) return;
+
+      timerBox.style.display = 'block';
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '100%';
+      void timerFill.offsetWidth;
+
+      timerFill.style.transition = 'width 3s linear';
+      timerFill.style.width = '0%';
+
+      let secondsLeft = 3;
+      timerNum.textContent = `3 SEGUNDOS`;
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+
+      currentTimerSfxSource = playSfxInstant('timerSfx', 0.7);
+
+      countdownInterval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+          timerNum.textContent = `${secondsLeft} SEGUNDOS`;
+        }
+      }, 1000);
+
+      answerImageTransitionTimer = setTimeout(() => {
+        startAnswerImageTransition();
+      }, 2800);
+
+      countdownTimer = setTimeout(() => {
+        clearInterval(countdownInterval);
+        timerNum.textContent = `¡TIEMPO!`;
+        revealAnswer();
+      }, 3000);
+    }
+
+    function startAnswerImageTransition() {
+      const wrap = document.getElementById('question-img-wrap');
+      const ansImg = document.getElementById('q-ans-img');
+      if (!wrap || !ansImg) return;
+
+      wrap.classList.add('do-flash');
+      ansImg.style.opacity = '1';
+    }
+
+    function revealAnswer() {
+      const q = getQuestionData(currentQuestionIndex);
+      ['A', 'B', 'C'].forEach(opt => {
+        const btn = document.getElementById(`opt-btn-${opt}`);
+        if (!btn) return;
+        if (opt === q.correct) {
+          btn.classList.add('is-correct');
+        } else {
+          btn.classList.add('is-wrong');
+        }
+      });
+      playVoiceInstant(q.ansAudioKey);
+    }
+
+    function stepNextOrFinish() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex <= 2) {
+        stepShowQuestion();
+      } else {
+        stepShowOutro();
+      }
+    }
+
+    function stepShowOutro() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+
+      renderStepWithTransition(() => {
+        const outroText = document.getElementById('outro-text').value || '¡Gracias por participar! Sígueme para más trivias.';
+        const stage = document.getElementById('quiz-stage');
+
+        stage.innerHTML = `
+          <div class="white-card">
+            <div class="pill-badge badge-results">🏅 QUIZ TERMINADO 🏅</div>
+            <div class="welcome-title">${escapeHtml(outroText)}</div>
+          </div>
+        `;
+
+        playVoiceInstant('outroAudio');
+      });
+    }
+
+    /* ========================================================
+       8. CONTROL DEL MODO GRABACIÓN (SOPORTE PARA VIDEO Y GIF)
+       ======================================================== */
+    let currentRecordMode = 'shorts';
+
+    function setStageBackgroundMedia(file) {
+      const videoPlayer = document.getElementById('bg-video-player');
+      const imgPlayer = document.getElementById('bg-img-player');
+
+      if (!file) {
+        videoPlayer.removeAttribute('src');
+        videoPlayer.style.display = 'none';
+        imgPlayer.removeAttribute('src');
+        imgPlayer.style.display = 'none';
+        return;
+      }
+
+      const isGifOrImg = file.type.startsWith('image/') || file.name.toLowerCase().endsWith('.gif');
+
+      if (isGifOrImg) {
+        videoPlayer.pause();
+        videoPlayer.removeAttribute('src');
+        videoPlayer.style.display = 'none';
+
+        imgPlayer.src = URL.createObjectURL(file);
+        imgPlayer.style.display = 'block';
+      } else {
+        imgPlayer.removeAttribute('src');
+        imgPlayer.style.display = 'none';
+
+        videoPlayer.src = URL.createObjectURL(file);
+        videoPlayer.style.display = 'block';
+        videoPlayer.play().catch(() => {});
+      }
+    }
+
+    async function enterRecordMode(mode) {
+      currentRecordMode = mode;
+      getAudioContext();
+
+      if (mode === 'shorts') {
+        for (const [key, file] of Object.entries(mediaStore)) {
+          if (file && key !== 'bgVideo' && !key.includes('Img') && !audioBufferCache[key]) {
+            await preloadAudioToBuffer(key, file);
+          }
+        }
+        if (categoryAudiosStore[selectedCategory] && !audioBufferCache['bank_cat_' + selectedCategory]) {
+          await preloadAudioToBuffer('bank_cat_' + selectedCategory, categoryAudiosStore[selectedCategory]);
+        }
+
+        setStageBackgroundMedia(mediaStore.bgVideo);
+
+        currentQuestionIndex = 0;
+        renderControlsBar('shorts');
+        document.getElementById('record-screen').style.display = 'flex';
+        stepStartIntro();
+
+      } else if (mode === 'wyr') {
+        setStageBackgroundMedia(wyrActiveSelection.bgVideo);
+
+        currentWyrIndex = 0;
+        renderControlsBar('wyr');
+        document.getElementById('record-screen').style.display = 'flex';
+        stepWyrIntro();
+      }
+    }
+
+    function renderControlsBar(mode) {
+      const container = document.getElementById('stage-thumb-controls');
+      if (mode === 'shorts') {
+        container.style.gridTemplateColumns = 'repeat(5, 1fr)';
+        container.innerHTML = `
+          <button class="ctrl-btn" onclick="stepStartIntro()"><span class="icon">🚀</span><span>Intro</span></button>
+          <button class="ctrl-btn" onclick="stepRevealCategory()"><span class="icon">🏷️</span><span>Categoría</span></button>
+          <button class="ctrl-btn" onclick="stepShowQuestion()"><span class="icon">❓</span><span>Pregunta</span></button>
+          <button class="ctrl-btn" onclick="stepStartCountdown()"><span class="icon">⏱️</span><span>3 Seg</span></button>
+          <button class="ctrl-btn" onclick="stepNextOrFinish()"><span class="icon">⏩</span><span>Sig/Fin</span></button>
+        `;
+      } else {
+        container.style.gridTemplateColumns = 'repeat(4, 1fr)';
+        container.innerHTML = `
+          <button class="ctrl-btn" onclick="stepWyrIntro()"><span class="icon">🚀</span><span>Intro</span></button>
+          <button class="ctrl-btn" onclick="stepWyrShowOptions()"><span class="icon">❓</span><span>Opciones</span></button>
+          <button class="ctrl-btn" onclick="stepWyrCountdown()"><span class="icon">⏱️</span><span>5 Seg</span></button>
+          <button class="ctrl-btn" onclick="stepWyrNextOrFinish()"><span class="icon">⏩</span><span>Siguiente</span></button>
+        `;
+      }
+    }
+
+    function exitRecordMode() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+      clearTimeout(wyrCountdownTimer);
+      clearHookStickers(false);
+      document.getElementById('record-screen').style.display = 'none';
+      document.getElementById('bg-video-player').pause();
+    }
+
+    /* ========================================================
+       9. MODO POST IMAGEN & AUTOGUARDADO
+       ======================================================== */
+    let postState = {
+      ratio: '1:1',
+      bgType: 'color',
+      bgFile: null,
+      logoFile: null,
+      illustrationFile: null
+    };
+
+    let postAutosaveTimeout = null;
+    function triggerPostAutosave() {
+      clearTimeout(postAutosaveTimeout);
+      postAutosaveTimeout = setTimeout(savePostAutosaveData, 500);
+    }
+
+    async function savePostAutosaveData() {
+      const data = {
+        ratio: postState.ratio,
+        badge: document.getElementById('post-badge-text').value,
+        title: document.getElementById('post-title-text').value,
+        body: document.getElementById('post-body-text').value,
+        footer: document.getElementById('post-footer-text').value,
+        titleSize: document.getElementById('range-title-size').value,
+        bodySize: document.getElementById('range-body-size').value,
+        wordSpacing: document.getElementById('range-word-spacing').value,
+        brightness: document.getElementById('range-bg-brightness').value
+      };
+      await saveSettingToDB('post_autosave_state', data);
+    }
+
+    async function loadPostAutosaveData() {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_SETTINGS, 'readonly');
+        const req = tx.objectStore(STORE_SETTINGS).get('post_autosave_state');
+        req.onsuccess = () => {
+          if (req.result && req.result.file) {
+            const d = req.result.file;
+            if (d.badge !== undefined) document.getElementById('post-badge-text').value = d.badge;
+            if (d.title !== undefined) document.getElementById('post-title-text').value = d.title;
+            if (d.body !== undefined) document.getElementById('post-body-text').value = d.body;
+            if (d.footer !== undefined) document.getElementById('post-footer-text').value = d.footer;
+            if (d.titleSize !== undefined) document.getElementById('range-title-size').value = d.titleSize;
+            if (d.bodySize !== undefined) document.getElementById('range-body-size').value = d.bodySize;
+            if (d.wordSpacing !== undefined) document.getElementById('range-word-spacing').value = d.wordSpacing;
+            if (d.brightness !== undefined) document.getElementById('range-bg-brightness').value = d.brightness;
+            if (d.ratio) setImageRatio(d.ratio);
+            updatePostPreview();
+          }
+        };
+      } catch (e) {}
+    }
+
+    function setImageRatio(ratio) {
+      postState.ratio = ratio;
+      const node = document.getElementById('post-render-node');
+      const btn1 = document.getElementById('btn-ratio-1-1');
+      const btn4 = document.getElementById('btn-ratio-4-5');
+
+      if (ratio === '1:1') {
+        node.className = 'post-canvas-container ratio-1-1';
+        btn1.classList.add('active');
+        btn4.classList.remove('active');
+      } else {
+        node.className = 'post-canvas-container ratio-4-5';
+        btn4.classList.add('active');
+        btn1.classList.remove('active');
+      }
+      triggerPostAutosave();
+    }
+
+    function handleBrandLogoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      postState.logoFile = file;
+
+      const label = document.getElementById('lbl-post-logo');
+      label.textContent = `✓ Logo: ${file.name}`;
+      label.classList.add('loaded');
+
+      const url = URL.createObjectURL(file);
+      const prevLogo = document.getElementById('prev-brand-logo');
+      prevLogo.src = url;
+      prevLogo.style.display = 'block';
+
+      saveSettingToDB('brand_logo', file);
+    }
+
+    function handlePostBgUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      postState.bgFile = file;
+
+      const label = document.getElementById('lbl-post-bg');
+      label.textContent = `✓ Fondo: ${file.name}`;
+      label.classList.add('loaded');
+
+      const bgImg = document.getElementById('post-bg-img');
+      const bgVid = document.getElementById('post-bg-video');
+      const url = URL.createObjectURL(file);
+
+      if (file.type.startsWith('video/')) {
+        postState.bgType = 'video';
+        bgVid.src = url;
+        bgVid.style.display = 'block';
+        bgImg.style.display = 'none';
+        bgVid.play().catch(()=>{});
+      } else {
+        postState.bgType = 'image';
+        bgImg.src = url;
+        bgImg.style.display = 'block';
+        bgVid.style.display = 'none';
+      }
+      updatePostPreview();
+    }
+
+    function handlePostIllustrationUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      postState.illustrationFile = file;
+
+      const label = document.getElementById('lbl-post-illust');
+      label.textContent = `✓ Ilustración: ${file.name}`;
+      label.classList.add('loaded');
+
+      const img = document.getElementById('prev-illustration');
+      img.src = URL.createObjectURL(file);
+    }
+
+    function updatePostPreview() {
+      const titleEl = document.getElementById('prev-title');
+      const bodyEl = document.getElementById('prev-body');
+      const footerEl = document.getElementById('prev-footer');
+      const bgImg = document.getElementById('post-bg-img');
+      const bgVid = document.getElementById('post-bg-video');
+
+      document.getElementById('prev-badge').textContent = document.getElementById('post-badge-text').value || '💡 CURIOSIDAD';
+      titleEl.textContent = document.getElementById('post-title-text').value || 'Título de la curiosidad';
+      bodyEl.textContent = document.getElementById('post-body-text').value || '';
+      footerEl.textContent = document.getElementById('post-footer-text').value || '';
+
+      const titleSize = document.getElementById('range-title-size').value;
+      const bodySize = document.getElementById('range-body-size').value;
+      const wordSpacing = document.getElementById('range-word-spacing').value;
+      const bgBrightness = document.getElementById('range-bg-brightness').value;
+
+      titleEl.style.fontSize = `${titleSize}px`;
+      bodyEl.style.fontSize = `${bodySize}px`;
+      titleEl.style.wordSpacing = `${wordSpacing}px`;
+      bodyEl.style.wordSpacing = `${wordSpacing}px`;
+
+      bgImg.style.filter = `brightness(${bgBrightness}%)`;
+      bgVid.style.filter = `brightness(${bgBrightness}%)`;
+
+      document.getElementById('val-title-size').textContent = `${titleSize}px`;
+      document.getElementById('val-body-size').textContent = `${bodySize}px`;
+      document.getElementById('val-word-spacing').textContent = `${wordSpacing}px`;
+      document.getElementById('val-bg-brightness').textContent = `${bgBrightness}%`;
+    }
+
+    async function downloadCuriosityPost() {
+      const target = document.getElementById('post-render-node');
+      const title = (document.getElementById('post-title-text').value || 'curiosidad').slice(0, 25).trim();
+
+      try {
+        const canvas = await html2canvas(target, {
+          scale: 2.5,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#0d0f17'
+        });
+
+        const link = document.createElement('a');
+        link.download = `Post_${title.replace(/\s+/g, '_')}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (err) {
+        alert('Hubo un inconveniente al generar la imagen. Intenta con otra foto.');
+        console.error(err);
+      }
+    }
+
+    /* ========================================================
+       10. BASE DE DATOS (INDEXEDDB UNIFICADA)
+       ======================================================== */
+    const DB_NAME = 'ViralContentDB_v12';
+    const DB_VERSION = 1;
+    const STORE_PROJECTS = 'projects';
+    const STORE_CAT_AUDIOS = 'category_audios';
+    const STORE_SETTINGS = 'brand_settings';
+    const STORE_WYR_MESSAGES = 'wyr_messages';
+
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_PROJECTS)) db.createObjectStore(STORE_PROJECTS, { keyPath: 'id', autoIncrement: true });
+          if (!db.objectStoreNames.contains(STORE_CAT_AUDIOS)) db.createObjectStore(STORE_CAT_AUDIOS, { keyPath: 'name' });
+          if (!db.objectStoreNames.contains(STORE_SETTINGS)) db.createObjectStore(STORE_SETTINGS, { keyPath: 'key' });
+          if (!db.objectStoreNames.contains(STORE_WYR_MESSAGES)) db.createObjectStore(STORE_WYR_MESSAGES, { keyPath: 'id', autoIncrement: true });
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
+        req.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function saveCategoryAudioToDB(catName, fileBlob) {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_CAT_AUDIOS, 'readwrite');
+        tx.objectStore(STORE_CAT_AUDIOS).put({ name: catName, file: fileBlob });
+      } catch (e) {}
+    }
+
+    async function saveSettingToDB(key, val) {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_SETTINGS, 'readwrite');
+        tx.objectStore(STORE_SETTINGS).put({ key: key, file: val });
+      } catch (e) {}
+    }
+
+    async function loadPersistentSettings() {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_SETTINGS, 'readonly');
+        const req = tx.objectStore(STORE_SETTINGS).getAll();
+
+        req.onsuccess = async () => {
+          const rows = req.result || [];
+          for (const item of rows) {
+            // Brand Logo
+            if (item.key === 'brand_logo' && item.file) {
+              postState.logoFile = item.file;
+              const prevLogo = document.getElementById('prev-brand-logo');
+              prevLogo.src = URL.createObjectURL(item.file);
+              prevLogo.style.display = 'block';
+              const label = document.getElementById('lbl-post-logo');
+              label.textContent = `✓ Logo guardado disponible`;
+              label.classList.add('loaded');
+            }
+
+            // WYR Timer SFX
+            if (item.key === 'wyr_timer_sfx' && item.file) {
+              await preloadAudioToBuffer('wyr_persistent_timer_sfx', item.file);
+              const lbl = document.getElementById('lbl-wyr-timer-sfx');
+              lbl.textContent = `✓ SFX 5 Seg Guardado Disponible`;
+              lbl.classList.add('loaded');
+            }
+
+            // Quiz Timer SFX
+            if (item.key === 'quiz_timer_sfx' && item.file) {
+              mediaStore.timerSfx = item.file;
+              await preloadAudioToBuffer('timerSfx', item.file);
+              const lbl = document.getElementById('lbl-timer-sfx');
+              lbl.textContent = `✓ SFX Cuenta Regresiva Listo`;
+              lbl.classList.add('loaded');
+            }
+
+            // Quiz Cat SFX
+            if (item.key === 'quiz_cat_sfx' && item.file) {
+              mediaStore.catSfx = item.file;
+              await preloadAudioToBuffer('catSfx', item.file);
+              const lbl = document.getElementById('lbl-cat-sfx');
+              lbl.textContent = `✓ SFX Ruleta Listo`;
+              lbl.classList.add('loaded');
+            }
+
+            // Quiz Intro Audio
+            if (item.key === 'quiz_intro_audio' && item.file) {
+              mediaStore.introAudio = item.file;
+              await preloadAudioToBuffer('introAudio', item.file);
+              const lbl = document.getElementById('lbl-intro-audio');
+              lbl.textContent = `✓ Audio Bienvenida Listo`;
+              lbl.classList.add('loaded');
+            }
+
+            // Quiz Outro Audio
+            if (item.key === 'quiz_outro_audio' && item.file) {
+              mediaStore.outroAudio = item.file;
+              await preloadAudioToBuffer('outroAudio', item.file);
+              const lbl = document.getElementById('lbl-outro-audio');
+              lbl.textContent = `✓ Audio Despedida Listo`;
+              lbl.classList.add('loaded');
+            }
+
+            // Quiz "Categoría de hoy..." Audio
+            if (item.key === 'quiz_cat_prefix_audio' && item.file) {
+              mediaStore.catPrefixAudio = item.file;
+              await preloadAudioToBuffer('catPrefixAudio', item.file);
+              const lbl = document.getElementById('lbl-cat-prefix-audio');
+              lbl.textContent = `✓ Audio "Categoría de hoy..." Listo`;
+              lbl.classList.add('loaded');
+            }
+
+            // Quiz Intro & Outro Texts
+            if (item.key === 'quiz_intro_text' && typeof item.file === 'string') {
+              document.getElementById('intro-text').value = item.file;
+            }
+            if (item.key === 'quiz_outro_text' && typeof item.file === 'string') {
+              document.getElementById('outro-text').value = item.file;
+            }
+
+            // Colores
+            if (item.key === 'cat_winner_color' && typeof item.file === 'string') {
+              syncCatWinnerColor(item.file);
+            }
+            if (item.key === 'cat_winner_color_2' && typeof item.file === 'string') {
+              syncCatWinnerColor2(item.file);
+            }
+            if (item.key === 'cat_wheel_bg_color' && typeof item.file === 'string') {
+              syncCatWheelBgColor(item.file);
+            }
+
+            // Stickers Quiz
+            for (let i = 0; i < 4; i++) {
+              if (item.key === `hook_stk_${i}` && item.file) {
+                persistentStickers[i] = item.file;
+                preloadImageBlob(`hook_stk_${i}`, item.file);
+                const lbl = document.getElementById(`lbl-sticker-${i + 1}`);
+                if (lbl) {
+                  lbl.textContent = `✓ PNG ${i + 1} Listo`;
+                  lbl.classList.add('loaded');
+                }
+              }
+            }
+
+            // SFX Pop Stickers Quiz
+            if (item.key === 'sticker_pop_sfx' && item.file) {
+              await preloadAudioToBuffer('sticker_pop_sfx', item.file);
+              const lbl = document.getElementById('lbl-sticker-pop-sfx');
+              lbl.textContent = `✓ SFX Pop Listo`;
+              lbl.classList.add('loaded');
+            }
+
+            // MEJORA: Carga de Stickers ¿Qué prefieres?
+            for (let i = 0; i < 4; i++) {
+              if (item.key === `wyr_hook_stk_${i}` && item.file) {
+                wyrPersistentStickers[i] = item.file;
+                preloadImageBlob(`wyr_hook_stk_${i}`, item.file);
+                const lbl = document.getElementById(`lbl-wyr-sticker-${i + 1}`);
+                if (lbl) {
+                  lbl.textContent = `✓ PNG ${i + 1} Listo`;
+                  lbl.classList.add('loaded');
+                }
+              }
+            }
+
+            // SFX Pop Stickers WYR
+            if (item.key === 'wyr_sticker_pop_sfx' && item.file) {
+              await preloadAudioToBuffer('wyr_sticker_pop_sfx', item.file);
+              const lbl = document.getElementById('lbl-wyr-sticker-pop-sfx');
+              lbl.textContent = `✓ Pop SFX WYR Listo`;
+              lbl.classList.add('loaded');
+            }
+          }
+        };
+      } catch (e) {}
+    }
+
+    async function loadAllBankMessagesFromDB() {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_WYR_MESSAGES, 'readonly');
+        const req = tx.objectStore(STORE_WYR_MESSAGES).getAll();
+        req.onsuccess = async () => {
+          wyrBankMessages = req.result || [];
+          for (const msg of wyrBankMessages) {
+            if (msg.audioBlob) {
+              await preloadAudioToBuffer('wyr_msg_' + msg.id, msg.audioBlob);
+            }
+          }
+          updateBankMessagesCounter();
+        };
+      } catch (e) {}
+    }
+
+    async function loadAllCategoryAudiosFromDB() {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_CAT_AUDIOS, 'readonly');
+        const req = tx.objectStore(STORE_CAT_AUDIOS).getAll();
+        req.onsuccess = async () => {
+          const records = req.result || [];
+          for (const item of records) {
+            categoryAudiosStore[item.name] = item.file;
+            await preloadAudioToBuffer('bank_cat_' + item.name, item.file);
+          }
+          updateBankCatUI();
+        };
+      } catch (e) {}
+    }
+
+    /* GUARDADO DE PROYECTOS */
+    function getCurrentQuizFormData() {
+      const getVal = id => document.getElementById(id).value;
+      const getRadio = name => {
+        const radios = document.getElementsByName(name);
+        for (const r of radios) if (r.checked) return r.value;
+        return 'A';
+      };
+
+      return {
+        introText: getVal('intro-text'),
+        selectedCategory,
+        outroText: getVal('outro-text'),
+        q1: { text: getVal('q1-text'), optA: getVal('q1-optA'), optB: getVal('q1-optB'), optC: getVal('q1-optC'), correct: getRadio('q1-correct') },
+        q2: { text: getVal('q2-text'), optA: getVal('q2-optA'), optB: getVal('q2-optB'), optC: getVal('q2-optC'), correct: getRadio('q2-correct') },
+        q3: { text: getVal('q3-text'), optA: getVal('q3-optA'), optB: getVal('q3-optB'), optC: getVal('q3-optC'), correct: getRadio('q3-correct') },
+        files: { ...mediaStore }
+      };
+    }
+
+    async function saveCurrentQuizProject() {
+      const projectName = prompt('Nombre del proyecto Quiz:', `${selectedCategory} - Quiz`);
+      if (!projectName) return;
+
+      const data = getCurrentQuizFormData();
+      const projectRecord = {
+        type: 'quiz',
+        name: projectName,
+        date: new Date().toLocaleString(),
+        payload: data
+      };
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readwrite');
+        tx.objectStore(STORE_PROJECTS).add(projectRecord);
+        tx.oncomplete = () => alert('✅ ¡Proyecto Quiz guardado en la biblioteca!');
+      } catch (err) {
+        alert('Error al guardar proyecto.');
+      }
+    }
+
+    function getCurrentWyrFormData() {
+      const getVal = id => document.getElementById(id).value;
+
+      return {
+        activeSelection: { ...wyrActiveSelection },
+        c1: {
+          optAText: getVal('wyr-c1-optA-text'), optAPct: getVal('wyr-c1-optA-pct'),
+          optBText: getVal('wyr-c1-optB-text'), optBPct: getVal('wyr-c1-optB-pct')
+        },
+        c2: {
+          optAText: getVal('wyr-c2-optA-text'), optAPct: getVal('wyr-c2-optA-pct'),
+          optBText: getVal('wyr-c2-optB-text'), optBPct: getVal('wyr-c2-optB-pct')
+        },
+        c3: {
+          optAText: getVal('wyr-c3-optA-text'), optAPct: getVal('wyr-c3-optA-pct'),
+          optBText: getVal('wyr-c3-optB-text'), optBPct: getVal('wyr-c3-optB-pct')
+        }
+      };
+    }
+
+    async function saveCurrentWyrProject() {
+      const opt1 = document.getElementById('wyr-c1-optA-text').value || 'Prefieres';
+      const projectName = prompt('Nombre del proyecto "¿Qué prefieres?":', `¿Qué prefieres? - ${opt1.slice(0, 15)}...`);
+      if (!projectName) return;
+
+      const data = getCurrentWyrFormData();
+      const projectRecord = {
+        type: 'wyr',
+        name: projectName,
+        date: new Date().toLocaleString(),
+        payload: data
+      };
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readwrite');
+        tx.objectStore(STORE_PROJECTS).add(projectRecord);
+        tx.oncomplete = () => alert('✅ ¡Proyecto "¿Qué prefieres?" guardado con éxito!');
+      } catch (err) {
+        alert('Error al guardar proyecto.');
+      }
+    }
+
+    /* BIBLIOTECA */
+    async function openLibraryModal() {
+      document.getElementById('library-modal').style.display = 'flex';
+      renderProjectsList();
+    }
+    function closeLibraryModal() {
+      document.getElementById('library-modal').style.display = 'none';
+    }
+
+    async function renderProjectsList() {
+      const container = document.getElementById('projects-list');
+      container.innerHTML = '<div style="text-align:center; padding: 20px; color:#888;">Cargando...</div>';
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readonly');
+        const req = tx.objectStore(STORE_PROJECTS).getAll();
+
+        req.onsuccess = () => {
+          const list = req.result;
+          if (!list || list.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:20px; color:#777;">No hay proyectos guardados aún.</div>';
+            return;
+          }
+
+          container.innerHTML = '';
+          list.reverse().forEach(item => {
+            const isWyr = (item.type === 'wyr');
+            const typeLabel = isWyr ? '<span class="project-type-tag tag-wyr">⚖️ ¿QUÉ PREFIERES?</span>' : '<span class="project-type-tag tag-quiz">🎬 QUIZ 9:16</span>';
+
+            const div = document.createElement('div');
+            div.className = 'project-item';
+            div.innerHTML = `
+              <div class="project-info">
+                ${typeLabel}
+                <h4>${escapeHtml(item.name)}</h4>
+                <span>📅 ${item.date}</span>
+              </div>
+              <div class="project-actions">
+                <button class="btn-proj-load" onclick="loadProjectItem(${item.id})">Cargar</button>
+                <button class="btn-proj-del" onclick="deleteProjectById(${item.id})">Eliminar</button>
+              </div>
+            `;
+            container.appendChild(div);
+          });
+        };
+      } catch (err) {
+        container.innerHTML = '<div style="text-align:center; padding:20px;">Error al cargar biblioteca.</div>';
+      }
+    }
+
+    async function loadProjectItem(id) {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readonly');
+        const req = tx.objectStore(STORE_PROJECTS).get(id);
+
+        req.onsuccess = async () => {
+          const item = req.result;
+          if (!item) return;
+
+          if (item.type === 'wyr') {
+            await restoreWyrProject(item);
+          } else {
+            await restoreQuizProject(item);
+          }
+
+          closeLibraryModal();
+        };
+      } catch (err) {
+        alert('Error al restaurar proyecto.');
+      }
+    }
+
+    async function restoreQuizProject(item) {
+      switchMode('shorts');
+      const p = item.payload;
+      document.getElementById('intro-text').value = p.introText || '';
+      document.getElementById('outro-text').value = p.outroText || '';
+
+      if (p.selectedCategory) {
+        selectedCategory = p.selectedCategory;
+        document.getElementById('txt-selected-cat').textContent = `🏷️ Categoría: ${selectedCategory}`;
+      }
+
+      const loadQ = (n, qData) => {
+        if (!qData) return;
+        document.getElementById(`q${n}-text`).value = qData.text || '';
+        document.getElementById(`q${n}-optA`).value = qData.optA || '';
+        document.getElementById(`q${n}-optB`).value = qData.optB || '';
+        document.getElementById(`q${n}-optC`).value = qData.optC || '';
+        const radios = document.getElementsByName(`q${n}-correct`);
+        for (const r of radios) r.checked = (r.value === qData.correct);
+      };
+
+      loadQ(1, p.q1);
+      loadQ(2, p.q2);
+      loadQ(3, p.q3);
+
+      if (p.files) {
+        Object.assign(mediaStore, p.files);
+
+        for (const [key, file] of Object.entries(p.files)) {
+          if (file && key !== 'bgVideo' && !key.includes('Img')) {
+            await preloadAudioToBuffer(key, file);
+          }
+          if (file && key.includes('Img')) {
+            preloadImageBlob(key, file);
+          }
+        }
+
+        const updateLabel = (id, file, txt) => {
+          const lbl = document.getElementById(id);
+          if (file) {
+            lbl.textContent = `✓ ${file.name || 'Cargado'}`;
+            lbl.classList.add('loaded');
+          } else {
+            lbl.textContent = txt;
+            lbl.classList.remove('loaded');
+          }
+        };
+
+        updateLabel('lbl-bg-video', mediaStore.bgVideo, 'Cargar Video MP4 o GIF de fondo');
+        updateLabel('lbl-timer-sfx', mediaStore.timerSfx, '🎵 Cargar SFX Cuenta Regresiva (Vol 70%)');
+        updateLabel('lbl-intro-audio', mediaStore.introAudio, 'Cargar Audio Bienvenida');
+        updateLabel('lbl-cat-prefix-audio', mediaStore.catPrefixAudio, 'Cargar Audio "Categoría de hoy..."');
+        updateLabel('lbl-cat-sfx', mediaStore.catSfx, '🎵 Cargar SFX Ruleta Categoría (Vol 70%)');
+        updateLabel('lbl-q1-img', mediaStore.q1Img, '1. Imagen Inicial de Pregunta');
+        updateLabel('lbl-q1-ans-img', mediaStore.q1AnsImg, '2. Imagen de Respuesta Correcta (Transición)');
+        updateLabel('lbl-q1-audio', mediaStore.q1Audio, 'Cargar Audio Pregunta 1');
+        updateLabel('lbl-q1-ans-audio', mediaStore.q1AnsAudio, '🔊 Cargar Audio Respuesta Correcta P1');
+        updateLabel('lbl-q2-img', mediaStore.q2Img, '1. Imagen Inicial de Pregunta');
+        updateLabel('lbl-q2-ans-img', mediaStore.q2AnsImg, '2. Imagen de Respuesta Correcta (Transición)');
+        updateLabel('lbl-q2-audio', mediaStore.q2Audio, 'Cargar Audio Pregunta 2');
+        updateLabel('lbl-q2-ans-audio', mediaStore.q2AnsAudio, '🔊 Cargar Audio Respuesta Correcta P2');
+        updateLabel('lbl-q3-img', mediaStore.q3Img, '1. Imagen Inicial de Pregunta');
+        updateLabel('lbl-q3-ans-img', mediaStore.q3AnsImg, '2. Imagen de Respuesta Correcta (Transición)');
+        updateLabel('lbl-q3-audio', mediaStore.q3Audio, 'Cargar Audio Pregunta 3');
+        updateLabel('lbl-q3-ans-audio', mediaStore.q3AnsAudio, '🔊 Cargar Audio Respuesta Correcta P3');
+        updateLabel('lbl-outro-audio', mediaStore.outroAudio, 'Cargar Audio Outro');
+      }
+
+      alert(`✅ Proyecto Quiz "${item.name}" cargado.`);
+    }
+
+    async function restoreWyrProject(item) {
+      switchMode('wyr');
+      const p = item.payload;
+
+      if (p.activeSelection) {
+        Object.assign(wyrActiveSelection, p.activeSelection);
+
+        if (wyrActiveSelection.intro.text) {
+          document.getElementById('txt-wyr-intro').textContent = `✓ ${wyrActiveSelection.intro.text}`;
+          document.getElementById('btn-sel-wyr-intro').classList.add('selected');
+        }
+        if (wyrActiveSelection.c1.text) {
+          document.getElementById('txt-wyr-c1').textContent = `✓ ${wyrActiveSelection.c1.text}`;
+          document.getElementById('btn-sel-wyr-c1').classList.add('selected');
+        }
+        if (wyrActiveSelection.c2.text) {
+          document.getElementById('txt-wyr-c2').textContent = `✓ ${wyrActiveSelection.c2.text}`;
+          document.getElementById('btn-sel-wyr-c2').classList.add('selected');
+        }
+        if (wyrActiveSelection.c3.text) {
+          document.getElementById('txt-wyr-c3').textContent = `✓ ${wyrActiveSelection.c3.text}`;
+          document.getElementById('btn-sel-wyr-c3').classList.add('selected');
+        }
+        if (wyrActiveSelection.outro.text) {
+          document.getElementById('txt-wyr-outro').textContent = `✓ ${wyrActiveSelection.outro.text}`;
+          document.getElementById('btn-sel-wyr-outro').classList.add('selected');
+        }
+
+        const updateLabel = (id, file, txt) => {
+          const lbl = document.getElementById(id);
+          if (file) {
+            lbl.textContent = `✓ ${file.name || 'Cargado'}`;
+            lbl.classList.add('loaded');
+          } else {
+            lbl.textContent = txt;
+            lbl.classList.remove('loaded');
+          }
+        };
+
+        updateLabel('lbl-wyr-bg-video', wyrActiveSelection.bgVideo, 'Cargar Video MP4 o GIF de fondo');
+        updateLabel('lbl-wyr-c1-optA-img', wyrActiveSelection.c1OptAImg, 'Subir Imagen Opción A');
+        updateLabel('lbl-wyr-c1-optB-img', wyrActiveSelection.c1OptBImg, 'Subir Imagen Opción B');
+        updateLabel('lbl-wyr-c2-optA-img', wyrActiveSelection.c2OptAImg, 'Subir Imagen Opción A');
+        updateLabel('lbl-wyr-c2-optB-img', wyrActiveSelection.c2OptBImg, 'Subir Imagen Opción B');
+        updateLabel('lbl-wyr-c3-optA-img', wyrActiveSelection.c3OptAImg, 'Subir Imagen Opción A');
+        updateLabel('lbl-wyr-c3-optB-img', wyrActiveSelection.c3OptBImg, 'Subir Imagen Opción B');
+      }
+
+      const loadC = (n, cData) => {
+        if (!cData) return;
+        document.getElementById(`wyr-c${n}-optA-text`).value = cData.optAText || '';
+        document.getElementById(`wyr-c${n}-optA-pct`).value = cData.optAPct || '';
+        document.getElementById(`wyr-c${n}-optB-text`).value = cData.optBText || '';
+        document.getElementById(`wyr-c${n}-optB-pct`).value = cData.optBPct || '';
+      };
+
+      loadC(1, p.c1);
+      loadC(2, p.c2);
+      loadC(3, p.c3);
+
+      alert(`✅ Proyecto "¿Qué prefieres?" "${item.name}" cargado.`);
+    }
+
+    async function deleteProjectById(id) {
+      if (!confirm('¿Eliminar proyecto permanentemente de la biblioteca?')) return;
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readwrite');
+        tx.objectStore(STORE_PROJECTS).delete(id);
+        tx.oncomplete = () => renderProjectsList();
+      } catch (err) {}
+    }
+
+    /* INICIALIZACIÓN GLOBAL */
+    window.addEventListener('DOMContentLoaded', async () => {
+      initBankSelect();
+      await loadPersistentSettings();
+      await loadAllCategoryAudiosFromDB();
+      await loadAllBankMessagesFromDB();
+      await loadPostAutosaveData();
+      updatePostPreview();
+    });
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+  </script>
+</body>
+</html>
