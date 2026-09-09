@@ -3181,9 +3181,10 @@
           </div>
         `;
 
-        playVoiceInstant(q.audioKey);
-      });
-    }
+        setTimeout(() => {
+    playVoiceInstant(q.audioKey);
+}, 250);
+    });
 
     function stepStartCountdown() {
       const timerBox = document.getElementById('timer-box');
@@ -3235,7 +3236,7 @@
 
       answerImageTransitionTimer = setTimeout(() => {
         startAnswerImageTransition();
-      }, 2800);
+      }, 3000);
 
       countdownTimer = setTimeout(() => {
         clearInterval(countdownInterval);
@@ -3269,8 +3270,10 @@
       });
 
       triggerConfetti();
-      playVoiceInstant(q.ansAudioKey);
-    }
+      setTimeout(() => {
+    playVoiceInstant(q.ansAudioKey);
+}, 250);
+    });
 
     function stepNextOrFinish() {
       currentQuestionIndex++;
@@ -3300,9 +3303,10 @@
           </div>
         `;
 
-        playVoiceInstant('outroAudio');
-      });
-    }
+        setTimeout(() => {
+    playVoiceInstant('outroAudio');
+}, 450);
+    });
 
     /* ========================================================
        11. CONTROL DEL MODO GRABACIÓN
