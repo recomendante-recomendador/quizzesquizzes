@@ -1,0 +1,3754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Viral Content Studio Pro: Quiz 9:16 & ¿Qué prefieres?</title>
+  <!-- Tipografías Virales -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;0,900;1,900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0d0f17;
+      --panel-bg: #161822;
+      --card-white: rgba(255, 255, 255, 0.97);
+      --primary: #00F0FF;
+      --accent: #FF007F;
+      --gold: #FFC400;
+      --correct: #00E676;
+      --wrong: #FF1744;
+      --wyr-red: #ff1e42;
+      --wyr-red-dark: #7a0014;
+      --wyr-blue: #0077ff;
+      --wyr-blue-dark: #002d6b;
+      --text-dark: #0f172a;
+      --text-muted: #8F9CAE;
+      --font-display: 'Montserrat', sans-serif;
+      --font-body: 'Poppins', sans-serif;
+
+      /* Variables dinámicas para Categoría */
+      --cat-color: #FFC400;
+      --cat-border-color: rgba(204, 153, 0, 0.65);
+      --cat-glow-shadow: rgba(255, 196, 0, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #fff;
+      font-family: var(--font-body);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    input, textarea, select, button {
+      font-family: inherit;
+    }
+
+    /* SWITCH PRINCIPAL DE 2 MODOS */
+    .mode-switch-wrapper {
+      max-width: 480px;
+      margin: 12px auto 0 auto;
+      padding: 0 12px;
+    }
+
+    .mode-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #111420;
+      padding: 4px;
+      border-radius: 14px;
+      border: 1px solid #282f48;
+      gap: 6px;
+    }
+
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 10px 4px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .mode-btn.active {
+      background: linear-gradient(135deg, var(--primary), #00a8ff);
+      color: #000;
+      box-shadow: 0 2px 10px rgba(0, 240, 255, 0.35);
+    }
+
+    .mode-btn.active.wyr-active {
+      background: linear-gradient(135deg, #ff1e42, #0077ff);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(255, 30, 66, 0.4);
+    }
+
+    /* PANEL DE CONTROL MÓVIL */
+    .setup-container {
+      padding: 14px 14px 90px 14px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #282c3f;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-lib { background: #2b3044; color: #fff; }
+    .btn-save { background: var(--primary); color: #000; }
+    .btn-save-wyr { background: linear-gradient(135deg, #ff1e42, #0077ff); color: #fff; }
+
+    .card-setup {
+      background: var(--panel-bg);
+      border: 1px solid #282d3f;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .card-setup-title {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    textarea, input[type="text"], input[type="number"], select {
+      width: 100%;
+      background: #0d0f17;
+      border: 1px solid #272d42;
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: #fff;
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+      user-select: text;
+    }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .color-picker-row input[type="color"] {
+      width: 44px;
+      height: 38px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+    }
+    .color-picker-row input[type="text"] {
+      margin-bottom: 0;
+      flex: 1;
+    }
+
+    .file-input-wrapper {
+      margin-bottom: 8px;
+    }
+    .file-input-wrapper input[type="file"] { display: none; }
+    .file-custom-btn {
+      display: block;
+      background: #1e2230;
+      border: 1px dashed #3a415a;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      text-align: center;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-custom-btn.loaded {
+      border: 1px solid var(--correct);
+      color: var(--correct);
+      background: rgba(0, 230, 118, 0.08);
+    }
+    .file-custom-btn.sfx-btn {
+      border-color: #818cf8;
+      color: #c7d2fe;
+    }
+
+    .btn-select-category, .btn-select-message {
+      width: 100%;
+      background: #202638;
+      border: 1px solid var(--primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+      line-height: 1.3;
+    }
+    .btn-select-message.selected {
+      border-color: var(--correct);
+      background: rgba(0, 230, 118, 0.08);
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .opt-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f121b;
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1px solid #23283a;
+    }
+    .opt-row input[type="radio"] { accent-color: var(--correct); }
+    .opt-row input[type="text"] { margin-bottom: 0; background: transparent; border: none; padding: 4px; }
+
+    /* BOTONES PARA AÑADIR / QUITAR PREGUNTAS */
+    .expand-actions-bar {
+      display: flex;
+      gap: 8px;
+      margin: 10px 0 16px 0;
+    }
+    .btn-expand {
+      flex: 1;
+      padding: 11px 12px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      border: 1px dashed rgba(255,255,255,0.25);
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+    }
+    .btn-add-q {
+      background: rgba(0, 240, 255, 0.12);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .btn-add-q:active {
+      background: var(--primary);
+      color: #000;
+    }
+    .btn-rem-q {
+      background: rgba(255, 23, 68, 0.12);
+      border-color: var(--wrong);
+      color: var(--wrong);
+    }
+    .btn-rem-q:active {
+      background: var(--wrong);
+      color: #fff;
+    }
+
+    .btn-record-mode {
+      position: sticky;
+      bottom: 12px;
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #ff5252);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 900;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      box-shadow: 0 6px 20px rgba(255, 0, 127, 0.4);
+      cursor: pointer;
+      text-transform: uppercase;
+      z-index: 10;
+    }
+
+    .btn-record-mode.wyr-theme {
+      background: linear-gradient(135deg, #ff1e42, #0077ff);
+      box-shadow: 0 6px 20px rgba(255, 30, 66, 0.4);
+    }
+
+    .wyr-opt-group {
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .wyr-opt-group.red-side { background: rgba(255, 30, 66, 0.08); border-left: 4px solid var(--wyr-red); }
+    .wyr-opt-group.blue-side { background: rgba(0, 119, 255, 0.08); border-left: 4px solid var(--wyr-blue); }
+
+    /* MODO GRABACIÓN 9:16 */
+    #record-screen {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: #000;
+      z-index: 999;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .bg-media-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+    #bg-video-player, #bg-img-player {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+    }
+    .video-overlay-dim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
+      z-index: 1;
+    }
+
+    /* CANVAS DE CONFETI / EMOJIS */
+    #confetti-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 35;
+    }
+
+    .btn-exit-record {
+      position: absolute;
+      top: max(12px, env(safe-area-inset-top));
+      right: 12px;
+      z-index: 50;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quiz-stage {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 395px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 16px 85px 16px;
+      gap: 12px;
+    }
+
+    /* INSIGNIA CONTADOR DE PREGUNTAS */
+    .question-counter-badge {
+      font-family: var(--font-display);
+      font-size: 0.74rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      color: #fff;
+      margin-bottom: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      animation: popIn 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .white-card {
+      position: relative;
+      background: var(--card-white);
+      color: var(--text-dark);
+      border-radius: 20px;
+      padding: 18px 16px;
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0,0,0,0.1);
+      width: 100%;
+      text-align: center;
+      animation: popIn 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      z-index: 10;
+      overflow: hidden;
+      will-change: transform, opacity;
+      transition: transform 0.15s ease;
+    }
+
+    .white-card.cascade-second {
+      animation: popIn 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.25) 0.16s backwards;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.88) translateY(16px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .card-exit {
+      animation: popOut 0.18s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+    }
+
+    @keyframes popOut {
+      0% { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.9) translateY(-12px); }
+    }
+
+    /* TEMBLOR POR URGENCIA (ÚLTIMOS SEGUNDOS) */
+    .card-urgency-1 { animation: urgencyShakeLvl1 0.14s infinite linear !important; }
+    .card-urgency-2 { animation: urgencyShakeLvl2 0.12s infinite linear !important; }
+    .card-urgency-3 { animation: urgencyShakeLvl3 0.1s infinite linear !important; }
+
+    @keyframes urgencyShakeLvl1 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-0.6px, 0.2px) rotate(-0.15deg); }
+      40% { transform: translate(0.6px, -0.2px) rotate(0.15deg); }
+      60% { transform: translate(-0.4px, -0.2px) rotate(-0.1deg); }
+      80% { transform: translate(0.4px, 0.2px) rotate(0.1deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes urgencyShakeLvl2 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-1px, 0.35px) rotate(-0.28deg); }
+      40% { transform: translate(1px, -0.35px) rotate(0.28deg); }
+      60% { transform: translate(-0.7px, -0.35px) rotate(-0.2deg); }
+      80% { transform: translate(0.7px, 0.35px) rotate(0.2deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes urgencyShakeLvl3 {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-1.5px, 0.5px) rotate(-0.4deg); }
+      40% { transform: translate(1.5px, -0.5px) rotate(0.4deg); }
+      60% { transform: translate(-1px, -0.5px) rotate(-0.3deg); }
+      80% { transform: translate(1px, 0.5px) rotate(0.3deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    .white-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(115deg, transparent, rgba(255,255,255,0.55), transparent);
+      transform: skewX(-20deg);
+      animation: cardShine 1.1s ease-out 0.15s forwards;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    @keyframes cardShine {
+      0% { left: -60%; opacity: 1; }
+      100% { left: 130%; opacity: 0; }
+    }
+
+    /* STICKERS POP FLOTANTES */
+    .hook-stickers-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 25;
+      display: none;
+    }
+    .hook-sticker {
+      position: absolute;
+      width: 62px;
+      height: 62px;
+      object-fit: contain;
+      filter: drop-shadow(0 5px 12px rgba(0,0,0,0.65));
+      opacity: 0;
+      transform: scale(0);
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+    .hook-sticker.show {
+      opacity: 1;
+      transform: scale(1);
+      animation: stickerAppear 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.35) forwards;
+    }
+    .hook-sticker.hiding {
+      animation: stickerDisappear 0.2s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+    }
+
+    @keyframes stickerAppear {
+      0% { opacity: 0; transform: scale(0) rotate(-15deg); }
+      70% { opacity: 1; transform: scale(1.15) rotate(6deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes stickerDisappear {
+      0% { opacity: 1; transform: scale(1) rotate(0deg); }
+      100% { opacity: 0; transform: scale(0) rotate(15deg); }
+    }
+
+    .hook-sticker.pos-1 { top: 28%; left: 8%; }
+    .hook-sticker.pos-2 { top: 26%; right: 9%; }
+    .hook-sticker.pos-3 { bottom: 32%; left: 9%; }
+    .hook-sticker.pos-4 { bottom: 34%; right: 8%; }
+
+    .pill-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), #ff0055);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 900;
+      padding: 5px 16px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 14px rgba(255, 0, 127, 0.45);
+    }
+    .pill-badge.wyr-badge {
+      background: linear-gradient(135deg, #ff1e42, #0077ff);
+      box-shadow: 0 4px 14px rgba(255, 30, 66, 0.45);
+    }
+    .pill-badge.badge-results {
+      font-size: 0.95rem;
+      padding: 8px 22px;
+    }
+
+    .welcome-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 900;
+      line-height: 1.25;
+      color: #0f172a;
+    }
+
+    /* TARJETA DE CATEGORÍA CON GLOW DINÁMICO & BORDE ADAPTATIVO */
+    .intro-cat-card {
+      background: #121624;
+      border: 2px solid var(--cat-border-color);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55), 0 0 20px var(--cat-glow-shadow);
+      border-radius: 18px;
+      padding: 14px 16px;
+      width: 100%;
+      text-align: center;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .intro-cat-subtitle {
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: #94a3b8;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .intro-cat-highlight {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      line-height: 1.2;
+      display: inline-block;
+      background: linear-gradient(
+        110deg,
+        var(--cat-color) 0%,
+        var(--cat-color) 35%,
+        #ffffff 50%,
+        var(--cat-color) 65%,
+        var(--cat-color) 100%
+      );
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: textGlowShimmer 1.5s infinite linear;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+    }
+
+    @keyframes textGlowShimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    /* IMAGEN DE PREGUNTA */
+    .question-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 150px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: #000;
+      display: none;
+    }
+    .question-img-wrap img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.05s ease;
+      animation: kenBurns 6s ease-in-out infinite alternate;
+      transform-origin: center center;
+    }
+    .question-img-wrap img#q-base-img { opacity: 1; z-index: 1; }
+    .question-img-wrap img#q-ans-img { opacity: 0; z-index: 2; animation-delay: 0.15s; }
+
+    @keyframes kenBurns {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.06); }
+    }
+    .question-img-wrap .flash-overlay {
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .question-img-wrap.do-flash .flash-overlay {
+      animation: microFlash 0.22s ease forwards;
+    }
+
+    @keyframes microFlash {
+      0% { opacity: 0; }
+      50% { opacity: 0.55; }
+      100% { opacity: 0; }
+    }
+
+    /* CONTENEDOR DE PREGUNTA ANTI-FRAGMENTACIÓN */
+    .question-text {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 900;
+      line-height: 1.28;
+      color: #0f172a;
+      margin-bottom: 12px;
+      text-align: center;
+      width: 100%;
+      word-break: normal;
+      overflow-wrap: break-word;
+      hyphens: none;
+    }
+
+    .word-unit {
+      display: inline-block;
+      white-space: nowrap;
+      vertical-align: baseline;
+    }
+
+    .char-pop {
+      display: inline-block;
+      opacity: 0;
+      transform: scale(0.8) translateY(4px);
+      filter: blur(1.5px);
+      animation: letterPop 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes letterPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(4px);
+        filter: blur(1.5px);
+      }
+      65% {
+        opacity: 1;
+        transform: scale(1.08) translateY(-1px);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0px);
+      }
+    }
+
+    .timer-container {
+      width: 100%;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .timer-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .timer-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #FF1744 0%, #FFD600 50%, #00E676 100%);
+      border-radius: 999px;
+      transition: width 3s linear;
+    }
+
+    .timer-badge {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #dc2626;
+      margin-top: 4px;
+      display: inline-block;
+      animation: timerPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .quiz-options {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt-btn {
+      width: 100%;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      color: #1e293b;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 800;
+      padding: 10px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      opacity: 1;
+      animation: optCascade 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.25) backwards;
+      transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .quiz-opt-btn:nth-child(1) { animation-delay: 0.05s; }
+    .quiz-opt-btn:nth-child(2) { animation-delay: 0.20s; }
+    .quiz-opt-btn:nth-child(3) { animation-delay: 0.35s; }
+
+    @keyframes optCascade {
+      0% { opacity: 0; transform: translateY(14px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .opt-letter {
+      background: #334155;
+      color: #fff;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      transition: background 0.3s ease;
+    }
+
+    .quiz-opt-btn.is-correct {
+      opacity: 1 !important;
+      visibility: visible !important;
+      background: var(--correct) !important;
+      border-color: #059669 !important;
+      color: #064e3b !important;
+      animation: correctReveal 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+                 correctGlow 1.1s ease-in-out 0.42s infinite alternate !important;
+    }
+    .quiz-opt-btn.is-correct .opt-letter {
+      background: #064e3b;
+      color: #fff;
+    }
+
+    @keyframes correctReveal {
+      0% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 230, 118, 0); }
+      60% { transform: scale(1.055); box-shadow: 0 0 24px rgba(0, 230, 118, 0.85); }
+      100% { transform: scale(1.03); box-shadow: 0 0 16px rgba(0, 230, 118, 0.7); }
+    }
+
+    @keyframes correctGlow {
+      0% { transform: scale(1.03); box-shadow: 0 0 14px rgba(0, 230, 118, 0.6); }
+      100% { transform: scale(1.045); box-shadow: 0 0 28px rgba(0, 230, 118, 0.95); }
+    }
+
+    .quiz-opt-btn.is-wrong {
+      background: #fee2e2 !important;
+      border-color: #fca5a5 !important;
+      color: #991b1b !important;
+      opacity: 0.45 !important;
+      transform: scale(0.96);
+      animation: wrongShake 0.35s ease-in-out;
+    }
+
+    @keyframes wrongShake {
+      0%, 100% { transform: scale(0.96) translateX(0); }
+      25% { transform: scale(0.96) translateX(-4px); }
+      75% { transform: scale(0.96) translateX(4px); }
+    }
+
+    /* ========================================================
+       MODO ¿QUÉ PREFIERES? (WYR)
+       ======================================================== */
+    .wyr-stage-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: popIn 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
+      will-change: transform, opacity;
+    }
+
+    .wyr-header-card {
+      position: relative;
+      background: var(--card-white);
+      color: var(--text-dark);
+      border-radius: 18px;
+      padding: 14px 16px 14px 16px;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .wyr-header-title {
+      font-family: var(--font-display);
+      font-size: 1.18rem;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.25;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .wyr-split-container {
+      position: relative;
+      width: 100%;
+      height: 460px;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.6);
+      border: 3px solid rgba(255,255,255,0.85);
+    }
+
+    .wyr-half {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      gap: 12px;
+      overflow: hidden;
+      transition: filter 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, opacity 0.35s ease;
+      opacity: 1;
+      border: 2px solid transparent;
+    }
+
+    .wyr-half.half-red {
+      background: linear-gradient(135deg, #ff1e42, #b80024);
+      border-bottom: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .wyr-half.half-blue {
+      background: linear-gradient(135deg, #0077ff, #0044b3);
+      border-top: 2px solid rgba(255,255,255,0.3);
+    }
+
+    /* FLASH Y GLOW DE ÉNFASIS DINÁMICO POR OPCIÓN */
+    .wyr-flash-layer {
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .wyr-half.do-flash .wyr-flash-layer {
+      animation: wyrFlashAnim 0.32s ease forwards;
+    }
+
+    @keyframes wyrFlashAnim {
+      0% { opacity: 0; }
+      50% { opacity: 0.55; }
+      100% { opacity: 0; }
+    }
+
+    .wyr-half.wyr-focus-red {
+      filter: brightness(1.15) saturate(1.1);
+      box-shadow: inset 0 0 25px rgba(255, 30, 66, 0.7), 0 0 25px rgba(255, 30, 66, 0.6);
+      border-color: #ff4d6d !important;
+      animation: glowBorderRed 1.8s infinite ease-in-out alternate;
+    }
+
+    .wyr-half.wyr-focus-blue {
+      filter: brightness(1.15) saturate(1.1);
+      box-shadow: inset 0 0 25px rgba(0, 119, 255, 0.7), 0 0 25px rgba(0, 119, 255, 0.6);
+      border-color: #38bdf8 !important;
+      animation: glowBorderBlue 1.8s infinite ease-in-out alternate;
+    }
+
+    @keyframes glowBorderRed {
+      0% { box-shadow: inset 0 0 16px rgba(255, 30, 66, 0.4), 0 0 16px rgba(255, 30, 66, 0.4); }
+      100% { box-shadow: inset 0 0 32px rgba(255, 30, 66, 0.9), 0 0 32px rgba(255, 30, 66, 0.85); }
+    }
+
+    @keyframes glowBorderBlue {
+      0% { box-shadow: inset 0 0 16px rgba(0, 119, 255, 0.4), 0 0 16px rgba(0, 119, 255, 0.4); }
+      100% { box-shadow: inset 0 0 32px rgba(0, 119, 255, 0.9), 0 0 32px rgba(0, 119, 255, 0.85); }
+    }
+
+    .wyr-half.is-loser {
+      filter: brightness(0.68) saturate(0.85);
+      opacity: 0.88;
+    }
+
+    .wyr-half.is-winner {
+      filter: brightness(1.12) saturate(1.15);
+      box-shadow: inset 0 0 30px rgba(255,255,255,0.45), 0 0 20px rgba(255, 215, 0, 0.55);
+    }
+
+    /* IMAGEN 3:2 EN ¿QUÉ PREFIERES? */
+    .wyr-half-img {
+      width: 138px;
+      height: 92px;
+      aspect-ratio: 3 / 2;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 2.5px solid rgba(255,255,255,0.95);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+      flex-shrink: 0;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .wyr-half-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .wyr-half-text {
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      font-weight: 900;
+      line-height: 1.25;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    .wyr-percentage-badge {
+      display: none;
+      align-self: flex-start;
+      margin-top: 8px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      border: 2px solid var(--gold);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 4px 14px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .wyr-vs-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      background: #fff;
+      color: #000;
+      border-radius: 50%;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      border: 3px solid #111;
+      z-index: 10;
+    }
+
+    /* CONTROLES INFERIORES EN MODO GRABACIÓN */
+    .thumb-controls {
+      position: absolute;
+      bottom: max(10px, env(safe-area-inset-bottom));
+      left: 10px;
+      right: 10px;
+      z-index: 100;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: rgba(13, 15, 23, 0.88);
+      backdrop-filter: blur(10px);
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .ctrl-btn {
+      background: #202538;
+      border: 1px solid #3b4362;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 6px 2px;
+      border-radius: 9px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1;
+      height: 46px;
+    }
+    .ctrl-btn:active {
+      transform: scale(0.92);
+      background: var(--primary);
+      color: #000;
+    }
+    .ctrl-btn span.icon { font-size: 1rem; }
+
+    /* MODALES */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-box {
+      background: var(--panel-bg);
+      border: 1px solid #33384c;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 18px;
+      padding: 16px;
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .modal-title { font-family: var(--font-display); font-size: 1rem; font-weight: 800; }
+    .modal-close { background: transparent; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .cat-chip {
+      background: #111420;
+      border: 1px solid #282f48;
+      color: #cbd5e1;
+      padding: 10px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+    }
+    .cat-chip:active, .cat-chip.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    .projects-list, .messages-list {
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 2px;
+    }
+    .project-item, .msg-item {
+      background: #0f111a;
+      border: 1px solid #262c3e;
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .project-info h4, .msg-info h4 { font-size: 0.8rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .project-info span, .msg-info span { font-size: 0.65rem; color: var(--text-muted); }
+    .project-type-tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .tag-quiz { background: rgba(0, 240, 255, 0.15); color: var(--primary); border: 1px solid var(--primary); }
+    .tag-wyr { background: rgba(255, 30, 66, 0.15); color: #ff8095; border: 1px solid #ff1e42; }
+
+    .project-actions, .msg-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+    .btn-proj-load { background: var(--primary); color: #000; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 700; font-size: 0.72rem; cursor: pointer; }
+    .btn-proj-del { background: rgba(255, 23, 68, 0.2); color: var(--wrong); border: 1px solid var(--wrong); padding: 6px 8px; border-radius: 6px; font-weight: 700; font-size: 0.72rem; cursor: pointer; }
+    .btn-preview-audio { background: #262e45; color: #cbd5e1; border: 1px solid #3d4766; padding: 6px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <!-- SELECTOR DE 2 MODOS DE VIDEO -->
+  <div class="mode-switch-wrapper">
+    <div class="mode-switcher">
+      <button class="mode-btn active" id="btn-mode-shorts" onclick="switchMode('shorts')">
+        🎬 Quiz 9:16
+      </button>
+      <button class="mode-btn" id="btn-mode-wyr" onclick="switchMode('wyr')">
+        ⚖️ ¿Qué Prefieres?
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODO 1: PANEL DE CONTROL DE QUIZ (9:16)
+       ======================================================== -->
+  <div id="setup-screen" class="setup-container">
+    <div class="header-bar">
+      <div class="logo">⚡ QUIZ MAKER 9:16</div>
+      <div class="top-actions">
+        <button type="button" class="btn-sm btn-lib" onclick="openLibraryModal()">📂 Biblioteca</button>
+        <button type="button" class="btn-sm btn-save" onclick="saveCurrentQuizProject()">💾 Guardar</button>
+      </div>
+    </div>
+
+    <!-- Fondo de Video o GIF Global -->
+    <div class="card-setup">
+      <div class="card-setup-title">🎬 Video o GIF de Fondo</div>
+      <div class="file-input-wrapper">
+        <label for="bg-video-input" class="file-custom-btn" id="lbl-bg-video">Cargar Video MP4 o GIF de fondo</label>
+        <input type="file" id="bg-video-input" accept="video/mp4,video/*,image/gif,image/*" onchange="handleQuizFileUploaded(event, 'lbl-bg-video', 'bgVideo')" />
+      </div>
+    </div>
+
+    <!-- SFX Cuenta Regresiva Global -->
+    <div class="card-setup">
+      <div class="card-setup-title">⏱️ SFX Cuenta Regresiva (Permanente)</div>
+      <div class="file-input-wrapper">
+        <label for="timer-sfx-input" class="file-custom-btn sfx-btn" id="lbl-timer-sfx">🎵 Cargar SFX Cuenta Regresiva (Vol 70%)</label>
+        <input type="file" id="timer-sfx-input" accept="audio/*" onchange="handleQuizPersistentAudioUpload(event, 'quiz_timer_sfx', 'lbl-timer-sfx', 'timerSfx')" />
+      </div>
+    </div>
+
+    <!-- STICKERS FLOTANTES QUIZ -->
+    <div class="card-setup" style="border-left: 4px solid var(--accent);">
+      <div class="card-setup-title">✨ Stickers Pop de Bienvenida Quiz (Gancho 3s)</div>
+      <p style="font-size:0.7rem; color:var(--text-muted); margin-bottom:8px; line-height: 1.3;">
+        Sube 4 stickers PNG y su sonido Pop. Aparecen en secuencia y se guardan permanentemente.
+      </p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
+        <div class="file-input-wrapper">
+          <label for="sticker-1-input" class="file-custom-btn" id="lbl-sticker-1">1. Superior Izq</label>
+          <input type="file" id="sticker-1-input" accept="image/png,image/webp" onchange="handleStickerUpload(event, 0)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="sticker-2-input" class="file-custom-btn" id="lbl-sticker-2">2. Superior Der</label>
+          <input type="file" id="sticker-2-input" accept="image/png,image/webp" onchange="handleStickerUpload(event, 1)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="sticker-3-input" class="file-custom-btn" id="lbl-sticker-3">3. Inferior Izq</label>
+          <input type="file" id="sticker-3-input" accept="image/png,image/webp" onchange="handleStickerUpload(event, 2)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="sticker-4-input" class="file-custom-btn" id="lbl-sticker-4">4. Inferior Der</label>
+          <input type="file" id="sticker-4-input" accept="image/png,image/webp" onchange="handleStickerUpload(event, 3)" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="sticker-pop-sfx-input" class="file-custom-btn sfx-btn" id="lbl-sticker-pop-sfx">🎵 Sonido Pop para Quiz</label>
+        <input type="file" id="sticker-pop-sfx-input" accept="audio/*" onchange="handleStickerPopSfxUpload(event)" />
+      </div>
+    </div>
+
+    <!-- Intro & Categoría Simultánea con Selector de Color -->
+    <div class="card-setup">
+      <div class="card-setup-title">👋 Pantalla 1: Saludo & Categoría</div>
+      <label>1. Pregunta de Bienvenida / Gancho</label>
+      <textarea id="intro-text" rows="2" placeholder="Ej: ¿Cuánto sabes de Cultura General?" oninput="triggerQuizAutosave()"></textarea>
+      
+      <div class="file-input-wrapper">
+        <label for="intro-audio-input" class="file-custom-btn" id="lbl-intro-audio">Cargar Audio Bienvenida</label>
+        <input type="file" id="intro-audio-input" accept="audio/*" onchange="handleQuizPersistentAudioUpload(event, 'quiz_intro_audio', 'lbl-intro-audio', 'introAudio')" />
+      </div>
+
+      <label style="margin-top: 8px;">2. Categoría a mostrar</label>
+      <button type="button" class="btn-select-category" onclick="openCategoryModal()">
+        <span id="txt-selected-cat">🏷️ Categoría: Países del mundo</span>
+        <span style="font-size: 0.75rem; color: var(--primary);">Cambiar ▾</span>
+      </button>
+
+      <label style="margin-top: 8px;">Color de la Categoría y Resplandor</label>
+      <div class="color-picker-row">
+        <input type="color" id="cat-color-picker" value="#FFC400" oninput="applyCategoryColor(this.value)" />
+        <input type="text" id="cat-color-hex" value="#FFC400" placeholder="#FFC400" oninput="applyCategoryColor(this.value)" />
+      </div>
+    </div>
+
+    <!-- CONTENEDOR DINÁMICO DE PREGUNTAS (1 A 5) -->
+    <div id="quiz-questions-list-container"></div>
+
+    <!-- BOTONES PARA EXPANDIR PREGUNTAS -->
+    <div class="expand-actions-bar">
+      <button type="button" class="btn-expand btn-add-q" onclick="addQuizQuestion()">➕ Añadir Pregunta (<span id="txt-q-count">3</span>/5)</button>
+      <button type="button" class="btn-expand btn-rem-q" onclick="removeQuizQuestion()">🗑️ Quitar Pregunta</button>
+    </div>
+
+    <!-- Outro -->
+    <div class="card-setup">
+      <div class="card-setup-title">🏁 Pantalla Final: Outro</div>
+      <label>Texto de Cierre</label>
+      <textarea id="outro-text" rows="2" placeholder="¿Cuántas acertaste? Escríbelo en los comentarios. ¡Nos vemos luego!" oninput="triggerQuizAutosave()"></textarea>
+
+      <div class="file-input-wrapper">
+        <label for="outro-audio-input" class="file-custom-btn" id="lbl-outro-audio">Cargar Audio Outro</label>
+        <input type="file" id="outro-audio-input" accept="audio/*" onchange="handleQuizPersistentAudioUpload(event, 'quiz_outro_audio', 'lbl-outro-audio', 'outroAudio')" />
+      </div>
+    </div>
+
+    <button type="button" class="btn-record-mode" onclick="enterRecordMode('shorts')">
+      🎥 Entrar en Modo Grabación (Quiz)
+    </button>
+  </div>
+
+  <!-- ========================================================
+       MODO 2: PANEL DE CONTROL "¿QUÉ PREFIERES?" (9:16)
+       ======================================================== -->
+  <div id="wyr-setup-screen" class="setup-container" style="display: none;">
+    <div class="header-bar">
+      <div class="logo" style="background: linear-gradient(90deg, #ff1e42, #0077ff); -webkit-background-clip: text;">
+        ⚖️ ¿QUÉ PREFIERES? MAKER 9:16
+      </div>
+      <div class="top-actions">
+        <button type="button" class="btn-sm btn-lib" onclick="openLibraryModal()">📂 Biblioteca</button>
+        <button type="button" class="btn-sm btn-save-wyr" onclick="saveCurrentWyrProject()">💾 Guardar</button>
+      </div>
+    </div>
+
+    <!-- Video o GIF Fondo y SFX Permanente WYR -->
+    <div class="card-setup">
+      <div class="card-setup-title">🎬 Video o GIF de Fondo & SFX Conteo</div>
+      <label>Fondo en Bucle (Video MP4 o GIF)</label>
+      <div class="file-input-wrapper">
+        <label for="wyr-bg-video-input" class="file-custom-btn" id="lbl-wyr-bg-video">Cargar Video MP4 o GIF de fondo</label>
+        <input type="file" id="wyr-bg-video-input" accept="video/mp4,video/*,image/gif,image/*" onchange="handleWyrBgVideoSelected(event)" />
+      </div>
+
+      <label style="margin-top: 6px;">⏱️ SFX Conteo 3 Segundos (Permanente)</label>
+      <div class="file-input-wrapper">
+        <label for="wyr-timer-sfx-input" class="file-custom-btn sfx-btn" id="lbl-wyr-timer-sfx">⏱️ Cargar SFX 3 Segundos (Guardado permanente)</label>
+        <input type="file" id="wyr-timer-sfx-input" accept="audio/*" onchange="handleWyrTimerSfxUpload(event)" />
+      </div>
+    </div>
+
+    <!-- STICKERS FLOTANTES WYR -->
+    <div class="card-setup" style="border-left: 4px solid var(--accent);">
+      <div class="card-setup-title">✨ Stickers Pop de Bienvenida (¿Qué Prefieres?)</div>
+      <p style="font-size:0.7rem; color:var(--text-muted); margin-bottom:8px; line-height: 1.3;">
+        Sube tus 4 stickers PNG exclusivos para ¿Qué prefieres? y su sonido Pop (Volumen al 50%).
+      </p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
+        <div class="file-input-wrapper">
+          <label for="wyr-sticker-1-input" class="file-custom-btn" id="lbl-wyr-sticker-1">1. Superior Izq</label>
+          <input type="file" id="wyr-sticker-1-input" accept="image/png,image/webp" onchange="handleWyrStickerUpload(event, 0)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="wyr-sticker-2-input" class="file-custom-btn" id="lbl-wyr-sticker-2">2. Superior Der</label>
+          <input type="file" id="wyr-sticker-2-input" accept="image/png,image/webp" onchange="handleWyrStickerUpload(event, 1)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="wyr-sticker-3-input" class="file-custom-btn" id="lbl-wyr-sticker-3">3. Inferior Izq</label>
+          <input type="file" id="wyr-sticker-3-input" accept="image/png,image/webp" onchange="handleWyrStickerUpload(event, 2)" />
+        </div>
+        <div class="file-input-wrapper">
+          <label for="wyr-sticker-4-input" class="file-custom-btn" id="lbl-wyr-sticker-4">4. Inferior Der</label>
+          <input type="file" id="wyr-sticker-4-input" accept="image/png,image/webp" onchange="handleWyrStickerUpload(event, 3)" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="wyr-sticker-pop-sfx-input" class="file-custom-btn sfx-btn" id="lbl-wyr-sticker-pop-sfx">🎵 Sonido Pop para ¿Qué Prefieres?</label>
+        <input type="file" id="wyr-sticker-pop-sfx-input" accept="audio/*" onchange="handleWyrStickerPopSfxUpload(event)" />
+      </div>
+    </div>
+
+    <!-- BANCO DE MENSAJES WYR -->
+    <div class="card-setup" style="border-left: 4px solid var(--gold);">
+      <div class="card-setup-title">📁 Banco de Mensajes (Permanente)</div>
+      <label>1. Tipo de Mensaje</label>
+      <select id="bank-msg-type">
+        <option value="intro">👋 Saludo / Introducción</option>
+        <option value="question">❓ Pregunta ("¿Qué prefieres?", "¿Con cuál te quedas?")</option>
+        <option value="outro">🏁 Despedida / Outro</option>
+      </select>
+
+      <label>2. Texto del Mensaje</label>
+      <textarea id="bank-msg-text" rows="2" placeholder="Ej: ¿Qué tan difíciles son tus elecciones? ¡Ponte a prueba!"></textarea>
+
+      <label>3. Audio del Mensaje</label>
+      <div class="file-input-wrapper">
+        <label for="bank-msg-audio-input" class="file-custom-btn" id="lbl-bank-msg-audio">Subir Audio para este mensaje</label>
+        <input type="file" id="bank-msg-audio-input" accept="audio/*" onchange="handleBankMessageAudioSelected(event)" />
+      </div>
+
+      <button type="button" class="btn-sm btn-save" style="width:100%; padding:10px; margin-top:4px;" onclick="saveMessageToBank()">
+        💾 Guardar Mensaje en la Biblioteca
+      </button>
+      <div id="bank-msg-counter" style="font-size:0.68rem; color:var(--gold); font-weight:700; margin-top:8px;"></div>
+    </div>
+
+    <!-- Saludo / Intro WYR -->
+    <div class="card-setup">
+      <div class="card-setup-title">👋 1. Saludo / Bienvenida</div>
+      <label>Seleccionar Mensaje de Saludo</label>
+      <button type="button" class="btn-select-message" id="btn-sel-wyr-intro" onclick="openMessagePickerModal('intro', 'wyr-intro')">
+        <span id="txt-wyr-intro">👉 Clic para seleccionar un Saludo guardado</span>
+        <span style="font-size: 0.75rem; color: var(--primary);">Elegir ▾</span>
+      </button>
+    </div>
+
+    <!-- CONTENEDOR DINÁMICO DE ELECCIONES WYR -->
+    <div id="wyr-choices-list-container"></div>
+
+    <!-- BOTONES PARA EXPANDIR ELECCIONES -->
+    <div class="expand-actions-bar">
+      <button type="button" class="btn-expand btn-add-q" onclick="addWyrChoice()">➕ Añadir Elección (<span id="txt-wyr-count">3</span>/5)</button>
+      <button type="button" class="btn-expand btn-rem-q" onclick="removeWyrChoice()">🗑️ Quitar Elección</button>
+    </div>
+
+    <!-- Despedida WYR -->
+    <div class="card-setup">
+      <div class="card-setup-title">🏁 Despedida / Outro</div>
+      <label>Seleccionar Mensaje de Despedida</label>
+      <button type="button" class="btn-select-message" id="btn-sel-wyr-outro" onclick="openMessagePickerModal('outro', 'wyr-outro')">
+        <span id="txt-wyr-outro">👉 Clic para seleccionar una Despedida guardada</span>
+        <span style="font-size: 0.75rem; color: var(--primary);">Elegir ▾</span>
+      </button>
+    </div>
+
+    <button type="button" class="btn-record-mode wyr-theme" onclick="enterRecordMode('wyr')">
+      🎥 Entrar en Modo Grabación (¿Qué prefieres?)
+    </button>
+  </div>
+
+  <!-- ========================================================
+       MODO GRABACIÓN DE PANTALLA UNIFICADO (9:16)
+       ======================================================== -->
+  <div id="record-screen">
+    <div class="bg-media-container">
+      <video id="bg-video-player" autoplay loop muted playsinline style="display: none;"></video>
+      <img id="bg-img-player" alt="Fondo" style="display: none;" />
+      <div class="video-overlay-dim"></div>
+    </div>
+
+    <!-- CANVAS DE CONFETI / EMOJIS -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Capa de Stickers Flotantes (Gancho 3s) -->
+    <div class="hook-stickers-layer" id="hook-stickers-layer">
+      <img id="hook-stk-1" class="hook-sticker pos-1" src="" alt="" />
+      <img id="hook-stk-2" class="hook-sticker pos-2" src="" alt="" />
+      <img id="hook-stk-3" class="hook-sticker pos-3" src="" alt="" />
+      <img id="hook-stk-4" class="hook-sticker pos-4" src="" alt="" />
+    </div>
+
+    <button class="btn-exit-record" title="Volver al panel" onclick="exitRecordMode()">✕</button>
+
+    <div class="quiz-stage" id="quiz-stage"></div>
+
+    <!-- Barra de Controles Táctiles (4 Botones Móviles) -->
+    <div class="thumb-controls" id="stage-thumb-controls"></div>
+  </div>
+
+  <!-- Modal Selector de Mensajes WYR -->
+  <div class="modal-backdrop" id="message-picker-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="msg-modal-title">📁 Seleccionar Mensaje</div>
+        <button class="modal-close" onclick="closeMessagePickerModal()">✕</button>
+      </div>
+      <div class="messages-list" id="messages-picker-list"></div>
+    </div>
+  </div>
+
+  <!-- Modal Categorías Quiz (ALFABÉTICO) -->
+  <div class="modal-backdrop" id="category-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">🏷️ Elige la Categoría</div>
+        <button class="modal-close" onclick="closeCategoryModal()">✕</button>
+      </div>
+      <div class="category-grid" id="category-grid"></div>
+    </div>
+  </div>
+
+  <!-- Modal Biblioteca Proyectos -->
+  <div class="modal-backdrop" id="library-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">📚 Proyectos Guardados</div>
+        <button class="modal-close" onclick="closeLibraryModal()">✕</button>
+      </div>
+      <div class="projects-list" id="projects-list"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       JAVASCRIPT PRINCIPAL
+       ======================================================== -->
+  <script>
+    /* 1. NAVEGACIÓN ENTRE MODOS */
+    let currentAppMode = 'shorts';
+
+    function switchMode(mode) {
+      currentAppMode = mode;
+      const btnShorts = document.getElementById('btn-mode-shorts');
+      const btnWyr = document.getElementById('btn-mode-wyr');
+      const setupQuiz = document.getElementById('setup-screen');
+      const setupWyr = document.getElementById('wyr-setup-screen');
+
+      [btnShorts, btnWyr].forEach(b => b.classList.remove('active', 'wyr-active'));
+      [setupQuiz, setupWyr].forEach(s => s.style.display = 'none');
+
+      if (mode === 'shorts') {
+        btnShorts.classList.add('active');
+        setupQuiz.style.display = 'block';
+      } else {
+        btnWyr.classList.add('active', 'wyr-active');
+        setupWyr.style.display = 'block';
+      }
+    }
+
+    /* GESTIÓN DINÁMICA DEL COLOR DE CATEGORÍA */
+    let selectedCategoryColor = '#FFC400';
+
+    function hexToRgba(hex, alpha) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) {
+        hex = hex.split('').map(c => c + c).join('');
+      }
+      const num = parseInt(hex, 16);
+      if (isNaN(num)) return `rgba(204, 153, 0, ${alpha})`;
+      const r = (num >> 16) & 255;
+      const g = (num >> 8) & 255;
+      const b = num & 255;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    function applyCategoryColor(hex) {
+      if (!hex) return;
+      if (!hex.startsWith('#')) hex = '#' + hex;
+      selectedCategoryColor = hex;
+
+      const picker = document.getElementById('cat-color-picker');
+      const hexInput = document.getElementById('cat-color-hex');
+      if (picker && picker.value.toLowerCase() !== hex.toLowerCase()) picker.value = hex;
+      if (hexInput && hexInput.value !== hex) hexInput.value = hex;
+
+      const borderColor = hexToRgba(hex, 0.65);
+      const glowShadow = hexToRgba(hex, 0.35);
+
+      document.documentElement.style.setProperty('--cat-color', hex);
+      document.documentElement.style.setProperty('--cat-border-color', borderColor);
+      document.documentElement.style.setProperty('--cat-glow-shadow', glowShadow);
+
+      saveSettingToDB('cat_selected_color', hex);
+      triggerQuizAutosave();
+    }
+
+    /* ========================================================
+       2. MOTOR DE AUDIO (WEB AUDIO API CERO LATENCIA)
+       ======================================================== */
+    let audioCtx = null;
+    const audioBufferCache = {};
+    let activeVoiceSources = [];
+    let currentTimerSfxSource = null;
+    let previewAudioSource = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    async function preloadAudioToBuffer(key, blob) {
+      if (!blob) {
+        audioBufferCache[key] = null;
+        return;
+      }
+      try {
+        const ctx = getAudioContext();
+        const arrayBuffer = await blob.arrayBuffer();
+        const decodedBuffer = await ctx.decodeAudioData(arrayBuffer);
+        audioBufferCache[key] = decodedBuffer;
+      } catch (err) {
+        console.warn('Error decodificando audio:', key, err);
+      }
+    }
+
+    function stopVoiceChain() {
+      activeVoiceSources.forEach(src => {
+        try {
+          src.onended = null;
+          src.stop();
+        } catch(e){}
+      });
+      activeVoiceSources = [];
+    }
+
+    function playVoiceInstant(key) {
+      stopVoiceChain();
+      const ctx = getAudioContext();
+      const buffer = audioBufferCache[key];
+      if (!buffer) return null;
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.value = 1.0;
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(0);
+      activeVoiceSources.push(source);
+      return source;
+    }
+
+    function playVoiceWithCallback(key, onEnded) {
+      stopVoiceChain();
+      const ctx = getAudioContext();
+      const buffer = audioBufferCache[key];
+      if (!buffer) {
+        if (onEnded) onEnded();
+        return null;
+      }
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.value = 1.0;
+      source.connect(gain);
+      gain.connect(ctx.destination);
+
+      source.onended = () => {
+        if (onEnded) onEnded();
+      };
+
+      source.start(0);
+      activeVoiceSources.push(source);
+      return source;
+    }
+
+    function playSfxInstant(key, vol = 0.5) {
+      const ctx = getAudioContext();
+      const buffer = audioBufferCache[key];
+      if (!buffer) return null;
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.value = vol;
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(0);
+      return source;
+    }
+
+    function playPreviewAudio(blob) {
+      if (previewAudioSource) {
+        try { previewAudioSource.stop(); } catch(e){}
+      }
+      if (!blob) return;
+      const ctx = getAudioContext();
+      blob.arrayBuffer().then(ab => ctx.decodeAudioData(ab)).then(buf => {
+        previewAudioSource = ctx.createBufferSource();
+        previewAudioSource.buffer = buf;
+        previewAudioSource.connect(ctx.destination);
+        previewAudioSource.start(0);
+      });
+    }
+
+    function stopAllAudio() {
+      stopVoiceChain();
+      if (currentTimerSfxSource) {
+        try { currentTimerSfxSource.stop(); } catch(e){}
+        currentTimerSfxSource = null;
+      }
+      if (previewAudioSource) {
+        try { previewAudioSource.stop(); } catch(e){}
+      }
+    }
+
+    /* ========================================================
+       3. GESTOR DE PRECARGA DE IMÁGENES
+       ======================================================== */
+    const imagePreloadCache = {};
+
+    function preloadImageBlob(key, blob) {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.src = url;
+      imagePreloadCache[key] = url;
+    }
+
+    function getPreloadedImageUrl(key, fallbackBlob) {
+      if (imagePreloadCache[key]) return imagePreloadCache[key];
+      if (fallbackBlob) {
+        preloadImageBlob(key, fallbackBlob);
+        return imagePreloadCache[key];
+      }
+      return '';
+    }
+
+    /* ========================================================
+       4. SISTEMA DE STICKERS POP-UP FLOTANTES (POP AL 50%)
+       ======================================================== */
+    const persistentStickers = [null, null, null, null];
+    const wyrPersistentStickers = [null, null, null, null];
+    let stickerTimeouts = [];
+    let stickerClearTimeout = null;
+
+    async function handleStickerUpload(event, index) {
+      const file = event.target.files[0];
+      const lbl = document.getElementById(`lbl-sticker-${index + 1}`);
+      if (!file) return;
+      persistentStickers[index] = file;
+      lbl.textContent = `✓ PNG ${index + 1}: ${file.name}`;
+      lbl.classList.add('loaded');
+      preloadImageBlob(`hook_stk_${index}`, file);
+      await saveSettingToDB(`hook_stk_${index}`, file);
+    }
+
+    async function handleStickerPopSfxUpload(event) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById('lbl-sticker-pop-sfx');
+      if (!file) return;
+      await saveSettingToDB('sticker_pop_sfx', file);
+      await preloadAudioToBuffer('sticker_pop_sfx', file);
+      lbl.textContent = `✓ Pop SFX: ${file.name}`;
+      lbl.classList.add('loaded');
+    }
+
+    async function handleWyrStickerUpload(event, index) {
+      const file = event.target.files[0];
+      const lbl = document.getElementById(`lbl-wyr-sticker-${index + 1}`);
+      if (!file) return;
+      wyrPersistentStickers[index] = file;
+      lbl.textContent = `✓ PNG ${index + 1}: ${file.name}`;
+      lbl.classList.add('loaded');
+      preloadImageBlob(`wyr_hook_stk_${index}`, file);
+      await saveSettingToDB(`wyr_hook_stk_${index}`, file);
+    }
+
+    async function handleWyrStickerPopSfxUpload(event) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById('lbl-wyr-sticker-pop-sfx');
+      if (!file) return;
+      await saveSettingToDB('wyr_sticker_pop_sfx', file);
+      await preloadAudioToBuffer('wyr_sticker_pop_sfx', file);
+      lbl.textContent = `✓ Pop SFX WYR: ${file.name}`;
+      lbl.classList.add('loaded');
+    }
+
+    function triggerHookStickersPop(mode = 'shorts') {
+      clearTimeout(stickerClearTimeout);
+      clearHookStickers(false);
+
+      const layer = document.getElementById('hook-stickers-layer');
+      layer.style.display = 'block';
+
+      const list = (mode === 'wyr') ? wyrPersistentStickers : persistentStickers;
+      const sfxKey = (mode === 'wyr') ? 'wyr_sticker_pop_sfx' : 'sticker_pop_sfx';
+      const prefix = (mode === 'wyr') ? 'wyr_hook_stk_' : 'hook_stk_';
+
+      const delays = [0, 150, 300, 450];
+
+      delays.forEach((delay, idx) => {
+        const t = setTimeout(() => {
+          const imgEl = document.getElementById(`hook-stk-${idx + 1}`);
+          const file = list[idx];
+          if (file && imgEl) {
+            imgEl.classList.remove('hiding');
+            imgEl.src = getPreloadedImageUrl(`${prefix}${idx}`, file);
+            imgEl.classList.add('show');
+            // Sonido del Pop bajado al 50%
+            playSfxInstant(sfxKey, 0.5);
+          }
+        }, delay);
+        stickerTimeouts.push(t);
+      });
+    }
+
+    function clearHookStickers(animateExit = true) {
+      stickerTimeouts.forEach(t => clearTimeout(t));
+      stickerTimeouts = [];
+      clearTimeout(stickerClearTimeout);
+
+      const layer = document.getElementById('hook-stickers-layer');
+      if (!layer) return;
+
+      if (animateExit) {
+        for (let i = 1; i <= 4; i++) {
+          const el = document.getElementById(`hook-stk-${i}`);
+          if (el && el.classList.contains('show')) {
+            el.classList.remove('show');
+            el.classList.add('hiding');
+          }
+        }
+        stickerClearTimeout = setTimeout(() => {
+          layer.style.display = 'none';
+          for (let i = 1; i <= 4; i++) {
+            const el = document.getElementById(`hook-stk-${i}`);
+            if (el) el.classList.remove('show', 'hiding');
+          }
+        }, 200);
+      } else {
+        layer.style.display = 'none';
+        for (let i = 1; i <= 4; i++) {
+          const el = document.getElementById(`hook-stk-${i}`);
+          if (el) el.classList.remove('show', 'hiding');
+        }
+      }
+    }
+
+    /* TRANSICIÓN FLUIDA ENTRE PANTALLAS */
+    let transitionTimeout = null;
+    function renderStepWithTransition(renderCallback) {
+      clearTimeout(transitionTimeout);
+      const stage = document.getElementById('quiz-stage');
+      const currentCards = stage.querySelectorAll('.white-card, .intro-cat-card, .wyr-stage-wrapper, .question-counter-badge');
+
+      if (currentCards.length > 0) {
+        currentCards.forEach(c => c.classList.add('card-exit'));
+        clearHookStickers(true);
+
+        transitionTimeout = setTimeout(() => {
+          renderCallback();
+        }, 180);
+      } else {
+        renderCallback();
+      }
+    }
+
+    /* ========================================================
+       5. CATEGORÍAS FIJAS EN ORDEN ALFABÉTICO
+       ======================================================== */
+    const CATEGORIES_LIST = [
+      "Actores", "Animales", "Anime", "Artistas", "Astronomía",
+      "Banderas", "Biología", "Capitales", "Cine", "Comida",
+      "Cuerpo humano", "Deportes", "Física", "Fútbol", "Idioma español",
+      "Inventos", "Logotipos", "Marcas", "Mitología", "Música",
+      "Naturaleza", "Ortografía", "Países del mundo", "Personajes históricos",
+      "Química", "Series", "Superhéroes", "Videojuegos"
+    ];
+
+    let selectedCategory = "Países del mundo";
+
+    function openCategoryModal() {
+      const grid = document.getElementById('category-grid');
+      grid.innerHTML = '';
+      CATEGORIES_LIST.forEach(cat => {
+        const chip = document.createElement('div');
+        const isSelected = cat.toLowerCase() === selectedCategory.toLowerCase();
+        chip.className = `cat-chip ${isSelected ? 'active' : ''}`;
+        chip.textContent = cat;
+        chip.onclick = () => {
+          selectedCategory = cat;
+          document.getElementById('txt-selected-cat').textContent = `🏷️ Categoría: ${cat}`;
+          closeCategoryModal();
+          triggerQuizAutosave();
+        };
+        grid.appendChild(chip);
+      });
+      document.getElementById('category-modal').style.display = 'flex';
+    }
+
+    function closeCategoryModal() {
+      document.getElementById('category-modal').style.display = 'none';
+    }
+
+    /* ========================================================
+       6. SISTEMA DINÁMICO DE PREGUNTAS (1 HASTA 5 PREGUNTAS)
+       ======================================================== */
+    let quizQuestionsTotal = 3;
+    let wyrChoicesTotal = 3;
+
+    const mediaStore = {
+      bgVideo: null,
+      timerSfx: null,
+      introAudio: null,
+      outroAudio: null
+    };
+
+    function renderQuizQuestionsSetup() {
+      const container = document.getElementById('quiz-questions-list-container');
+      container.innerHTML = '';
+
+      for (let n = 1; n <= quizQuestionsTotal; n++) {
+        const card = document.createElement('div');
+        card.className = 'card-setup';
+        card.id = `card-setup-q${n}`;
+        card.innerHTML = `
+          <div class="card-setup-title">❓ Pregunta ${n}</div>
+          <label>Texto de la Pregunta</label>
+          <textarea id="q${n}-text" rows="2" placeholder="Escribe la pregunta ${n}..." oninput="triggerQuizAutosave()"></textarea>
+
+          <div style="background: rgba(0, 240, 255, 0.06); padding: 8px 10px; border-radius: 8px; border: 1px dashed rgba(0, 240, 255, 0.35); margin-bottom: 10px;">
+            <label style="color: var(--primary); margin-bottom: 2px;">⚡ Duración animación de pregunta (segundos)</label>
+            <p style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 4px;">Tiempo en aparecer letra por letra (ej: 2.5, 3.25, 1.8)</p>
+            <input type="number" id="q${n}-anim-duration" step="0.1" min="0.5" max="8" value="2.5" oninput="triggerQuizAutosave()" style="margin-bottom:0;" />
+          </div>
+
+          <label>Opciones</label>
+          <div class="options-grid">
+            <div class="opt-row">
+              <input type="radio" name="q${n}-correct" value="A" checked onchange="triggerQuizAutosave()" />
+              <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">A</span>
+              <input type="text" id="q${n}-optA" placeholder="Opción A" oninput="triggerQuizAutosave()" />
+            </div>
+            <div class="opt-row">
+              <input type="radio" name="q${n}-correct" value="B" onchange="triggerQuizAutosave()" />
+              <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">B</span>
+              <input type="text" id="q${n}-optB" placeholder="Opción B" oninput="triggerQuizAutosave()" />
+            </div>
+            <div class="opt-row">
+              <input type="radio" name="q${n}-correct" value="C" onchange="triggerQuizAutosave()" />
+              <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">C</span>
+              <input type="text" id="q${n}-optC" placeholder="Opción C" oninput="triggerQuizAutosave()" />
+            </div>
+          </div>
+
+          <div class="file-input-wrapper">
+            <label for="q${n}-img-input" class="file-custom-btn" id="lbl-q${n}-img">1. Imagen Inicial de Pregunta</label>
+            <input type="file" id="q${n}-img-input" accept="image/*" onchange="handleQuizImageSelected(event, 'lbl-q${n}-img', 'q${n}Img')" />
+          </div>
+
+          <div class="file-input-wrapper">
+            <label for="q${n}-ans-img-input" class="file-custom-btn" id="lbl-q${n}-ans-img" style="border-color: #38bdf8;">2. Imagen de Respuesta Correcta (Transición)</label>
+            <input type="file" id="q${n}-ans-img-input" accept="image/*" onchange="handleQuizImageSelected(event, 'lbl-q${n}-ans-img', 'q${n}AnsImg')" />
+          </div>
+
+          <div class="file-input-wrapper">
+            <label for="q${n}-audio-input" class="file-custom-btn" id="lbl-q${n}-audio">Cargar Audio Pregunta ${n}</label>
+            <input type="file" id="q${n}-audio-input" accept="audio/*" onchange="handleQuizFileUploaded(event, 'lbl-q${n}-audio', 'q${n}Audio')" />
+          </div>
+
+          <div class="file-input-wrapper">
+            <label for="q${n}-ans-audio-input" class="file-custom-btn" id="lbl-q${n}-ans-audio">🔊 Cargar Audio Respuesta Correcta P${n}</label>
+            <input type="file" id="q${n}-ans-audio-input" accept="audio/*" onchange="handleQuizFileUploaded(event, 'lbl-q${n}-ans-audio', 'q${n}AnsAudio')" />
+          </div>
+        `;
+        container.appendChild(card);
+      }
+
+      document.getElementById('txt-q-count').textContent = quizQuestionsTotal;
+    }
+
+    function addQuizQuestion() {
+      if (quizQuestionsTotal >= 5) {
+        alert('El máximo permitido son 5 preguntas por vídeo.');
+        return;
+      }
+      quizQuestionsTotal++;
+      renderQuizQuestionsSetup();
+      triggerQuizAutosave();
+    }
+
+    function removeQuizQuestion() {
+      if (quizQuestionsTotal <= 1) {
+        alert('Debes tener al menos 1 pregunta.');
+        return;
+      }
+      quizQuestionsTotal--;
+      renderQuizQuestionsSetup();
+      triggerQuizAutosave();
+    }
+
+    /* ========================================================
+       7. SISTEMA DINÁMICO DE ELECCIONES ¿QUÉ PREFIERES?
+       ======================================================== */
+    let wyrBankMessages = [];
+    let tempBankAudioFile = null;
+
+    const wyrActiveSelection = {
+      intro: { text: '¿Qué tan difíciles son tus elecciones? ¡Ponte a prueba!', audioKey: null },
+      outro: { text: '¿Coincidiste con la mayoría? ¡Deja tu comentario y sígueme!', audioKey: null },
+      bgVideo: null
+    };
+
+    function renderWyrChoicesSetup() {
+      const container = document.getElementById('wyr-choices-list-container');
+      container.innerHTML = '';
+
+      for (let n = 1; n <= wyrChoicesTotal; n++) {
+        if (!wyrActiveSelection[`c${n}`]) {
+          wyrActiveSelection[`c${n}`] = { text: '¿QUÉ PREFIERES?', audioKey: null };
+        }
+
+        const card = document.createElement('div');
+        card.className = 'card-setup';
+        card.innerHTML = `
+          <div class="card-setup-title">🔴🔵 Elección ${n}</div>
+          <label>Pregunta / Gancho Superior</label>
+          <button type="button" class="btn-select-message" id="btn-sel-wyr-c${n}" onclick="openMessagePickerModal('question', 'wyr-c${n}')">
+            <span id="txt-wyr-c${n}">${escapeHtml(wyrActiveSelection[`c${n}`].text || '👉 Seleccionar Pregunta')}</span>
+            <span style="font-size: 0.75rem; color: var(--primary);">Elegir ▾</span>
+          </button>
+
+          <div class="wyr-opt-group red-side">
+            <label style="color: #ff8095;">Opción A (Rojo - Arriba)</label>
+            <input type="text" id="wyr-c${n}-optA-text" placeholder="Ej: Opción A..." value="${n === 1 ? 'Viajar 100 años al pasado' : (n === 2 ? 'Ser invisible cuando quieras' : 'Saber todos los idiomas')}" oninput="triggerWyrAutosave()" />
+            <div class="file-input-wrapper">
+              <label for="wyr-c${n}-optA-img-input" class="file-custom-btn" id="lbl-wyr-c${n}-optA-img">Subir Imagen Opción A (Formato 3:2)</label>
+              <input type="file" id="wyr-c${n}-optA-img-input" accept="image/*" onchange="handleWyrChoiceImgSelected(event, 'lbl-wyr-c${n}-optA-img', 'c${n}OptAImg')" />
+            </div>
+            <div class="file-input-wrapper">
+              <label for="wyr-c${n}-optA-audio-input" class="file-custom-btn sfx-btn" id="lbl-wyr-c${n}-optA-audio">🔊 Cargar Audio Opción A</label>
+              <input type="file" id="wyr-c${n}-optA-audio-input" accept="audio/*" onchange="handleWyrChoiceAudioSelected(event, 'lbl-wyr-c${n}-optA-audio', 'c${n}OptAAudio')" />
+            </div>
+            <label style="margin-top:4px;">Porcentaje Opción A</label>
+            <input type="text" id="wyr-c${n}-optA-pct" value="60%" placeholder="Ej: 60%" oninput="triggerWyrAutosave()" />
+          </div>
+
+          <div class="wyr-opt-group blue-side">
+            <label style="color: #70b4ff;">Opción B (Azul - Abajo)</label>
+            <input type="text" id="wyr-c${n}-optB-text" placeholder="Ej: Opción B..." value="${n === 1 ? 'Viajar 100 años al futuro' : (n === 2 ? 'Poder volar a cualquier velocidad' : 'Tocar todos los instrumentos')}" oninput="triggerWyrAutosave()" />
+            <div class="file-input-wrapper">
+              <label for="wyr-c${n}-optB-img-input" class="file-custom-btn" id="lbl-wyr-c${n}-optB-img">Subir Imagen Opción B (Formato 3:2)</label>
+              <input type="file" id="wyr-c${n}-optB-img-input" accept="image/*" onchange="handleWyrChoiceImgSelected(event, 'lbl-wyr-c${n}-optB-img', 'c${n}OptBImg')" />
+            </div>
+            <div class="file-input-wrapper">
+              <label for="wyr-c${n}-optB-audio-input" class="file-custom-btn sfx-btn" id="lbl-wyr-c${n}-optB-audio">🔊 Cargar Audio Opción B</label>
+              <input type="file" id="wyr-c${n}-optB-audio-input" accept="audio/*" onchange="handleWyrChoiceAudioSelected(event, 'lbl-wyr-c${n}-optB-audio', 'c${n}OptBAudio')" />
+            </div>
+            <label style="margin-top:4px;">Porcentaje Opción B</label>
+            <input type="text" id="wyr-c${n}-optB-pct" value="40%" placeholder="Ej: 40%" oninput="triggerWyrAutosave()" />
+          </div>
+        `;
+        container.appendChild(card);
+      }
+
+      document.getElementById('txt-wyr-count').textContent = wyrChoicesTotal;
+    }
+
+    function addWyrChoice() {
+      if (wyrChoicesTotal >= 5) {
+        alert('El máximo permitido son 5 elecciones.');
+        return;
+      }
+      wyrChoicesTotal++;
+      renderWyrChoicesSetup();
+      triggerWyrAutosave();
+    }
+
+    function removeWyrChoice() {
+      if (wyrChoicesTotal <= 1) {
+        alert('Debes tener al menos 1 elección.');
+        return;
+      }
+      wyrChoicesTotal--;
+      renderWyrChoicesSetup();
+      triggerWyrAutosave();
+    }
+
+    /* ========================================================
+       8. MOTOR DE LLUVIA DE EMOJIS (WYR) & CONFETI (QUIZ)
+       ======================================================== */
+    let confettiAnimationId = null;
+    let confettiParticles = [];
+
+    // Confeti para Quiz
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      confettiParticles = [];
+      const colors = ['#00F0FF', '#FF007F', '#FFC400', '#00E676', '#ffffff', '#a78bfa', '#f43f5e'];
+      const confettiOriginY = 40;
+
+      for (let i = 0; i < 48; i++) {
+        confettiParticles.push({
+          type: 'rect',
+          x: Math.random() * canvas.width,
+          y: confettiOriginY - Math.random() * 60,
+          w: 6 + Math.random() * 6,
+          h: 10 + Math.random() * 8,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: -1.5 + Math.random() * 3,
+          vy: 2.5 + Math.random() * 3.5,
+          angle: Math.random() * 360,
+          vAngle: -4 + Math.random() * 8,
+          opacity: 1
+        });
+      }
+
+      cancelAnimationFrame(confettiAnimationId);
+      const startTime = performance.now();
+
+      function updateConfetti(now) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const elapsed = now - startTime;
+
+        let activeCount = 0;
+        confettiParticles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.angle += p.vAngle;
+
+          if (elapsed > 1800) p.opacity -= 0.025;
+
+          if (p.opacity > 0 && p.y < canvas.height + 20) {
+            activeCount++;
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, p.opacity);
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.angle * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          }
+        });
+
+        if (activeCount > 0 && elapsed < 3200) {
+          confettiAnimationId = requestAnimationFrame(updateConfetti);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      confettiAnimationId = requestAnimationFrame(updateConfetti);
+    }
+
+    // Lluvia de Emojis Pequeños para ¿Qué prefieres?
+    function triggerEmojiRain() {
+      const canvas = document.getElementById('confetti-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      const emojis = ['😮','🤑','😠','🤬','😝','🤣','😱','🤔','😭','🤭','🫢','🥵'];
+      confettiParticles = [];
+
+      for (let i = 0; i < 42; i++) {
+        confettiParticles.push({
+          type: 'emoji',
+          x: Math.random() * canvas.width,
+          y: -15 - Math.random() * 75,
+          char: emojis[Math.floor(Math.random() * emojis.length)],
+          size: 15 + Math.random() * 6, // Emojis chiquitos (15px a 21px)
+          vx: -1.2 + Math.random() * 2.4,
+          vy: 2.8 + Math.random() * 3.4,
+          angle: -15 + Math.random() * 30,
+          vAngle: -2 + Math.random() * 4,
+          opacity: 1
+        });
+      }
+
+      cancelAnimationFrame(confettiAnimationId);
+      const startTime = performance.now();
+
+      function updateEmojis(now) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const elapsed = now - startTime;
+        let activeCount = 0;
+
+        confettiParticles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.angle += p.vAngle;
+
+          if (elapsed > 2000) p.opacity -= 0.025;
+
+          if (p.opacity > 0 && p.y < canvas.height + 30) {
+            activeCount++;
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, p.opacity);
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.angle * Math.PI) / 180);
+            ctx.font = `${p.size}px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(p.char, 0, 0);
+            ctx.restore();
+          }
+        });
+
+        if (activeCount > 0 && elapsed < 3500) {
+          confettiAnimationId = requestAnimationFrame(updateEmojis);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      confettiAnimationId = requestAnimationFrame(updateEmojis);
+    }
+
+    function clearConfetti() {
+      cancelAnimationFrame(confettiAnimationId);
+      const canvas = document.getElementById('confetti-canvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    /* ========================================================
+       9. BANCO DE MENSAJES & CONTROL WYR
+       ======================================================== */
+    let currentWyrIndex = 0;
+    let wyrCountdownTimer = null;
+    let wyrCountdownInterval = null;
+    let wyrSequenceTimeouts = [];
+    let activePickerTarget = null;
+
+    function handleBankMessageAudioSelected(event) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById('lbl-bank-msg-audio');
+      if (file) {
+        tempBankAudioFile = file;
+        lbl.textContent = `✓ Audio: ${file.name}`;
+        lbl.classList.add('loaded');
+      }
+    }
+
+    async function saveMessageToBank() {
+      const type = document.getElementById('bank-msg-type').value;
+      const text = document.getElementById('bank-msg-text').value.trim();
+
+      if (!text) {
+        alert('Por favor escribe el texto del mensaje.');
+        return;
+      }
+      if (!tempBankAudioFile) {
+        alert('Por favor sube un archivo de audio para este mensaje.');
+        return;
+      }
+
+      const newMsg = {
+        type,
+        text,
+        audioBlob: tempBankAudioFile,
+        date: new Date().toLocaleDateString()
+      };
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_WYR_MESSAGES, 'readwrite');
+        const store = tx.objectStore(STORE_WYR_MESSAGES);
+        const req = store.add(newMsg);
+
+        req.onsuccess = (e) => {
+          newMsg.id = e.target.result;
+          wyrBankMessages.push(newMsg);
+          preloadAudioToBuffer('wyr_msg_' + newMsg.id, newMsg.audioBlob);
+
+          document.getElementById('bank-msg-text').value = '';
+          document.getElementById('lbl-bank-msg-audio').textContent = 'Subir Audio para este mensaje';
+          document.getElementById('lbl-bank-msg-audio').classList.remove('loaded');
+          tempBankAudioFile = null;
+
+          updateBankMessagesCounter();
+          alert('✅ ¡Mensaje y audio guardados en la biblioteca!');
+        };
+      } catch (err) {
+        alert('Error al guardar mensaje en la base de datos.');
+      }
+    }
+
+    function updateBankMessagesCounter() {
+      const intros = wyrBankMessages.filter(m => m.type === 'intro').length;
+      const questions = wyrBankMessages.filter(m => m.type === 'question').length;
+      const outros = wyrBankMessages.filter(m => m.type === 'outro').length;
+      document.getElementById('bank-msg-counter').textContent = 
+        `📁 Biblioteca activa: ${intros} Saludos | ${questions} Preguntas | ${outros} Despedidas`;
+    }
+
+    function openMessagePickerModal(typeFilter, targetKey) {
+      activePickerTarget = targetKey;
+      const modal = document.getElementById('message-picker-modal');
+      const listContainer = document.getElementById('messages-picker-list');
+      const titleEl = document.getElementById('msg-modal-title');
+
+      const titles = {
+        intro: '👋 Seleccionar Saludo',
+        question: '❓ Seleccionar Pregunta',
+        outro: '🏁 Seleccionar Despedida'
+      };
+      titleEl.textContent = titles[typeFilter] || '📁 Seleccionar Mensaje';
+
+      const filtered = wyrBankMessages.filter(m => m.type === typeFilter);
+
+      if (filtered.length === 0) {
+        listContainer.innerHTML = `
+          <div style="text-align:center; padding: 25px 10px; color: var(--text-muted); font-size: 0.8rem;">
+            No tienes mensajes guardados en esta categoría.<br><br>
+            <b>Sube uno arriba en "📁 Banco de Mensajes"</b> para poder elegirlo aquí.
+          </div>
+        `;
+      } else {
+        listContainer.innerHTML = '';
+        filtered.forEach(msg => {
+          const div = document.createElement('div');
+          div.className = 'msg-item';
+          div.innerHTML = `
+            <div class="msg-info">
+              <h4>${escapeHtml(msg.text)}</h4>
+              <span>🔊 Audio listo</span>
+            </div>
+            <div class="msg-actions">
+              <button class="btn-preview-audio" onclick="playPreviewAudioById(${msg.id})" title="Escuchar audio">▶️</button>
+              <button class="btn-proj-load" onclick="selectMessageForTarget(${msg.id})">Elegir</button>
+              <button class="btn-proj-del" onclick="deleteBankMessage(${msg.id})">✕</button>
+            </div>
+          `;
+          listContainer.appendChild(div);
+        });
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function closeMessagePickerModal() {
+      document.getElementById('message-picker-modal').style.display = 'none';
+      if (previewAudioSource) {
+        try { previewAudioSource.stop(); } catch(e){}
+      }
+    }
+
+    function playPreviewAudioById(msgId) {
+      const msg = wyrBankMessages.find(m => m.id === msgId);
+      if (msg && msg.audioBlob) {
+        playPreviewAudio(msg.audioBlob);
+      }
+    }
+
+    async function deleteBankMessage(msgId) {
+      if (!confirm('¿Eliminar este mensaje de la biblioteca?')) return;
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_WYR_MESSAGES, 'readwrite');
+        tx.objectStore(STORE_WYR_MESSAGES).delete(msgId);
+        tx.oncomplete = () => {
+          wyrBankMessages = wyrBankMessages.filter(m => m.id !== msgId);
+          updateBankMessagesCounter();
+          closeMessagePickerModal();
+        };
+      } catch (err) {}
+    }
+
+    function selectMessageForTarget(msgId) {
+      const msg = wyrBankMessages.find(m => m.id === msgId);
+      if (!msg) return;
+
+      const audioKey = 'wyr_msg_' + msg.id;
+
+      if (activePickerTarget === 'wyr-intro') {
+        wyrActiveSelection.intro.text = msg.text;
+        wyrActiveSelection.intro.audioKey = audioKey;
+        document.getElementById('txt-wyr-intro').textContent = `✓ ${msg.text}`;
+        document.getElementById('btn-sel-wyr-intro').classList.add('selected');
+      } else if (activePickerTarget === 'wyr-outro') {
+        wyrActiveSelection.outro.text = msg.text;
+        wyrActiveSelection.outro.audioKey = audioKey;
+        document.getElementById('txt-wyr-outro').textContent = `✓ ${msg.text}`;
+        document.getElementById('btn-sel-wyr-outro').classList.add('selected');
+      } else if (activePickerTarget.startsWith('wyr-c')) {
+        const cKey = activePickerTarget.replace('wyr-', '');
+        wyrActiveSelection[cKey].text = msg.text;
+        wyrActiveSelection[cKey].audioKey = audioKey;
+        const txtEl = document.getElementById(`txt-${activePickerTarget}`);
+        const btnEl = document.getElementById(`btn-sel-${activePickerTarget}`);
+        if (txtEl) txtEl.textContent = `✓ ${msg.text}`;
+        if (btnEl) btnEl.classList.add('selected');
+      }
+
+      closeMessagePickerModal();
+      triggerWyrAutosave();
+    }
+
+    function handleWyrBgVideoSelected(event) {
+      const file = event.target.files[0];
+      const lbl = document.getElementById('lbl-wyr-bg-video');
+      if (file) {
+        wyrActiveSelection.bgVideo = file;
+        lbl.textContent = `✓ Fondo: ${file.name}`;
+        lbl.classList.add('loaded');
+        triggerWyrAutosave();
+      }
+    }
+
+    async function handleWyrTimerSfxUpload(event) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById('lbl-wyr-timer-sfx');
+      if (file) {
+        await saveSettingToDB('wyr_timer_sfx', file);
+        await preloadAudioToBuffer('wyr_persistent_timer_sfx', file);
+        lbl.textContent = `✓ SFX 3 Seg Guardado: ${file.name}`;
+        lbl.classList.add('loaded');
+        triggerWyrAutosave();
+      }
+    }
+
+    function handleWyrChoiceImgSelected(event, labelId, storeKey) {
+      const file = event.target.files[0];
+      const lbl = document.getElementById(labelId);
+      if (file) {
+        wyrActiveSelection[storeKey] = file;
+        lbl.textContent = `✓ Imagen: ${file.name}`;
+        lbl.classList.add('loaded');
+        preloadImageBlob('wyr_' + storeKey, file);
+        triggerWyrAutosave();
+      }
+    }
+
+    async function handleWyrChoiceAudioSelected(event, labelId, storeKey) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById(labelId);
+      if (file) {
+        wyrActiveSelection[storeKey] = file;
+        lbl.textContent = `✓ Audio: ${file.name}`;
+        lbl.classList.add('loaded');
+        await preloadAudioToBuffer('wyr_' + storeKey, file);
+        triggerWyrAutosave();
+      }
+    }
+
+    function getWyrChoiceData(idx) {
+      const n = idx + 1;
+      const title = (wyrActiveSelection[`c${n}`] && wyrActiveSelection[`c${n}`].text) ? wyrActiveSelection[`c${n}`].text : '¿QUÉ PREFIERES?';
+      const optAInput = document.getElementById(`wyr-c${n}-optA-text`);
+      const optAPctInput = document.getElementById(`wyr-c${n}-optA-pct`);
+      const optBInput = document.getElementById(`wyr-c${n}-optB-text`);
+      const optBPctInput = document.getElementById(`wyr-c${n}-optB-pct`);
+
+      const optAText = optAInput ? optAInput.value : 'Opción A';
+      const optAPct = optAPctInput ? optAPctInput.value : '50%';
+      const optBText = optBInput ? optBInput.value : 'Opción B';
+      const optBPct = optBPctInput ? optBPctInput.value : '50%';
+
+      const optAImg = wyrActiveSelection[`c${n}OptAImg`];
+      const optBImg = wyrActiveSelection[`c${n}OptBImg`];
+      const audioKey = wyrActiveSelection[`c${n}`] ? wyrActiveSelection[`c${n}`].audioKey : null;
+
+      const optAAudioKey = wyrActiveSelection[`c${n}OptAAudio`] ? `wyr_c${n}OptAAudio` : null;
+      const optBAudioKey = wyrActiveSelection[`c${n}OptBAudio`] ? `wyr_c${n}OptBAudio` : null;
+
+      return {
+        title,
+        optAText, optAPct, optAImg,
+        optBText, optBPct, optBImg,
+        audioKey,
+        optAAudioKey,
+        optBAudioKey,
+        idxKeyA: `wyr_c${n}OptAImg`,
+        idxKeyB: `wyr_c${n}OptBImg`
+      };
+    }
+
+    function clearWyrSequence() {
+      wyrSequenceTimeouts.forEach(t => clearTimeout(t));
+      wyrSequenceTimeouts = [];
+    }
+
+    /* 1. INTRO WYR: Con delay de 0.25 segundos */
+    function stepWyrIntro() {
+      stopAllAudio();
+      clearWyrSequence();
+      clearTimeout(wyrCountdownTimer);
+      clearInterval(wyrCountdownInterval);
+      clearConfetti();
+
+      renderStepWithTransition(() => {
+        const introText = wyrActiveSelection.intro.text;
+        const stage = document.getElementById('quiz-stage');
+
+        stage.innerHTML = `
+          <div class="white-card">
+            <div class="pill-badge wyr-badge">⚖️ ¿QUÉ PREFIERES? ⚖️</div>
+            <div class="welcome-title">${escapeHtml(introText)}</div>
+          </div>
+        `;
+
+        triggerHookStickersPop('wyr');
+
+        // Delay de 0.25 segundos al audio de la intro
+        if (wyrActiveSelection.intro.audioKey) {
+          const t = setTimeout(() => {
+            playVoiceInstant(wyrActiveSelection.intro.audioKey);
+          }, 250);
+          wyrSequenceTimeouts.push(t);
+        }
+      });
+    }
+
+    /* 2. OPCIONES WYR: Con delay de 0.35s a pregunta, secuencia Opción A (flash + glow rojo) y Opción B (flash + glow azul) */
+    function stepWyrShowOptions() {
+      stopAllAudio();
+      clearWyrSequence();
+      clearTimeout(wyrCountdownTimer);
+      clearInterval(wyrCountdownInterval);
+      clearConfetti();
+
+      if (currentWyrIndex >= wyrChoicesTotal) {
+        stepWyrOutro();
+        return;
+      }
+
+      renderStepWithTransition(() => {
+        const data = getWyrChoiceData(currentWyrIndex);
+        const stage = document.getElementById('quiz-stage');
+
+        const imgAUrl = data.optAImg ? getPreloadedImageUrl(data.idxKeyA, data.optAImg) : 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=400&auto=format&fit=crop&q=80';
+        const imgBUrl = data.optBImg ? getPreloadedImageUrl(data.idxKeyB, data.optBImg) : 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop&q=80';
+
+        const diffColors = getDifficultyBadgeStyle(currentWyrIndex, wyrChoicesTotal);
+
+        stage.innerHTML = `
+          <div class="question-counter-badge" style="background:${diffColors.bg}; border-color:${diffColors.border}; box-shadow:0 0 14px ${diffColors.shadow};">
+            ELECCIÓN ${currentWyrIndex + 1} DE ${wyrChoicesTotal}
+          </div>
+
+          <div class="wyr-stage-wrapper">
+            <div class="wyr-header-card">
+              <div class="wyr-header-title">${escapeHtml(data.title)}</div>
+
+              <!-- CONTADOR DE TIEMPO IGUAL AL MODO QUIZ -->
+              <div class="timer-container" id="wyr-timer-box" style="margin-top: 8px; margin-bottom: 2px;">
+                <div class="timer-bar-bg">
+                  <div class="timer-bar-fill" id="wyr-timer-fill"></div>
+                </div>
+                <div class="timer-badge" id="wyr-timer-number">3 SEGUNDOS</div>
+              </div>
+            </div>
+
+            <div class="wyr-split-container">
+              <!-- Mitad Roja (Opción A) -->
+              <div class="wyr-half half-red" id="wyr-half-A">
+                <div class="wyr-flash-layer"></div>
+                <img src="${imgAUrl}" class="wyr-half-img" alt="Opción A" />
+                <div class="wyr-half-content">
+                  <div class="wyr-half-text">${escapeHtml(data.optAText)}</div>
+                  <div class="wyr-percentage-badge" id="wyr-pct-A">${escapeHtml(data.optAPct)}</div>
+                </div>
+              </div>
+
+              <div class="wyr-vs-badge">VS</div>
+
+              <!-- Mitad Azul (Opción B) -->
+              <div class="wyr-half half-blue" id="wyr-half-B">
+                <div class="wyr-flash-layer"></div>
+                <img src="${imgBUrl}" class="wyr-half-img" alt="Opción B" />
+                <div class="wyr-half-content">
+                  <div class="wyr-half-text">${escapeHtml(data.optBText)}</div>
+                  <div class="wyr-percentage-badge" id="wyr-pct-B">${escapeHtml(data.optBPct)}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Cadena de audios con Énfasis
+        const startSequence = () => {
+          const runOptionA = () => {
+            const t1 = setTimeout(() => {
+              const halfA = document.getElementById('wyr-half-A');
+              if (halfA) {
+                halfA.classList.remove('do-flash');
+                void halfA.offsetWidth;
+                halfA.classList.add('do-flash', 'wyr-focus-red');
+              }
+
+              if (data.optAAudioKey) {
+                playVoiceWithCallback(data.optAAudioKey, () => {
+                  runOptionB();
+                });
+              } else {
+                // Si no hay audio para Opción A, espera 1.4s de énfasis y pasa a la B
+                const tA = setTimeout(runOptionB, 1400);
+                wyrSequenceTimeouts.push(tA);
+              }
+            }, 150); // Delay de 0.15s para el audio de opción
+            wyrSequenceTimeouts.push(t1);
+          };
+
+          const runOptionB = () => {
+            const t2 = setTimeout(() => {
+              const halfA = document.getElementById('wyr-half-A');
+              const halfB = document.getElementById('wyr-half-B');
+              if (halfA) halfA.classList.remove('wyr-focus-red');
+              if (halfB) {
+                halfB.classList.remove('do-flash');
+                void halfB.offsetWidth;
+                halfB.classList.add('do-flash', 'wyr-focus-blue');
+              }
+
+              if (data.optBAudioKey) {
+                playVoiceWithCallback(data.optBAudioKey, () => {});
+              }
+            }, 150); // Delay de 0.15s para el audio de opción B
+            wyrSequenceTimeouts.push(t2);
+          };
+
+          // Audio de la Pregunta con 0.35s de delay inicial
+          if (data.audioKey) {
+            playVoiceWithCallback(data.audioKey, () => {
+              runOptionA();
+            });
+          } else {
+            runOptionA();
+          }
+        };
+
+        const tInit = setTimeout(startSequence, 350); // 0.35 segundos de delay al audio de la pregunta
+        wyrSequenceTimeouts.push(tInit);
+      });
+    }
+
+    /* 3. CUENTA REGRESIVA WYR: 3 SEGUNDOS + 0.10s DE DELAY */
+    function stepWyrCountdown() {
+      // Al pulsar cuenta regresiva, desaparece de inmediato cualquier énfasis previo
+      clearWyrSequence();
+      stopVoiceChain();
+
+      const halfA = document.getElementById('wyr-half-A');
+      const halfB = document.getElementById('wyr-half-B');
+      if (halfA) halfA.classList.remove('wyr-focus-red', 'do-flash');
+      if (halfB) halfB.classList.remove('wyr-focus-blue', 'do-flash');
+
+      const timerBox = document.getElementById('wyr-timer-box');
+      const timerFill = document.getElementById('wyr-timer-fill');
+      const timerNum = document.getElementById('wyr-timer-number');
+      if (!timerBox || !timerFill || !timerNum) return;
+
+      clearTimeout(wyrCountdownTimer);
+      clearInterval(wyrCountdownInterval);
+
+      // Delay de 0.10 segundos a la cuenta regresiva
+      const tCountdown = setTimeout(() => {
+        timerBox.style.display = 'block';
+        timerFill.style.transition = 'none';
+        timerFill.style.width = '100%';
+        void timerFill.offsetWidth;
+
+        timerFill.style.transition = 'width 3s linear';
+        timerFill.style.width = '0%';
+
+        let secondsLeft = 3;
+        timerNum.textContent = `3 SEGUNDOS`;
+
+        if (currentTimerSfxSource) {
+          try { currentTimerSfxSource.stop(); } catch(e){}
+        }
+        currentTimerSfxSource = playSfxInstant('wyr_persistent_timer_sfx', 0.85);
+
+        wyrCountdownInterval = setInterval(() => {
+          secondsLeft--;
+          if (secondsLeft > 0) {
+            timerNum.textContent = `${secondsLeft} SEGUNDOS`;
+          }
+        }, 1000);
+
+        wyrCountdownTimer = setTimeout(() => {
+          clearInterval(wyrCountdownInterval);
+          timerNum.textContent = `¡TIEMPO!`;
+          revealWyrPercentages();
+        }, 3000); // 3 segundos para decidir
+      }, 100);
+
+      wyrSequenceTimeouts.push(tCountdown);
+    }
+
+    /* 4. REVELACIÓN WYR: Lluvia de emojis pequeños, sin reiniciar cascada de la tarjeta */
+    function revealWyrPercentages() {
+      const data = getWyrChoiceData(currentWyrIndex);
+      const badgeA = document.getElementById('wyr-pct-A');
+      const badgeB = document.getElementById('wyr-pct-B');
+      const halfA = document.getElementById('wyr-half-A');
+      const halfB = document.getElementById('wyr-half-B');
+
+      if (!badgeA || !badgeB || !halfA || !halfB) return;
+
+      // Disparar lluvia de emojis en lugar de confeti
+      triggerEmojiRain();
+
+      badgeA.style.display = 'inline-block';
+      badgeB.style.display = 'inline-block';
+
+      const numA = parseFloat(data.optAPct.replace('%', '')) || 50;
+      const numB = parseFloat(data.optBPct.replace('%', '')) || 50;
+
+      if (numA < numB) {
+        halfA.classList.add('is-loser');
+        halfB.classList.add('is-winner');
+      } else if (numB < numA) {
+        halfB.classList.add('is-loser');
+        halfA.classList.add('is-winner');
+      } else {
+        halfA.classList.add('is-winner');
+        halfB.classList.add('is-winner');
+      }
+    }
+
+    function stepWyrNextOrFinish() {
+      currentWyrIndex++;
+      if (currentWyrIndex < wyrChoicesTotal) {
+        stepWyrShowOptions();
+      } else {
+        stepWyrOutro();
+      }
+    }
+
+    /* 5. OUTRO WYR: Con delay de 0.25 segundos */
+    function stepWyrOutro() {
+      stopAllAudio();
+      clearWyrSequence();
+      clearTimeout(wyrCountdownTimer);
+      clearInterval(wyrCountdownInterval);
+      clearConfetti();
+
+      renderStepWithTransition(() => {
+        const outroText = wyrActiveSelection.outro.text;
+        const stage = document.getElementById('quiz-stage');
+
+        stage.innerHTML = `
+          <div class="white-card">
+            <div class="pill-badge wyr-badge">🏁 RESULTADOS FINALES 🏁</div>
+            <div class="welcome-title">${escapeHtml(outroText)}</div>
+          </div>
+        `;
+
+        if (wyrActiveSelection.outro.audioKey) {
+          const tOutro = setTimeout(() => {
+            playVoiceInstant(wyrActiveSelection.outro.audioKey);
+          }, 250); // Delay de 0.25 segundos
+          wyrSequenceTimeouts.push(tOutro);
+        }
+      });
+    }
+
+    /* ========================================================
+       10. MODO QUIZ (9:16)
+       ======================================================== */
+    let countdownTimer = null;
+    let countdownInterval = null;
+    let currentQuestionIndex = 0;
+    let answerImageTransitionTimer = null;
+    let urgencyShakeTimers = [];
+
+    async function handleQuizFileUploaded(event, labelId, storeKey) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const label = document.getElementById(labelId);
+      if (file) {
+        label.textContent = `✓ ${file.name}`;
+        label.classList.add('loaded');
+        mediaStore[storeKey] = file;
+
+        if (storeKey !== 'bgVideo' && !storeKey.includes('Img')) {
+          await preloadAudioToBuffer(storeKey, file);
+        }
+        triggerQuizAutosave();
+      }
+    }
+
+    function handleQuizImageSelected(event, labelId, storeKey) {
+      const file = event.target.files[0];
+      const label = document.getElementById(labelId);
+      if (file) {
+        label.textContent = `✓ Imagen: ${file.name}`;
+        label.classList.add('loaded');
+        mediaStore[storeKey] = file;
+        preloadImageBlob(storeKey, file);
+        triggerQuizAutosave();
+      }
+    }
+
+    async function handleQuizPersistentAudioUpload(event, dbKey, labelId, storeKey) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById(labelId);
+      if (!file) return;
+
+      lbl.textContent = `✓ ${file.name} (Guardado)`;
+      lbl.classList.add('loaded');
+      mediaStore[storeKey] = file;
+      await preloadAudioToBuffer(storeKey, file);
+      await saveSettingToDB(dbKey, file);
+      triggerQuizAutosave();
+    }
+
+    function getDifficultyBadgeStyle(index, total) {
+      if (total <= 1) {
+        return { bg: 'linear-gradient(135deg, #00E676, #00b0ff)', border: '#00E676', shadow: 'rgba(0, 230, 118, 0.4)' };
+      }
+      const stops = [
+        { c1: '#00E676', c2: '#10b981', shadow: 'rgba(0, 230, 118, 0.5)' },
+        { c1: '#9ACD32', c2: '#65a30d', shadow: 'rgba(154, 205, 50, 0.5)' },
+        { c1: '#FFC400', c2: '#f59e0b', shadow: 'rgba(255, 196, 0, 0.55)' },
+        { c1: '#FF8A00', c2: '#ea580c', shadow: 'rgba(255, 138, 0, 0.55)' },
+        { c1: '#FF1744', c2: '#b91c1c', shadow: 'rgba(255, 23, 68, 0.6)' }
+      ];
+
+      const ratio = index / (total - 1);
+      const stopIndex = Math.min(stops.length - 1, Math.round(ratio * (stops.length - 1)));
+      const s = stops[stopIndex];
+
+      return { bg: `linear-gradient(135deg, ${s.c1}, ${s.c2})`, border: s.c1, shadow: s.shadow };
+    }
+
+    function stepStartIntro() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+      urgencyShakeTimers.forEach(t => clearTimeout(t)); urgencyShakeTimers = [];
+      clearConfetti();
+
+      renderStepWithTransition(() => {
+        const introText = document.getElementById('intro-text').value || '¿Cuánto sabes de cultura general?';
+        const stage = document.getElementById('quiz-stage');
+
+        stage.innerHTML = `
+          <div class="white-card" id="card-welcome">
+            <div class="pill-badge">✨ DESAFÍO VIRAL ✨</div>
+            <div class="welcome-title">${escapeHtml(introText)}</div>
+          </div>
+
+          <div class="intro-cat-card white-card cascade-second" id="card-cat-direct">
+            <div class="intro-cat-subtitle">CATEGORÍA:</div>
+            <div class="intro-cat-highlight">${escapeHtml(selectedCategory)}</div>
+          </div>
+        `;
+
+        triggerHookStickersPop('shorts');
+        playVoiceInstant('introAudio');
+      });
+    }
+
+    function getQuestionData(idx) {
+      const n = idx + 1;
+      const textInput = document.getElementById(`q${n}-text`);
+      const animInput = document.getElementById(`q${n}-anim-duration`);
+      const optAInput = document.getElementById(`q${n}-optA`);
+      const optBInput = document.getElementById(`q${n}-optB`);
+      const optCInput = document.getElementById(`q${n}-optC`);
+
+      const text = textInput ? textInput.value : `Pregunta ${n}`;
+      const animDuration = animInput ? parseFloat(animInput.value) || 2.5 : 2.5;
+      const optA = optAInput ? optAInput.value : 'Opción A';
+      const optB = optBInput ? optBInput.value : 'Opción B';
+      const optC = optCInput ? optCInput.value : 'Opción C';
+      
+      const radios = document.getElementsByName(`q${n}-correct`);
+      let correct = 'A';
+      for (const r of radios) {
+        if (r.checked) { correct = r.value; break; }
+      }
+
+      return {
+        text, animDuration, optA, optB, optC, correct,
+        baseImg: mediaStore[`q${n}Img`],
+        ansImg: mediaStore[`q${n}AnsImg`],
+        baseImgKey: `q${n}Img`,
+        ansImgKey: `q${n}AnsImg`,
+        audioKey: `q${n}Audio`,
+        ansAudioKey: `q${n}AnsAudio`
+      };
+    }
+
+    function stepShowQuestion() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+      urgencyShakeTimers.forEach(t => clearTimeout(t)); urgencyShakeTimers = [];
+      clearConfetti();
+
+      if (currentQuestionIndex >= quizQuestionsTotal) {
+        stepShowOutro();
+        return;
+      }
+
+      renderStepWithTransition(() => {
+        const q = getQuestionData(currentQuestionIndex);
+        const stage = document.getElementById('quiz-stage');
+
+        let imgHtml = '';
+        if (q.baseImg || q.ansImg) {
+          const baseSrc = q.baseImg ? getPreloadedImageUrl(q.baseImgKey, q.baseImg) : (q.ansImg ? getPreloadedImageUrl(q.ansImgKey, q.ansImg) : '');
+          const ansSrc = q.ansImg ? getPreloadedImageUrl(q.ansImgKey, q.ansImg) : '';
+
+          imgHtml = `
+            <div class="question-img-wrap" id="question-img-wrap" style="display: block;">
+              <img id="q-base-img" src="${baseSrc}" alt="Ilustración" />
+              ${ansSrc ? `<img id="q-ans-img" src="${ansSrc}" alt="Respuesta Ilustrada" />` : ''}
+              <div class="flash-overlay"></div>
+            </div>
+          `;
+        }
+
+        const diffColors = getDifficultyBadgeStyle(currentQuestionIndex, quizQuestionsTotal);
+
+        const rawText = q.text.trim();
+        const words = rawText.split(/\s+/);
+        const totalChars = rawText.replace(/\s+/g, '').length || 1;
+        const totalSeconds = Math.max(0.5, q.animDuration);
+        const delayPerChar = totalSeconds / totalChars;
+
+        let charCounter = 0;
+        const wordsHtml = words.map(word => {
+          const charsHtml = word.split('').map(char => {
+            const charDelay = (charCounter * delayPerChar).toFixed(3);
+            charCounter++;
+            return `<span class="char-pop" style="animation-delay: ${charDelay}s;">${escapeHtml(char)}</span>`;
+          }).join('');
+          return `<span class="word-unit">${charsHtml}</span>`;
+        }).join(' ');
+
+        stage.innerHTML = `
+          <div class="question-counter-badge" style="background:${diffColors.bg}; border-color:${diffColors.border}; box-shadow:0 0 14px ${diffColors.shadow};">
+            PREGUNTA ${currentQuestionIndex + 1} DE ${quizQuestionsTotal}
+          </div>
+
+          <div class="white-card" id="current-question-card">
+            ${imgHtml}
+            <div class="question-text" id="animated-question-text">${wordsHtml}</div>
+
+            <div class="timer-container" id="timer-box">
+              <div class="timer-bar-bg">
+                <div class="timer-bar-fill" id="timer-fill"></div>
+              </div>
+              <div class="timer-badge" id="timer-number">3 SEGUNDOS</div>
+            </div>
+
+            <div class="quiz-options">
+              <div class="quiz-opt-btn" id="opt-btn-A">
+                <div class="opt-letter">A</div>
+                <span>${escapeHtml(q.optA)}</span>
+              </div>
+              <div class="quiz-opt-btn" id="opt-btn-B">
+                <div class="opt-letter">B</div>
+                <span>${escapeHtml(q.optB)}</span>
+              </div>
+              <div class="quiz-opt-btn" id="opt-btn-C">
+                <div class="opt-letter">C</div>
+                <span>${escapeHtml(q.optC)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        setTimeout(() => {
+          playVoiceInstant(q.audioKey);
+        }, 220);
+      });
+    }
+
+    function stepStartCountdown() {
+      const timerBox = document.getElementById('timer-box');
+      const timerFill = document.getElementById('timer-fill');
+      const timerNum = document.getElementById('timer-number');
+      const currentCard = document.getElementById('current-question-card');
+      if (!timerBox || !timerFill) return;
+
+      timerBox.style.display = 'block';
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '100%';
+      void timerFill.offsetWidth;
+
+      timerFill.style.transition = 'width 3s linear';
+      timerFill.style.width = '0%';
+
+      let secondsLeft = 3;
+      timerNum.textContent = `3 SEGUNDOS`;
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+      urgencyShakeTimers.forEach(t => clearTimeout(t)); urgencyShakeTimers = [];
+
+      currentTimerSfxSource = playSfxInstant('timerSfx', 0.7);
+
+      countdownInterval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+          timerNum.textContent = `${secondsLeft} SEGUNDOS`;
+        }
+      }, 1000);
+
+      if (currentCard) currentCard.classList.remove('card-urgency-1', 'card-urgency-2', 'card-urgency-3');
+
+      urgencyShakeTimers.push(setTimeout(() => {
+        if (currentCard) currentCard.classList.add('card-urgency-1');
+      }, 1500));
+
+      urgencyShakeTimers.push(setTimeout(() => {
+        if (currentCard) currentCard.classList.replace('card-urgency-1', 'card-urgency-2');
+      }, 2100));
+
+      urgencyShakeTimers.push(setTimeout(() => {
+        if (currentCard) currentCard.classList.replace('card-urgency-2', 'card-urgency-3');
+      }, 2600));
+
+      answerImageTransitionTimer = setTimeout(() => {
+        startAnswerImageTransition();
+      }, 3000);
+
+      countdownTimer = setTimeout(() => {
+        clearInterval(countdownInterval);
+        timerNum.textContent = `¡TIEMPO!`;
+        if (currentCard) currentCard.classList.remove('card-urgency-1', 'card-urgency-2', 'card-urgency-3');
+        urgencyShakeTimers.forEach(t => clearTimeout(t));
+        urgencyShakeTimers = [];
+        revealAnswer();
+      }, 3000);
+    }
+
+    function startAnswerImageTransition() {
+      const wrap = document.getElementById('question-img-wrap');
+      const ansImg = document.getElementById('q-ans-img');
+      if (!wrap || !ansImg) return;
+
+      wrap.classList.add('do-flash');
+      ansImg.style.opacity = '1';
+    }
+
+    function revealAnswer() {
+      const q = getQuestionData(currentQuestionIndex);
+      ['A', 'B', 'C'].forEach(opt => {
+        const btn = document.getElementById(`opt-btn-${opt}`);
+        if (!btn) return;
+        if (opt === q.correct) {
+          btn.classList.add('is-correct');
+        } else {
+          btn.classList.add('is-wrong');
+        }
+      });
+
+      triggerConfetti();
+      setTimeout(() => {
+        playVoiceInstant(q.ansAudioKey);
+      }, 250);
+    }
+
+    function stepNextOrFinish() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < quizQuestionsTotal) {
+        stepShowQuestion();
+      } else {
+        stepShowOutro();
+      }
+    }
+
+    function stepShowOutro() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+      urgencyShakeTimers.forEach(t => clearTimeout(t)); urgencyShakeTimers = [];
+      clearConfetti();
+
+      renderStepWithTransition(() => {
+        const outroText = document.getElementById('outro-text').value || '¡Gracias por participar! Sígueme para más trivias.';
+        const stage = document.getElementById('quiz-stage');
+
+        stage.innerHTML = `
+          <div class="white-card">
+            <div class="pill-badge badge-results">🏅 QUIZ TERMINADO 🏅</div>
+            <div class="welcome-title">${escapeHtml(outroText)}</div>
+          </div>
+        `;
+
+        setTimeout(() => {
+          playVoiceInstant('outroAudio');
+        }, 450);
+      });
+    }
+
+    /* ========================================================
+       11. CONTROL DEL MODO GRABACIÓN (4 BOTONES MÓVILES)
+       ======================================================== */
+    let currentRecordMode = 'shorts';
+
+    function setStageBackgroundMedia(file) {
+      const videoPlayer = document.getElementById('bg-video-player');
+      const imgPlayer = document.getElementById('bg-img-player');
+
+      if (!file) {
+        videoPlayer.removeAttribute('src');
+        videoPlayer.style.display = 'none';
+        imgPlayer.removeAttribute('src');
+        imgPlayer.style.display = 'none';
+        return;
+      }
+
+      const isGifOrImg = file.type.startsWith('image/') || file.name.toLowerCase().endsWith('.gif');
+
+      if (isGifOrImg) {
+        videoPlayer.pause();
+        videoPlayer.removeAttribute('src');
+        videoPlayer.style.display = 'none';
+
+        imgPlayer.src = URL.createObjectURL(file);
+        imgPlayer.style.display = 'block';
+      } else {
+        imgPlayer.removeAttribute('src');
+        imgPlayer.style.display = 'none';
+
+        videoPlayer.src = URL.createObjectURL(file);
+        videoPlayer.style.display = 'block';
+        videoPlayer.play().catch(() => {});
+      }
+    }
+
+    async function enterRecordMode(mode) {
+      currentRecordMode = mode;
+      getAudioContext();
+
+      if (mode === 'shorts') {
+        for (const [key, file] of Object.entries(mediaStore)) {
+          if (file && key !== 'bgVideo' && !key.includes('Img') && !audioBufferCache[key]) {
+            await preloadAudioToBuffer(key, file);
+          }
+        }
+
+        setStageBackgroundMedia(mediaStore.bgVideo);
+
+        currentQuestionIndex = 0;
+        renderControlsBar('shorts');
+        document.getElementById('record-screen').style.display = 'flex';
+        stepStartIntro();
+
+      } else if (mode === 'wyr') {
+        setStageBackgroundMedia(wyrActiveSelection.bgVideo);
+
+        currentWyrIndex = 0;
+        renderControlsBar('wyr');
+        document.getElementById('record-screen').style.display = 'flex';
+        stepWyrIntro();
+      }
+    }
+
+    function renderControlsBar(mode) {
+      const container = document.getElementById('stage-thumb-controls');
+      container.style.gridTemplateColumns = 'repeat(4, 1fr)';
+
+      if (mode === 'shorts') {
+        container.innerHTML = `
+          <button class="ctrl-btn" onclick="stepStartIntro()"><span class="icon">🚀</span><span>Intro+Cat</span></button>
+          <button class="ctrl-btn" onclick="stepShowQuestion()"><span class="icon">❓</span><span>Pregunta</span></button>
+          <button class="ctrl-btn" onclick="stepStartCountdown()"><span class="icon">⏱️</span><span>3 Seg</span></button>
+          <button class="ctrl-btn" onclick="stepNextOrFinish()"><span class="icon">⏩</span><span>Sig/Fin</span></button>
+        `;
+      } else {
+        container.innerHTML = `
+          <button class="ctrl-btn" onclick="stepWyrIntro()"><span class="icon">🚀</span><span>Intro</span></button>
+          <button class="ctrl-btn" onclick="stepWyrShowOptions()"><span class="icon">❓</span><span>Opciones</span></button>
+          <button class="ctrl-btn" onclick="stepWyrCountdown()"><span class="icon">⏱️</span><span>3 Seg</span></button>
+          <button class="ctrl-btn" onclick="stepWyrNextOrFinish()"><span class="icon">⏩</span><span>Siguiente</span></button>
+        `;
+      }
+    }
+
+    function exitRecordMode() {
+      stopAllAudio();
+      clearWyrSequence();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(answerImageTransitionTimer);
+      urgencyShakeTimers.forEach(t => clearTimeout(t)); urgencyShakeTimers = [];
+      clearTimeout(wyrCountdownTimer);
+      clearInterval(wyrCountdownInterval);
+      clearHookStickers(false);
+      clearConfetti();
+      document.getElementById('record-screen').style.display = 'none';
+      document.getElementById('bg-video-player').pause();
+    }
+
+    /* ========================================================
+       12. BASE DE DATOS Y SISTEMA DE AUTOGUARDADO ROBUSTO
+       ======================================================== */
+    const DB_NAME = 'ViralContentDB_v15';
+    const DB_VERSION = 1;
+    const STORE_PROJECTS = 'projects';
+    const STORE_SETTINGS = 'brand_settings';
+    const STORE_WYR_MESSAGES = 'wyr_messages';
+
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_PROJECTS)) db.createObjectStore(STORE_PROJECTS, { keyPath: 'id', autoIncrement: true });
+          if (!db.objectStoreNames.contains(STORE_SETTINGS)) db.createObjectStore(STORE_SETTINGS, { keyPath: 'key' });
+          if (!db.objectStoreNames.contains(STORE_WYR_MESSAGES)) db.createObjectStore(STORE_WYR_MESSAGES, { keyPath: 'id', autoIncrement: true });
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
+        req.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function saveSettingToDB(key, val) {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_SETTINGS, 'readwrite');
+        tx.objectStore(STORE_SETTINGS).put({ key: key, file: val });
+      } catch (e) {}
+    }
+
+    let autosaveQuizDebounce = null;
+    function triggerQuizAutosave() {
+      clearTimeout(autosaveQuizDebounce);
+      autosaveQuizDebounce = setTimeout(performQuizAutosave, 350);
+    }
+
+    async function performQuizAutosave() {
+      try {
+        const data = getCurrentQuizFormData();
+        await saveSettingToDB('quiz_autosave_state', data);
+      } catch (e) {}
+    }
+
+    let autosaveWyrDebounce = null;
+    function triggerWyrAutosave() {
+      clearTimeout(autosaveWyrDebounce);
+      autosaveWyrDebounce = setTimeout(performWyrAutosave, 350);
+    }
+
+    async function performWyrAutosave() {
+      try {
+        const data = getCurrentWyrFormData();
+        await saveSettingToDB('wyr_autosave_state', data);
+      } catch (e) {}
+    }
+
+    async function loadQuizAutosaveData() {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_SETTINGS, 'readonly');
+        const req = tx.objectStore(STORE_SETTINGS).get('quiz_autosave_state');
+        req.onsuccess = async () => {
+          if (req.result && req.result.file) {
+            await restoreQuizProject({ payload: req.result.file, name: 'Autoguardado' }, false);
+          }
+        };
+      } catch (e) {}
+    }
+
+    async function loadWyrAutosaveData() {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_SETTINGS, 'readonly');
+        const req = tx.objectStore(STORE_SETTINGS).get('wyr_autosave_state');
+        req.onsuccess = async () => {
+          if (req.result && req.result.file) {
+            await restoreWyrProject({ payload: req.result.file, name: 'Autoguardado' });
+          }
+        };
+      } catch (e) {}
+    }
+
+    async function loadPersistentSettings() {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_SETTINGS, 'readonly');
+        const req = tx.objectStore(STORE_SETTINGS).getAll();
+
+        req.onsuccess = async () => {
+          const rows = req.result || [];
+          for (const item of rows) {
+            if (item.key === 'cat_selected_color' && typeof item.file === 'string') {
+              applyCategoryColor(item.file);
+            }
+
+            if (item.key === 'wyr_timer_sfx' && item.file) {
+              await preloadAudioToBuffer('wyr_persistent_timer_sfx', item.file);
+              const lbl = document.getElementById('lbl-wyr-timer-sfx');
+              if (lbl) {
+                lbl.textContent = `✓ SFX 3 Seg Guardado`;
+                lbl.classList.add('loaded');
+              }
+            }
+
+            if (item.key === 'quiz_timer_sfx' && item.file) {
+              mediaStore.timerSfx = item.file;
+              await preloadAudioToBuffer('timerSfx', item.file);
+              const lbl = document.getElementById('lbl-timer-sfx');
+              if (lbl) {
+                lbl.textContent = `✓ SFX Cuenta Regresiva Listo`;
+                lbl.classList.add('loaded');
+              }
+            }
+
+            if (item.key === 'quiz_intro_audio' && item.file) {
+              mediaStore.introAudio = item.file;
+              await preloadAudioToBuffer('introAudio', item.file);
+              const lbl = document.getElementById('lbl-intro-audio');
+              if (lbl) {
+                lbl.textContent = `✓ Audio Bienvenida Listo`;
+                lbl.classList.add('loaded');
+              }
+            }
+
+            if (item.key === 'quiz_outro_audio' && item.file) {
+              mediaStore.outroAudio = item.file;
+              await preloadAudioToBuffer('outroAudio', item.file);
+              const lbl = document.getElementById('lbl-outro-audio');
+              if (lbl) {
+                lbl.textContent = `✓ Audio Despedida Listo`;
+                lbl.classList.add('loaded');
+              }
+            }
+
+            for (let i = 0; i < 4; i++) {
+              if (item.key === `hook_stk_${i}` && item.file) {
+                persistentStickers[i] = item.file;
+                preloadImageBlob(`hook_stk_${i}`, item.file);
+                const lbl = document.getElementById(`lbl-sticker-${i + 1}`);
+                if (lbl) {
+                  lbl.textContent = `✓ PNG ${i + 1} Listo`;
+                  lbl.classList.add('loaded');
+                }
+              }
+            }
+
+            if (item.key === 'sticker_pop_sfx' && item.file) {
+              await preloadAudioToBuffer('sticker_pop_sfx', item.file);
+              const lbl = document.getElementById('lbl-sticker-pop-sfx');
+              if (lbl) {
+                lbl.textContent = `✓ SFX Pop Listo`;
+                lbl.classList.add('loaded');
+              }
+            }
+
+            for (let i = 0; i < 4; i++) {
+              if (item.key === `wyr_hook_stk_${i}` && item.file) {
+                wyrPersistentStickers[i] = item.file;
+                preloadImageBlob(`wyr_hook_stk_${i}`, item.file);
+                const lbl = document.getElementById(`lbl-wyr-sticker-${i + 1}`);
+                if (lbl) {
+                  lbl.textContent = `✓ PNG ${i + 1} Listo`;
+                  lbl.classList.add('loaded');
+                }
+              }
+            }
+
+            if (item.key === 'wyr_sticker_pop_sfx' && item.file) {
+              await preloadAudioToBuffer('wyr_sticker_pop_sfx', item.file);
+              const lbl = document.getElementById('lbl-wyr-sticker-pop-sfx');
+              if (lbl) {
+                lbl.textContent = `✓ Pop SFX WYR Listo`;
+                lbl.classList.add('loaded');
+              }
+            }
+          }
+        };
+      } catch (e) {}
+    }
+
+    async function loadAllBankMessagesFromDB() {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_WYR_MESSAGES, 'readonly');
+        const req = tx.objectStore(STORE_WYR_MESSAGES).getAll();
+        req.onsuccess = async () => {
+          wyrBankMessages = req.result || [];
+          for (const msg of wyrBankMessages) {
+            if (msg.audioBlob) {
+              await preloadAudioToBuffer('wyr_msg_' + msg.id, msg.audioBlob);
+            }
+          }
+          updateBankMessagesCounter();
+        };
+      } catch (e) {}
+    }
+
+    /* GUARDADO DE PROYECTO QUIZ */
+    function getCurrentQuizFormData() {
+      const getVal = id => {
+        const el = document.getElementById(id);
+        return el ? el.value : '';
+      };
+      const getRadio = name => {
+        const radios = document.getElementsByName(name);
+        for (const r of radios) if (r.checked) return r.value;
+        return 'A';
+      };
+
+      const questions = [];
+      for (let n = 1; n <= quizQuestionsTotal; n++) {
+        questions.push({
+          text: getVal(`q${n}-text`),
+          animDuration: getVal(`q${n}-anim-duration`) || '2.5',
+          optA: getVal(`q${n}-optA`),
+          optB: getVal(`q${n}-optB`),
+          optC: getVal(`q${n}-optC`),
+          correct: getRadio(`q${n}-correct`)
+        });
+      }
+
+      return {
+        introText: getVal('intro-text'),
+        selectedCategory,
+        selectedCategoryColor,
+        outroText: getVal('outro-text'),
+        questionsTotal: quizQuestionsTotal,
+        questions,
+        files: { ...mediaStore }
+      };
+    }
+
+    async function saveCurrentQuizProject() {
+      const projectName = prompt('Nombre del proyecto Quiz:', `${selectedCategory} - Quiz`);
+      if (!projectName) return;
+
+      const data = getCurrentQuizFormData();
+      const projectRecord = {
+        type: 'quiz',
+        name: projectName,
+        date: new Date().toLocaleString(),
+        payload: data
+      };
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readwrite');
+        tx.objectStore(STORE_PROJECTS).add(projectRecord);
+        tx.oncomplete = () => alert('✅ ¡Proyecto Quiz guardado en la biblioteca!');
+      } catch (err) {
+        alert('Error al guardar proyecto.');
+      }
+    }
+
+    /* GUARDADO DE PROYECTO WYR */
+    function getCurrentWyrFormData() {
+      const getVal = id => {
+        const el = document.getElementById(id);
+        return el ? el.value : '';
+      };
+
+      const choices = [];
+      for (let n = 1; n <= wyrChoicesTotal; n++) {
+        choices.push({
+          optAText: getVal(`wyr-c${n}-optA-text`),
+          optAPct: getVal(`wyr-c${n}-optA-pct`),
+          optBText: getVal(`wyr-c${n}-optB-text`),
+          optBPct: getVal(`wyr-c${n}-optB-pct`)
+        });
+      }
+
+      return {
+        choicesTotal: wyrChoicesTotal,
+        activeSelection: { ...wyrActiveSelection },
+        choices
+      };
+    }
+
+    async function saveCurrentWyrProject() {
+      const opt1 = document.getElementById('wyr-c1-optA-text');
+      const sample = opt1 ? opt1.value : 'Prefieres';
+      const projectName = prompt('Nombre del proyecto "¿Qué prefieres?":', `¿Qué prefieres? - ${sample.slice(0, 15)}...`);
+      if (!projectName) return;
+
+      const data = getCurrentWyrFormData();
+      const projectRecord = {
+        type: 'wyr',
+        name: projectName,
+        date: new Date().toLocaleString(),
+        payload: data
+      };
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readwrite');
+        tx.objectStore(STORE_PROJECTS).add(projectRecord);
+        tx.oncomplete = () => alert('✅ ¡Proyecto "¿Qué prefieres?" guardado con éxito!');
+      } catch (err) {
+        alert('Error al guardar proyecto.');
+      }
+    }
+
+    /* BIBLIOTECA */
+    async function openLibraryModal() {
+      document.getElementById('library-modal').style.display = 'flex';
+      renderProjectsList();
+    }
+    function closeLibraryModal() {
+      document.getElementById('library-modal').style.display = 'none';
+    }
+
+    async function renderProjectsList() {
+      const container = document.getElementById('projects-list');
+      container.innerHTML = '<div style="text-align:center; padding: 20px; color:#888;">Cargando...</div>';
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readonly');
+        const req = tx.objectStore(STORE_PROJECTS).getAll();
+
+        req.onsuccess = () => {
+          const list = req.result;
+          if (!list || list.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:20px; color:#777;">No hay proyectos guardados aún.</div>';
+            return;
+          }
+
+          container.innerHTML = '';
+          list.reverse().forEach(item => {
+            const isWyr = (item.type === 'wyr');
+            const typeLabel = isWyr ? '<span class="project-type-tag tag-wyr">⚖️ ¿QUÉ PREFIERES?</span>' : '<span class="project-type-tag tag-quiz">🎬 QUIZ 9:16</span>';
+
+            const div = document.createElement('div');
+            div.className = 'project-item';
+            div.innerHTML = `
+              <div class="project-info">
+                ${typeLabel}
+                <h4>${escapeHtml(item.name)}</h4>
+                <span>📅 ${item.date}</span>
+              </div>
+              <div class="project-actions">
+                <button class="btn-proj-load" onclick="loadProjectItem(${item.id})">Cargar</button>
+                <button class="btn-proj-del" onclick="deleteProjectById(${item.id})">Eliminar</button>
+              </div>
+            `;
+            container.appendChild(div);
+          });
+        };
+      } catch (err) {
+        container.innerHTML = '<div style="text-align:center; padding:20px;">Error al cargar biblioteca.</div>';
+      }
+    }
+
+    async function loadProjectItem(id) {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readonly');
+        const req = tx.objectStore(STORE_PROJECTS).get(id);
+
+        req.onsuccess = async () => {
+          const item = req.result;
+          if (!item) return;
+
+          if (item.type === 'wyr') {
+            await restoreWyrProject(item);
+          } else {
+            await restoreQuizProject(item, true);
+          }
+
+          closeLibraryModal();
+        };
+      } catch (err) {
+        alert('Error al restaurar proyecto.');
+      }
+    }
+
+    async function restoreQuizProject(item, showAlert = true) {
+      switchMode('shorts');
+      const p = item.payload;
+      if (!p) return;
+
+      document.getElementById('intro-text').value = p.introText || '';
+      document.getElementById('outro-text').value = p.outroText || '';
+
+      if (p.selectedCategory) {
+        selectedCategory = p.selectedCategory;
+        document.getElementById('txt-selected-cat').textContent = `🏷️ Categoría: ${selectedCategory}`;
+      }
+
+      if (p.selectedCategoryColor) {
+        applyCategoryColor(p.selectedCategoryColor);
+      }
+
+      quizQuestionsTotal = p.questionsTotal || (p.questions ? p.questions.length : 3);
+      renderQuizQuestionsSetup();
+
+      if (p.questions) {
+        p.questions.forEach((qData, idx) => {
+          const n = idx + 1;
+          const textEl = document.getElementById(`q${n}-text`);
+          const animEl = document.getElementById(`q${n}-anim-duration`);
+          const optAEl = document.getElementById(`q${n}-optA`);
+          const optBEl = document.getElementById(`q${n}-optB`);
+          const optCEl = document.getElementById(`q${n}-optC`);
+          if (textEl) textEl.value = qData.text || '';
+          if (animEl) animEl.value = qData.animDuration || '2.5';
+          if (optAEl) optAEl.value = qData.optA || '';
+          if (optBEl) optBEl.value = qData.optB || '';
+          if (optCEl) optCEl.value = qData.optC || '';
+          const radios = document.getElementsByName(`q${n}-correct`);
+          for (const r of radios) r.checked = (r.value === qData.correct);
+        });
+      }
+
+      if (p.files) {
+        Object.assign(mediaStore, p.files);
+
+        for (const [key, file] of Object.entries(p.files)) {
+          if (file && key !== 'bgVideo' && !key.includes('Img')) {
+            await preloadAudioToBuffer(key, file);
+          }
+          if (file && key.includes('Img')) {
+            preloadImageBlob(key, file);
+          }
+        }
+
+        const updateLabel = (id, file, txt) => {
+          const lbl = document.getElementById(id);
+          if (!lbl) return;
+          if (file) {
+            lbl.textContent = `✓ ${file.name || 'Cargado'}`;
+            lbl.classList.add('loaded');
+          } else {
+            lbl.textContent = txt;
+            lbl.classList.remove('loaded');
+          }
+        };
+
+        updateLabel('lbl-bg-video', mediaStore.bgVideo, 'Cargar Video MP4 o GIF de fondo');
+        updateLabel('lbl-timer-sfx', mediaStore.timerSfx, '🎵 Cargar SFX Cuenta Regresiva (Vol 70%)');
+        updateLabel('lbl-intro-audio', mediaStore.introAudio, 'Cargar Audio Bienvenida');
+        updateLabel('lbl-outro-audio', mediaStore.outroAudio, 'Cargar Audio Outro');
+
+        for (let n = 1; n <= quizQuestionsTotal; n++) {
+          updateLabel(`lbl-q${n}-img`, mediaStore[`q${n}Img`], '1. Imagen Inicial de Pregunta');
+          updateLabel(`lbl-q${n}-ans-img`, mediaStore[`q${n}AnsImg`], '2. Imagen de Respuesta Correcta (Transición)');
+          updateLabel(`lbl-q${n}-audio`, mediaStore[`q${n}Audio`], `Cargar Audio Pregunta ${n}`);
+          updateLabel(`lbl-q${n}-ans-audio`, mediaStore[`q${n}AnsAudio`], `🔊 Cargar Audio Respuesta Correcta P${n}`);
+        }
+      }
+
+      if (showAlert) {
+        alert(`✅ Proyecto Quiz "${item.name}" cargado.`);
+      }
+    }
+
+    async function restoreWyrProject(item) {
+      switchMode('wyr');
+      const p = item.payload;
+      if (!p) return;
+
+      wyrChoicesTotal = p.choicesTotal || (p.choices ? p.choices.length : 3);
+
+      if (p.activeSelection) {
+        Object.assign(wyrActiveSelection, p.activeSelection);
+
+        if (wyrActiveSelection.intro && wyrActiveSelection.intro.text) {
+          document.getElementById('txt-wyr-intro').textContent = `✓ ${wyrActiveSelection.intro.text}`;
+          document.getElementById('btn-sel-wyr-intro').classList.add('selected');
+        }
+        if (wyrActiveSelection.outro && wyrActiveSelection.outro.text) {
+          document.getElementById('txt-wyr-outro').textContent = `✓ ${wyrActiveSelection.outro.text}`;
+          document.getElementById('btn-sel-wyr-outro').classList.add('selected');
+        }
+
+        // Precarga de audios de opciones WYR si existen
+        for (let n = 1; n <= wyrChoicesTotal; n++) {
+          if (wyrActiveSelection[`c${n}OptAAudio`]) {
+            await preloadAudioToBuffer(`wyr_c${n}OptAAudio`, wyrActiveSelection[`c${n}OptAAudio`]);
+          }
+          if (wyrActiveSelection[`c${n}OptBAudio`]) {
+            await preloadAudioToBuffer(`wyr_c${n}OptBAudio`, wyrActiveSelection[`c${n}OptBAudio`]);
+          }
+        }
+      }
+
+      renderWyrChoicesSetup();
+
+      if (p.choices) {
+        p.choices.forEach((cData, idx) => {
+          const n = idx + 1;
+          const aText = document.getElementById(`wyr-c${n}-optA-text`);
+          const aPct = document.getElementById(`wyr-c${n}-optA-pct`);
+          const bText = document.getElementById(`wyr-c${n}-optB-text`);
+          const bPct = document.getElementById(`wyr-c${n}-optB-pct`);
+          if (aText) aText.value = cData.optAText || '';
+          if (aPct) aPct.value = cData.optAPct || '';
+          if (bText) bText.value = cData.optBText || '';
+          if (bPct) bPct.value = cData.optBPct || '';
+        });
+      }
+
+      const updateLabel = (id, file, txt) => {
+        const lbl = document.getElementById(id);
+        if (!lbl) return;
+        if (file) {
+          lbl.textContent = `✓ ${file.name || 'Cargado'}`;
+          lbl.classList.add('loaded');
+        } else {
+          lbl.textContent = txt;
+          lbl.classList.remove('loaded');
+        }
+      };
+
+      updateLabel('lbl-wyr-bg-video', wyrActiveSelection.bgVideo, 'Cargar Video MP4 o GIF de fondo');
+
+      for (let n = 1; n <= wyrChoicesTotal; n++) {
+        updateLabel(`lbl-wyr-c${n}-optA-img`, wyrActiveSelection[`c${n}OptAImg`], 'Subir Imagen Opción A (Formato 3:2)');
+        updateLabel(`lbl-wyr-c${n}-optB-img`, wyrActiveSelection[`c${n}OptBImg`], 'Subir Imagen Opción B (Formato 3:2)');
+        updateLabel(`lbl-wyr-c${n}-optA-audio`, wyrActiveSelection[`c${n}OptAAudio`], '🔊 Cargar Audio Opción A');
+        updateLabel(`lbl-wyr-c${n}-optB-audio`, wyrActiveSelection[`c${n}OptBAudio`], '🔊 Cargar Audio Opción B');
+      }
+    }
+
+    async function deleteProjectById(id) {
+      if (!confirm('¿Eliminar proyecto permanentemente de la biblioteca?')) return;
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readwrite');
+        tx.objectStore(STORE_PROJECTS).delete(id);
+        tx.oncomplete = () => renderProjectsList();
+      } catch (err) {}
+    }
+
+    /* INICIALIZACIÓN GLOBAL */
+    window.addEventListener('DOMContentLoaded', async () => {
+      renderQuizQuestionsSetup();
+      renderWyrChoicesSetup();
+      await loadPersistentSettings();
+      await loadAllBankMessagesFromDB();
+      await loadQuizAutosaveData();
+      await loadWyrAutosaveData();
+    });
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+  </script>
+</body>
+</html>
