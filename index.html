@@ -572,8 +572,8 @@
 
     .hook-sticker.pos-1 { top: 28%; left: 8%; }
     .hook-sticker.pos-2 { top: 26%; right: 9%; }
-    .hook-sticker.pos-3 { bottom: 32%; left: 9%; }
-    .hook-sticker.pos-4 { bottom: 34%; right: 8%; }
+    .hook-sticker.pos-3 { bottom: 34%; left: 9%; }
+    .hook-sticker.pos-4 { bottom: 35%; right: 8%; }
 
     .pill-badge {
       display: inline-block;
@@ -2855,8 +2855,10 @@
         `;
 
         triggerHookStickersPop('shorts');
-        playVoiceInstant('introAudio');
-      });
+        setTimeout(() => {
+  playVoiceInstant('introAudio');
+}, 150);
+}); 
     }
 
     function getQuestionData(idx) {
@@ -3094,7 +3096,7 @@
 
         setTimeout(() => {
           playVoiceInstant('outroAudio');
-        }, 450);
+        }, 225);
       });
     }
 
