@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Quiz Shorts Studio Pro 9:16</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;0,900;1,900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0b0d14;
+      --panel-bg: #141824;
+      --card-white: rgba(255, 255, 255, 0.94);
+      --primary: #00F0FF;
+      --accent: #FF007F;
+      --gold: #FFC400;
+      --correct: #00E676;
+      --wrong: #FF1744;
+      --text-dark: #0f172a;
+      --text-muted: #8F9CAE;
+      --font-display: 'Montserrat', sans-serif;
+      --font-body: 'Poppins', sans-serif;
+
+      /* Variable personalizable para negritas destacadas (*texto*) */
+      --bold-highlight-color: #FF0055;
+
+      /* Arcoíris: solo tonos claros y saturados */
+      --rb-pink: #ff5c9d;
+      --rb-orange: #ffa733;
+      --rb-yellow: #ffe14a;
+      --rb-mint: #4dffa0;
+      --rb-cyan: #4de3ff;
+      --rb-violet: #b98aff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #fff;
+      font-family: var(--font-body);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    input, textarea, button {
+      font-family: inherit;
+    }
+
+    /* ========================================================
+       PANEL DE CONFIGURACIÓN MOBILE-FIRST
+       ======================================================== */
+    .setup-container {
+      padding: 14px 14px 90px 14px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #23293d;
+      gap: 8px;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      white-space: nowrap;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: transform 0.1s ease;
+    }
+    .btn-sm:active { transform: scale(0.94); }
+    .btn-lib { background: #262c42; color: #fff; border: 1px solid #3d4666; }
+    .btn-save { background: var(--primary); color: #000; }
+
+    .autosave-indicator {
+      font-size: 0.64rem;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: -6px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 5px;
+    }
+    .autosave-indicator.saved { color: var(--correct); }
+
+    .card-setup {
+      background: var(--panel-bg);
+      border: 1px solid #252b3d;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
+
+    .card-setup-title {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-setup.extra-card-setup {
+      border: 1.5px solid #a855f7;
+      background: linear-gradient(180deg, rgba(168, 85, 247, 0.08) 0%, rgba(20, 24, 36, 1) 100%);
+    }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    textarea, input[type="text"], input[type="number"] {
+      width: 100%;
+      background: #0d0f17;
+      border: 1px solid #262c40;
+      border-radius: 8px;
+      padding: 9px 11px;
+      color: #fff;
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+      user-select: text;
+    }
+
+    .helper-text {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: -6px;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .color-picker-row input[type="color"] {
+      width: 44px;
+      height: 38px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+    }
+    .color-picker-row input[type="text"] {
+      margin-bottom: 0;
+      flex: 1;
+    }
+
+    .file-input-wrapper {
+      margin-bottom: 8px;
+    }
+    .file-input-wrapper input[type="file"] { display: none; }
+    .file-custom-btn {
+      display: block;
+      background: #1c2132;
+      border: 1px dashed #3a425f;
+      padding: 9px 10px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      text-align: center;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-custom-btn.loaded {
+      border: 1px solid var(--correct);
+      color: var(--correct);
+      background: rgba(0, 230, 118, 0.08);
+    }
+    .file-custom-btn.sfx-btn {
+      border-color: #818cf8;
+      color: #c7d2fe;
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .opt-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f121b;
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1px solid #23283a;
+    }
+    .opt-row input[type="radio"] { accent-color: var(--correct); }
+    .opt-row input[type="text"] { margin-bottom: 0; background: transparent; border: none; padding: 4px; }
+
+    .btn-record-mode {
+      position: sticky;
+      bottom: 12px;
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #ff2a55);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 900;
+      padding: 15px;
+      border-radius: 14px;
+      border: none;
+      box-shadow: 0 6px 20px rgba(255, 0, 127, 0.45);
+      cursor: pointer;
+      text-transform: uppercase;
+      z-index: 10;
+    }
+
+    /* MODAL BIBLIOTECA DE PROYECTOS */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-box {
+      background: var(--panel-bg);
+      border: 1px solid #333b54;
+      border-radius: 18px;
+      width: 100%;
+      max-width: 440px;
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+      overflow: hidden;
+    }
+    .modal-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #262d42;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #fff;
+    }
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.3rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .projects-list {
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+    .project-item {
+      background: #0d0f17;
+      border: 1px solid #282f45;
+      padding: 12px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .project-info h4 {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 2px;
+      line-height: 1.25;
+    }
+    .project-info span {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+    .project-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .btn-proj-load {
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 6px 11px;
+      border-radius: 7px;
+      font-weight: 800;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
+    .btn-proj-del {
+      background: rgba(255, 23, 68, 0.15);
+      border: 1px solid var(--wrong);
+      color: var(--wrong);
+      padding: 6px 9px;
+      border-radius: 7px;
+      font-weight: 800;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
+
+    /* ========================================================
+       MODO GRABACIÓN VERTICAL (CANVAS 9:16)
+       ======================================================== */
+    #record-screen {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: #000;
+      z-index: 999;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .bg-media-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+    #bg-video-player, #bg-img-player {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+    }
+    .video-overlay-dim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.7) 100%);
+      z-index: 1;
+    }
+
+    #confetti-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 40;
+    }
+
+    .btn-exit-record {
+      position: absolute;
+      top: max(12px, env(safe-area-inset-top));
+      right: 12px;
+      z-index: 60;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quiz-stage {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 410px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 16px 16px 88px 16px;
+      gap: 18px;
+    }
+
+    /* 1. Tarjeta anunciadora de Reto / Título superior */
+    .header-hook-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--card-white);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: var(--text-dark);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 12px 16px 13px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0,0,0,0.1);
+      z-index: 15;
+      will-change: transform, opacity;
+    }
+
+    .header-hook-card.hook-enter {
+      animation: hookIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+    @keyframes hookIn {
+      0%   { opacity: 0; transform: translateY(-24px) scale(0.88); }
+      60%  { opacity: 1; transform: translateY(3px) scale(1.02); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .header-hook-card::after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: 0;
+      width: 45%;
+      height: 120%;
+      background: linear-gradient(105deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.55) 35%,
+        rgba(255,255,255,1) 50%,
+        rgba(255,255,255,0.55) 65%,
+        rgba(255,255,255,0) 100%);
+      transform: translateX(-130%) skewX(-20deg);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .header-hook-card.hook-enter::after {
+      animation: hookSheen 5.5s ease-in-out 0.6s infinite;
+    }
+    @keyframes hookSheen {
+      0%   { transform: translateX(-130%) skewX(-20deg); opacity: 0; }
+      3%   { opacity: 1; }
+      15%  { transform: translateX(330%) skewX(-20deg); opacity: 1; }
+      17%  { transform: translateX(330%) skewX(-20deg); opacity: 0; }
+      100% { transform: translateX(330%) skewX(-20deg); opacity: 0; }
+    }
+
+    .pill-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), #ff0055);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 3px 12px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      box-shadow: 0 3px 10px rgba(255, 0, 127, 0.4);
+      animation: pillBreath 2.2s ease-in-out infinite;
+    }
+    @keyframes pillBreath {
+      0%, 100% { transform: scale(1); box-shadow: 0 3px 10px rgba(255, 0, 127, 0.4); }
+      50%      { transform: scale(1.06); box-shadow: 0 4px 16px rgba(255, 0, 127, 0.6); }
+    }
+
+    .header-hook-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--text-dark);
+      line-height: 1.25;
+    }
+
+    /* 2. Badge Pregunta X de N / ¡Pregunta Extra! */
+    .question-counter-badge {
+      position: relative;
+      overflow: hidden;
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.45);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      z-index: 15;
+      will-change: transform, opacity;
+    }
+
+    .question-counter-badge::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(105deg, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0));
+      transform: translateX(-160%) skewX(-20deg);
+      pointer-events: none;
+    }
+
+    .question-counter-badge.badge-enter {
+      animation: badgePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.25) backwards;
+    }
+    .question-counter-badge.badge-enter::after {
+      animation: badgeShine 0.75s ease-out 0.4s both;
+    }
+    .question-counter-badge.badge-exit {
+      animation: badgeOut 0.17s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+    }
+
+    @keyframes badgePop {
+      0%   { opacity: 0; transform: translateY(-14px) scale(0.5) rotate(-5deg); }
+      55%  { opacity: 1; transform: translateY(2px) scale(1.12) rotate(1.5deg); }
+      100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+    }
+    @keyframes badgeOut {
+      0%   { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.8) translateY(-6px); }
+    }
+    @keyframes badgeShine {
+      0%   { transform: translateX(-160%) skewX(-20deg); }
+      100% { transform: translateX(380%) skewX(-20deg); }
+    }
+    @keyframes badgeShineLoop {
+      0%   { transform: translateX(-160%) skewX(-20deg); }
+      55%  { transform: translateX(380%) skewX(-20deg); }
+      100% { transform: translateX(380%) skewX(-20deg); }
+    }
+
+    /* Arcoíris animado */
+    .rainbow-badge {
+      background: linear-gradient(135deg, var(--rb-pink), var(--rb-orange), var(--rb-yellow), var(--rb-mint), var(--rb-cyan), var(--rb-violet), var(--rb-pink));
+      background-size: 300% 300%;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.55), 0 0 8px rgba(0,0,0,0.3);
+      border: 2px solid #fff;
+      font-size: 0.82rem;
+      padding: 7px 18px;
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.8);
+    }
+
+    .rainbow-badge.badge-enter {
+      animation:
+        extraBadgeIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.3) backwards,
+        extraBadgeRing 0.7s ease-out 0.1s backwards,
+        extraBadgePulse 1.5s ease-in-out 0.8s infinite,
+        rainbowBorderAnim 3s linear infinite;
+    }
+    .rainbow-badge.badge-enter::after {
+      animation: badgeShineLoop 1.9s ease-in-out 0.8s infinite;
+    }
+
+    .rb-star {
+      display: inline-block;
+      animation: starTwinkle 1.2s ease-in-out infinite;
+    }
+    .rb-star-2 { animation-delay: 0.6s; }
+    @keyframes starTwinkle {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50%      { transform: scale(1.35) rotate(25deg); }
+    }
+
+    @keyframes extraBadgeIn {
+      0%   { opacity: 0; transform: translateY(-18px) scale(0.2) rotate(-14deg); }
+      45%  { opacity: 1; transform: translateY(3px) scale(1.28) rotate(4deg); }
+      70%  { transform: translateY(0) scale(0.94) rotate(-1.5deg); }
+      100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+    }
+    @keyframes extraBadgeRing {
+      0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.95), 0 0 18px rgba(168,85,247,0.8); }
+      100% { box-shadow: 0 0 0 28px rgba(255,255,255,0), 0 0 18px rgba(168,85,247,0.8); }
+    }
+    @keyframes extraBadgePulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 14px rgba(168,85,247,0.7); }
+      50%      { transform: scale(1.07); box-shadow: 0 0 28px rgba(0,210,255,0.85), 0 0 42px rgba(255,0,85,0.45); }
+    }
+
+    .card-wrap {
+      position: relative;
+      width: 100%;
+      z-index: 10;
+    }
+
+    .white-card {
+      --card-delay: 0.06s;
+      position: relative;
+      background: var(--card-white);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: var(--text-dark);
+      border-radius: 20px;
+      padding: 20px 16px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0,0,0,0.1);
+      width: 100%;
+      text-align: center;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      z-index: 10;
+      overflow: hidden;
+      will-change: transform, opacity;
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+
+    .white-card.card-enter {
+      animation: cardIn 0.46s cubic-bezier(0.22, 1, 0.36, 1) var(--card-delay) backwards;
+    }
+    @keyframes cardIn {
+      0%   { opacity: 0; transform: scale(0.82) translateY(22px); }
+      60%  { opacity: 1; transform: scale(1.025) translateY(-3px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .white-card::after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: 0;
+      width: 45%;
+      height: 120%;
+      background: linear-gradient(105deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.55) 35%,
+        rgba(255,255,255,1) 50%,
+        rgba(255,255,255,0.55) 65%,
+        rgba(255,255,255,0) 100%);
+      transform: translateX(-130%) skewX(-20deg);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .white-card.card-enter::after {
+      animation: cardShine 0.95s ease-in-out calc(var(--card-delay) + 0.6s) both;
+    }
+    @keyframes cardShine {
+      0%   { transform: translateX(-130%) skewX(-20deg); opacity: 0; }
+      12%  { opacity: 1; }
+      88%  { opacity: 1; }
+      100% { transform: translateX(300%) skewX(-20deg); opacity: 0; }
+    }
+
+    .white-card.rainbow-card {
+      --card-delay: 0.04s;
+      border: 3.5px solid transparent;
+      background:
+        linear-gradient(rgba(255,255,255,0.96), rgba(255,255,255,0.96)) padding-box,
+        linear-gradient(115deg, var(--rb-pink), var(--rb-orange), var(--rb-yellow), var(--rb-mint), var(--rb-cyan), var(--rb-violet), var(--rb-pink)) border-box;
+      background-origin: border-box;
+      background-size: 100% 100%, 300% 300%;
+    }
+    .white-card.rainbow-card.card-enter {
+      animation:
+        extraCardIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--card-delay) backwards,
+        rainbowBorderAnim 3.5s linear infinite,
+        extraCardGlow 1.8s ease-in-out 0.7s infinite;
+    }
+    @keyframes extraCardIn {
+      0%   { opacity: 0; transform: scale(0.6) rotate(-4deg) translateY(30px); }
+      55%  { opacity: 1; transform: scale(1.06) rotate(1deg) translateY(-4px); }
+      80%  { transform: scale(0.985) rotate(0deg) translateY(0); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg) translateY(0); }
+    }
+    @keyframes extraCardGlow {
+      0%, 100% { box-shadow: 0 16px 36px rgba(0,0,0,0.5), 0 0 22px rgba(168,85,247,0.55); }
+      50%      { box-shadow: 0 16px 36px rgba(0,0,0,0.5), 0 0 38px rgba(0,240,255,0.7), 0 0 60px rgba(255,0,127,0.35); }
+    }
+
+    @keyframes rainbowBorderAnim {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .white-card.final-extra-dimmed {
+      filter: brightness(0.62) !important;
+      transform: scale(0.96) !important;
+    }
+
+    .giant-question-mark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      font-family: var(--font-display);
+      font-size: 7.2rem;
+      font-weight: 900;
+      line-height: 1;
+      z-index: 30;
+      pointer-events: none;
+      background: linear-gradient(135deg, var(--rb-pink), var(--rb-orange), var(--rb-yellow), var(--rb-mint), var(--rb-cyan), var(--rb-violet), var(--rb-pink));
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation:
+        giantPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.4) both,
+        giantPulse 2.4s ease-in-out 0.6s infinite alternate,
+        rainbowBorderAnim 6s linear infinite;
+      filter: drop-shadow(0 0 3px rgba(255,255,255,0.9)) drop-shadow(0 8px 20px rgba(0,0,0,0.85));
+      display: none;
+    }
+
+    .giant-question-mark.mark-exit {
+      animation: markOut 0.17s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+    }
+    @keyframes markOut {
+      0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+    }
+
+    @keyframes giantPop {
+      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(-18deg); }
+      60%  { opacity: 1; transform: translate(-50%, -50%) scale(1.18) rotate(4deg); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(0.94) rotate(0deg); }
+    }
+
+    @keyframes giantPulse {
+      0% { transform: translate(-50%, -50%) scale(0.94); }
+      100% { transform: translate(-50%, -50%) scale(1.06); }
+    }
+
+    .card-exit {
+      animation: popOut 0.17s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+    }
+    @keyframes popOut {
+      0%   { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.88) translateY(-8px); }
+    }
+
+    .question-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 145px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      background: #000;
+      display: none;
+      transition: box-shadow 0.45s ease;
+    }
+    .question-img-wrap img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: kenBurns 6s ease-in-out infinite alternate;
+    }
+    .question-img-wrap img#q-base-img {
+      opacity: 1; z-index: 1;
+      transition: filter 0.6s ease;
+    }
+    .question-img-wrap img#q-ans-img {
+      opacity: 0; z-index: 2;
+      clip-path: circle(0% at 50% 50%);
+      filter: brightness(1.5) saturate(1.3);
+      transition: clip-path 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, filter 0.8s ease 0.1s;
+    }
+    .question-img-wrap.show-answer img#q-base-img { filter: blur(3px) brightness(0.6); }
+    .question-img-wrap.show-answer img#q-ans-img {
+      opacity: 1;
+      clip-path: circle(125% at 50% 50%);
+      filter: none;
+    }
+    .question-img-wrap.show-answer {
+      box-shadow: 0 0 0 3px var(--correct), 0 0 22px rgba(0, 230, 118, 0.7);
+      animation: imgRevealPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+    }
+    @keyframes imgRevealPop {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.045); }
+      100% { transform: scale(1); }
+    }
+    .question-img-wrap.no-trans img { transition: none !important; }
+
+    @keyframes kenBurns {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.06); }
+    }
+
+    .question-img-wrap .flash-overlay {
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .question-img-wrap.do-flash .flash-overlay {
+      animation: microFlash 0.22s ease forwards;
+    }
+    @keyframes microFlash {
+      0% { opacity: 0; }
+      50% { opacity: 0.55; }
+      100% { opacity: 0; }
+    }
+
+    /* CONTENEDOR DE PREGUNTA Y NEGRITAS */
+    .question-text {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1.32;
+      color: #0f172a;
+      margin-bottom: 16px;
+      text-align: center;
+      width: 100%;
+      word-break: normal;
+      overflow-wrap: break-word;
+      hyphens: none;
+    }
+
+    .word-unit {
+      display: inline-block;
+      white-space: nowrap;
+      vertical-align: baseline;
+    }
+
+    .char-pop {
+      display: inline-block;
+      opacity: 0;
+      transform: scale(0.85) translateY(3px);
+      filter: blur(1px);
+      animation: letterPop 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes letterPop {
+      0% { opacity: 0; transform: scale(0.85) translateY(3px); filter: blur(1px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0px); }
+    }
+
+    .highlight-bold {
+      font-weight: 900 !important;
+      color: var(--bold-highlight-color) !important;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    /* CUENTA REGRESIVA 2S */
+    .timer-container {
+      width: 100%;
+      margin-bottom: 16px;
+      display: none;
+      animation: timerIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+    }
+    @keyframes timerIn {
+      0%   { opacity: 0; transform: translateY(-6px) scaleY(0.6); }
+      100% { opacity: 1; transform: translateY(0) scaleY(1); }
+    }
+
+    .timer-bar-bg {
+      width: 100%;
+      height: 9px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .timer-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #FF1744 0%, #FFD600 50%, #00E676 100%);
+      border-radius: 999px;
+      transition: width 2s linear;
+    }
+    .timer-badge {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #dc2626;
+      margin-top: 4px;
+      display: inline-block;
+      animation: timerPulse 0.9s ease-in-out infinite;
+    }
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    /* Opciones A, B, C */
+    .quiz-options {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .quiz-opt-btn {
+      width: 100%;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      color: #1e293b;
+      font-family: var(--font-display);
+      font-size: 0.86rem;
+      font-weight: 800;
+      padding: 11px 13px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      transition: all 0.3s ease;
+    }
+    .opt-letter {
+      background: #334155;
+      color: #fff;
+      width: 25px;
+      height: 25px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .quiz-opt-btn.is-correct {
+      background: var(--correct) !important;
+      border-color: #059669 !important;
+      color: #064e3b !important;
+      transform: scale(1.02);
+      box-shadow: 0 0 16px rgba(0, 230, 118, 0.75);
+    }
+    .quiz-opt-btn.is-correct .opt-letter {
+      background: #064e3b;
+      color: #fff;
+    }
+
+    .quiz-opt-btn.is-wrong {
+      background: #fee2e2 !important;
+      border-color: #fca5a5 !important;
+      color: #991b1b !important;
+      opacity: 0.45 !important;
+      transform: scale(0.97);
+    }
+
+    .quiz-options.cascade .quiz-opt-btn {
+      animation: optCascade 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.25) var(--d, 0.3s) backwards;
+    }
+    .quiz-options.cascade .quiz-opt-btn:nth-child(1) { --d: 0.30s; }
+    .quiz-options.cascade .quiz-opt-btn:nth-child(2) { --d: 0.46s; }
+    .quiz-options.cascade .quiz-opt-btn:nth-child(3) { --d: 0.62s; }
+
+    @keyframes optCascade {
+      0%   { opacity: 0; transform: translateY(24px) scale(0.92); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .quiz-options .quiz-opt-btn.is-correct { animation: correctPop 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.25); }
+    .quiz-options .quiz-opt-btn.is-wrong   { animation: wrongShake 0.4s ease-out; }
+
+    @keyframes correctPop {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.09); }
+      100% { transform: scale(1.02); }
+    }
+    @keyframes wrongShake {
+      0%   { transform: translateX(0) scale(1); }
+      20%  { transform: translateX(-7px) scale(0.98); }
+      40%  { transform: translateX(6px) scale(0.975); }
+      60%  { transform: translateX(-3px) scale(0.97); }
+      80%  { transform: translateX(2px) scale(0.97); }
+      100% { transform: translateX(0) scale(0.97); }
+    }
+
+    /* CONTROLES INFERIORES */
+    .thumb-controls {
+      position: absolute;
+      bottom: max(12px, env(safe-area-inset-bottom));
+      left: 12px;
+      right: 12px;
+      z-index: 100;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: rgba(13, 15, 23, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 8px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .ctrl-btn {
+      background: #1f2538;
+      border: 1px solid #3b4465;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 900;
+      padding: 10px 4px;
+      border-radius: 11px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1;
+      height: 52px;
+      text-transform: uppercase;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      transition: transform 0.1s ease, background 0.2s ease;
+    }
+    .ctrl-btn:active {
+      transform: scale(0.93);
+      background: var(--primary);
+      color: #000;
+    }
+    .ctrl-btn span.icon { font-size: 1.15rem; }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       PANEL DE CONFIGURACIÓN
+       ======================================================== -->
+  <div id="setup-screen" class="setup-container">
+    <div class="header-bar">
+      <div class="logo">⚡ QUIZ SHORTS MAKER 9:16</div>
+      <div class="header-actions">
+        <button type="button" class="btn-sm btn-lib" onclick="openLibraryModal()">📂 Biblioteca</button>
+        <button type="button" class="btn-sm btn-save" onclick="saveProjectToLibrary()">💾 Guardar</button>
+      </div>
+    </div>
+    
+    <div class="autosave-indicator" id="autosave-status">
+      <span>●</span> <span>Autoguardado activo</span>
+    </div>
+
+    <!-- Título y Negritas Destacadas -->
+    <div class="card-setup">
+      <div class="card-setup-title">🏷️ Encabezado General & Negritas</div>
+      
+      <label>1. Título / Gancho del Video (Tarjeta Superior)</label>
+      <input type="text" id="header-hook-input" value="Quiz de Cultura General 🧐" placeholder="Ej: Solo el 10% responde todas" oninput="markDirty()" />
+
+      <label>2. Color de Palabras Destacadas (*negrita*)</label>
+      <p class="helper-text">Usa asteriscos: ej. ¿Cuál es el *elemento químico* con símbolo *O*?</p>
+      <div class="color-picker-row">
+        <input type="color" id="bold-color-picker" value="#FF0055" oninput="applyBoldColor(this.value)" />
+        <input type="text" id="bold-color-hex" value="#FF0055" placeholder="#FF0055" oninput="applyBoldColor(this.value)" />
+      </div>
+    </div>
+
+    <!-- Fondo de Video/GIF y SFX de Conteo -->
+    <div class="card-setup">
+      <div class="card-setup-title">🎬 Video de Fondo & Conteo</div>
+      
+      <div class="file-input-wrapper">
+        <label for="bg-video-input" class="file-custom-btn" id="lbl-bg-video">Cargar Video MP4 o GIF de fondo</label>
+        <input type="file" id="bg-video-input" accept="video/mp4,video/*,image/gif,image/*" onchange="handleFileUpload(event, 'lbl-bg-video', 'bgVideo')" />
+      </div>
+
+      <label style="margin-top: 6px;">SFX Conteo Regresivo de 2 Segundos</label>
+      <div class="file-input-wrapper">
+        <label for="timer-sfx-input" class="file-custom-btn sfx-btn" id="lbl-timer-sfx">⏱️ SFX 2 Segundos (Volumen 70%)</label>
+        <input type="file" id="timer-sfx-input" accept="audio/*" onchange="handleFileUpload(event, 'lbl-timer-sfx', 'timerSfx')" />
+      </div>
+    </div>
+
+    <!-- Audios Especiales de Pregunta Extra & CTA -->
+    <div class="card-setup" style="border-left: 4px solid #a855f7;">
+      <div class="card-setup-title">⭐ Audios de Cierre & Pregunta Extra</div>
+
+      <label>Audio Anuncio "¡Pregunta Extra!"</label>
+      <div class="file-input-wrapper">
+        <label for="extra-intro-audio-input" class="file-custom-btn sfx-btn" id="lbl-extra-intro-audio">🔊 Cargar Audio "¡Pregunta Extra!"</label>
+        <input type="file" id="extra-intro-audio-input" accept="audio/*" onchange="handleFileUpload(event, 'lbl-extra-intro-audio', 'extraIntroAudio')" />
+      </div>
+
+      <label style="margin-top: 6px;">Audio CTA / Despedida Final</label>
+      <div class="file-input-wrapper">
+        <label for="extra-cta-audio-input" class="file-custom-btn sfx-btn" id="lbl-extra-cta-audio">🔊 Cargar Audio CTA ("Deja tu respuesta...")</label>
+        <input type="file" id="extra-cta-audio-input" accept="audio/*" onchange="handleFileUpload(event, 'lbl-extra-cta-audio', 'extraCtaAudio')" />
+      </div>
+    </div>
+
+    <!-- Preguntas Normales (1 a 3) -->
+    <div id="quiz-questions-list"></div>
+
+    <!-- Pregunta Extra Especial (Pregunta 4) -->
+    <div class="card-setup extra-card-setup">
+      <div class="card-setup-title" style="color: #c084fc;">⭐ ¡Pregunta Extra! (Final)</div>
+      
+      <label>Texto de la Pregunta Extra (*negrita* permitido)</label>
+      <textarea id="q-extra-text" rows="2" placeholder="Escribe el reto final que deben responder en los comentarios..." oninput="markDirty()">¿Cuál es el único mamífero capaz de *volar*?</textarea>
+
+      <div style="background: rgba(168, 85, 247, 0.1); padding: 8px 10px; border-radius: 8px; border: 1px dashed rgba(168, 85, 247, 0.4); margin-bottom: 10px;">
+        <label style="color: #c084fc; margin-bottom: 2px;">⚡ Duración animación de pregunta (segundos)</label>
+        <input type="number" id="q-extra-anim-duration" step="0.1" min="0.5" max="8" value="2.0" oninput="markDirty()" style="margin-bottom:0;" />
+      </div>
+
+      <label>Opciones (A la audiencia se le invita a comentar)</label>
+      <div class="options-grid">
+        <div class="opt-row">
+          <span style="font-weight: 800; font-size: 0.75rem; color: #c084fc;">A</span>
+          <input type="text" id="q-extra-optA" value="Ardilla voladora" placeholder="Opción A" oninput="markDirty()" />
+        </div>
+        <div class="opt-row">
+          <span style="font-weight: 800; font-size: 0.75rem; color: #c084fc;">B</span>
+          <input type="text" id="q-extra-optB" value="Murciélago" placeholder="Opción B" oninput="markDirty()" />
+        </div>
+        <div class="opt-row">
+          <span style="font-weight: 800; font-size: 0.75rem; color: #c084fc;">C</span>
+          <input type="text" id="q-extra-optC" value="Lémur volador" placeholder="Opción C" oninput="markDirty()" />
+        </div>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q-extra-img-input" class="file-custom-btn" id="lbl-q-extra-img">Imagen Ilustrativa Pregunta Extra</label>
+        <input type="file" id="q-extra-img-input" accept="image/*" onchange="handleImageUpload(event, 'lbl-q-extra-img', 'qExtraImg')" />
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="q-extra-audio-input" class="file-custom-btn" id="lbl-q-extra-audio">Cargar Audio Pregunta Extra</label>
+        <input type="file" id="q-extra-audio-input" accept="audio/*" onchange="handleFileUpload(event, 'lbl-q-extra-audio', 'qExtraAudio')" />
+      </div>
+    </div>
+
+    <button type="button" class="btn-record-mode" onclick="enterRecordMode()">
+      🎥 Iniciar Modo Grabación (9:16)
+    </button>
+  </div>
+
+  <!-- MODAL BIBLIOTECA -->
+  <div class="modal-backdrop" id="library-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">📂 Proyectos Guardados</div>
+        <button class="modal-close" onclick="closeLibraryModal()">✕</button>
+      </div>
+      <div class="projects-list" id="projects-list"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODO GRABACIÓN DE PANTALLA 9:16
+       ======================================================== -->
+  <div id="record-screen">
+    <div class="bg-media-container">
+      <video id="bg-video-player" autoplay loop muted playsinline style="display: none;"></video>
+      <img id="bg-img-player" alt="Fondo" style="display: none;" />
+      <div class="video-overlay-dim"></div>
+    </div>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <button class="btn-exit-record" title="Volver al panel" onclick="exitRecordMode()">✕</button>
+
+    <div class="quiz-stage" id="quiz-stage">
+      
+      <!-- 1. Tarjeta anunciadora -->
+      <div class="header-hook-card" id="header-hook-card">
+        <div class="pill-badge">✨ DESAFÍO VIRAL ✨</div>
+        <div class="header-hook-title" id="stage-hook-title">Quiz de Cultura General 🧐</div>
+      </div>
+
+      <!-- 2. Badge Pregunta -->
+      <div class="question-counter-badge" id="stage-counter-badge">
+        PREGUNTA 1 DE 3
+      </div>
+
+      <!-- 3. Tarjeta contenedora -->
+      <div class="card-wrap" id="stage-card-wrap">
+        <div class="white-card" id="stage-question-card">
+          <div class="question-img-wrap" id="question-img-wrap">
+            <img id="q-base-img" src="" alt="Ilustración" />
+            <img id="q-ans-img" src="" alt="Respuesta Ilustrada" />
+            <div class="flash-overlay"></div>
+          </div>
+
+          <div class="question-text" id="stage-question-text"></div>
+
+          <!-- Barra Conteo 2s -->
+          <div class="timer-container" id="stage-timer-container">
+            <div class="timer-bar-bg">
+              <div class="timer-bar-fill" id="stage-timer-fill"></div>
+            </div>
+            <div class="timer-badge" id="stage-timer-badge">2 SEGUNDOS</div>
+          </div>
+
+          <!-- Opciones A, B, C -->
+          <div class="quiz-options" id="stage-quiz-options">
+            <div class="quiz-opt-btn" id="opt-btn-A">
+              <div class="opt-letter">A</div>
+              <span id="txt-opt-A">Opción A</span>
+            </div>
+            <div class="quiz-opt-btn" id="opt-btn-B">
+              <div class="opt-letter">B</div>
+              <span id="txt-opt-B">Opción B</span>
+            </div>
+            <div class="quiz-opt-btn" id="opt-btn-C">
+              <div class="opt-letter">C</div>
+              <span id="txt-opt-C">Opción C</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="giant-question-mark" id="stage-giant-mark">?</div>
+      </div>
+    </div>
+
+    <!-- 3 Botones Móviles -->
+    <div class="thumb-controls">
+      <button class="ctrl-btn" onclick="ctrlActionStartQuestion()">
+        <span class="icon">🚀</span>
+        <span>Pregunta / Inicio</span>
+      </button>
+      <button class="ctrl-btn" onclick="ctrlActionStartCountdown()">
+        <span class="icon">⏱️</span>
+        <span>Conteo (2s)</span>
+      </button>
+      <button class="ctrl-btn" onclick="ctrlActionNext()">
+        <span class="icon">⏩</span>
+        <span>Siguiente</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       LÓGICA JAVASCRIPT VANILLA
+       ======================================================== -->
+  <script>
+    const NORMAL_QUESTIONS_TOTAL = 3;
+    let currentQuestionIndex = 0;
+    let customBoldColor = '#FF0055';
+    let isDirty = false;
+
+    // Almacén en memoria de Blobs / Files
+    const mediaStore = {
+      bgVideo: null,
+      timerSfx: null,
+      extraIntroAudio: null,
+      extraCtaAudio: null,
+      q1Img: null, q1AnsImg: null, q1Audio: null, q1AnsAudio: null,
+      q2Img: null, q2AnsImg: null, q2Audio: null, q2AnsAudio: null,
+      q3Img: null, q3AnsImg: null, q3Audio: null, q3AnsAudio: null,
+      qExtraImg: null, qExtraAudio: null
+    };
+
+    /* ========================================================
+       AUDIO ENGINE (WEB AUDIO API CERO LATENCIA)
+       ======================================================== */
+    let audioCtx = null;
+    const audioBufferCache = {};
+    let activeVoiceSources = [];
+    let currentTimerSfxSource = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    async function preloadAudioToBuffer(key, blob) {
+      if (!blob) {
+        audioBufferCache[key] = null;
+        return;
+      }
+      try {
+        const ctx = getAudioContext();
+        const arrayBuffer = await blob.arrayBuffer();
+        audioBufferCache[key] = await ctx.decodeAudioData(arrayBuffer);
+      } catch (err) {
+        console.warn('Error decodificando audio:', key, err);
+      }
+    }
+
+    function stopVoiceChain() {
+      activeVoiceSources.forEach(src => {
+        try {
+          src.onended = null;
+          src.stop();
+        } catch(e) {}
+      });
+      activeVoiceSources = [];
+    }
+
+    function playVoiceInstant(key) {
+      stopVoiceChain();
+      const ctx = getAudioContext();
+      const buffer = audioBufferCache[key];
+      if (!buffer) return null;
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      source.start(0);
+      activeVoiceSources.push(source);
+      return source;
+    }
+
+    function playVoiceWithCallback(key, onEnded) {
+      stopVoiceChain();
+      const ctx = getAudioContext();
+      const buffer = audioBufferCache[key];
+      if (!buffer) {
+        if (onEnded) onEnded();
+        return null;
+      }
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      source.onended = () => {
+        if (onEnded) onEnded();
+      };
+      source.start(0);
+      activeVoiceSources.push(source);
+      return source;
+    }
+
+    function playSfxInstant(key, vol = 0.7) {
+      const ctx = getAudioContext();
+      const buffer = audioBufferCache[key];
+      if (!buffer) return null;
+
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      const gain = ctx.createGain();
+      gain.gain.value = vol;
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.start(0);
+      return source;
+    }
+
+    function stopAllAudio() {
+      stopVoiceChain();
+      if (currentTimerSfxSource) {
+        try { currentTimerSfxSource.stop(); } catch(e){}
+        currentTimerSfxSource = null;
+      }
+    }
+
+    /* PRECARGA DE IMÁGENES */
+    const imagePreloadCache = {};
+    function preloadImageBlob(key, blob) {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.src = url;
+      imagePreloadCache[key] = url;
+    }
+
+    function getPreloadedImageUrl(key, fallbackBlob) {
+      if (imagePreloadCache[key]) return imagePreloadCache[key];
+      if (fallbackBlob) {
+        preloadImageBlob(key, fallbackBlob);
+        return imagePreloadCache[key];
+      }
+      return '';
+    }
+
+    /* ========================================================
+       PARSER CORREGIDO: NEGRITAS Y ESPACIOS EXACTOS
+       ======================================================== */
+    function applyBoldColor(hex) {
+      if (!hex) return;
+      if (!hex.startsWith('#')) hex = '#' + hex;
+      customBoldColor = hex;
+
+      const picker = document.getElementById('bold-color-picker');
+      const hexInput = document.getElementById('bold-color-hex');
+      if (picker && picker.value.toLowerCase() !== hex.toLowerCase()) picker.value = hex;
+      if (hexInput && hexInput.value !== hex) hexInput.value = hex;
+
+      document.documentElement.style.setProperty('--bold-highlight-color', hex);
+      markDirty();
+    }
+
+    /**
+     * Resuelve los dos problemas:
+     * 1. Preserva los espacios internos cuando se envuelven varias palabras en *negrita*.
+     * 2. No agrega ningún espacio ficticio al final (ej. si escribes `*O*?`, el '?' queda pegado a la 'O').
+     */
+    function formatAnimatedQuestionText(rawText, animDurationSec = 2.0) {
+      if (!rawText) return '';
+
+      // 1. Contar caracteres reales para la cadencia del delay
+      const cleanCharsCount = rawText.replace(/\*/g, '').replace(/\s/g, '').length;
+      const totalChars = Math.max(cleanCharsCount, 1);
+      const delayPerChar = Math.max(animDurationSec / totalChars, 0.015);
+      let charCounter = 0;
+
+      // 2. Parsear el texto asociando a cada carácter su estado de negrita
+      let inBold = false;
+      const annotatedChars = [];
+
+      for (let i = 0; i < rawText.length; i++) {
+        const ch = rawText[i];
+        if (ch === '*') {
+          if (!inBold) {
+            // Verificar si hay un asterisco de cierre más adelante
+            const closingIdx = rawText.indexOf('*', i + 1);
+            if (closingIdx !== -1) {
+              inBold = true;
+              continue;
+            }
+          } else {
+            inBold = false;
+            continue;
+          }
+        }
+        annotatedChars.push({ char: ch, isBold: inBold });
+      }
+
+      // 3. Agrupar en palabras (.word-unit) y espacios fieles al textarea
+      let html = '';
+      let currentWordChars = [];
+
+      const flushWord = () => {
+        if (currentWordChars.length === 0) return;
+        let wordInner = '';
+        for (const item of currentWordChars) {
+          const delay = (charCounter * delayPerChar).toFixed(3);
+          charCounter++;
+          const escaped = escapeHtml(item.char);
+          const boldClass = item.isBold ? ' highlight-bold' : '';
+          wordInner += `<span class="char-pop${boldClass}" style="animation-delay: ${delay}s;">${escaped}</span>`;
+        }
+        html += `<span class="word-unit">${wordInner}</span>`;
+        currentWordChars = [];
+      };
+
+      for (let i = 0; i < annotatedChars.length; i++) {
+        const item = annotatedChars[i];
+        if (/\s/.test(item.char)) {
+          flushWord();
+          if (item.char === '\n') {
+            html += '<br>';
+          } else {
+            html += ' '; // Preserva el espacio exacto
+          }
+        } else {
+          currentWordChars.push(item);
+        }
+      }
+      flushWord();
+
+      return html;
+    }
+
+    /* ========================================================
+       FORMULARIO DE PREGUNTAS
+       ======================================================== */
+    function renderQuizQuestionsInputs() {
+      const container = document.getElementById('quiz-questions-list');
+      container.innerHTML = '';
+
+      const defaultQuestions = [
+        {
+          text: '¿Cuál es el río más *largo* del planeta Tierra?',
+          optA: 'Río Nilo', optB: 'Río Amazonas', optC: 'Río Misisipi', correct: 'B'
+        },
+        {
+          text: '¿En qué país se encuentra la antigua ciudad de *Petra*?',
+          optA: 'Jordania', optB: 'Egipto', optC: 'Grecia', correct: 'A'
+        },
+        {
+          text: '¿Qué elemento químico tiene como símbolo la letra *O*?',
+          optA: 'Oro', optB: 'Osmio', optC: 'Oxígeno', correct: 'C'
+        }
+      ];
+
+      for (let n = 1; n <= NORMAL_QUESTIONS_TOTAL; n++) {
+        const def = defaultQuestions[n - 1] || { text: '', optA: '', optB: '', optC: '', correct: 'A' };
+        const card = document.createElement('div');
+        card.className = 'card-setup';
+        card.innerHTML = `
+          <div class="card-setup-title">❓ Pregunta ${n} de ${NORMAL_QUESTIONS_TOTAL}</div>
+          
+          <label>Texto de la Pregunta (*negrita* permitido)</label>
+          <textarea id="q${n}-text" rows="2" placeholder="Escribe la pregunta ${n}..." oninput="markDirty()">${def.text}</textarea>
+
+          <div style="background: rgba(0, 240, 255, 0.06); padding: 8px 10px; border-radius: 8px; border: 1px dashed rgba(0, 240, 255, 0.35); margin-bottom: 10px;">
+            <label style="color: var(--primary); margin-bottom: 2px;">⚡ Duración animación de pregunta (segundos)</label>
+            <input type="number" id="q${n}-anim-duration" step="0.1" min="0.5" max="8" value="2.0" oninput="markDirty()" style="margin-bottom:0;" />
+          </div>
+
+          <label>Opciones (Marca la correcta)</label>
+          <div class="options-grid">
+            <div class="opt-row">
+              <input type="radio" name="q${n}-correct" value="A" ${def.correct === 'A' ? 'checked' : ''} onchange="markDirty()" />
+              <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">A</span>
+              <input type="text" id="q${n}-optA" value="${def.optA}" placeholder="Opción A" oninput="markDirty()" />
+            </div>
+            <div class="opt-row">
+              <input type="radio" name="q${n}-correct" value="B" ${def.correct === 'B' ? 'checked' : ''} onchange="markDirty()" />
+              <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">B</span>
+              <input type="text" id="q${n}-optB" value="${def.optB}" placeholder="Opción B" oninput="markDirty()" />
+            </div>
+            <div class="opt-row">
+              <input type="radio" name="q${n}-correct" value="C" ${def.correct === 'C' ? 'checked' : ''} onchange="markDirty()" />
+              <span style="font-weight: 800; font-size: 0.75rem; color: var(--primary);">C</span>
+              <input type="text" id="q${n}-optC" value="${def.optC}" placeholder="Opción C" oninput="markDirty()" />
+            </div>
+          </div>
+
+          <div class="file-input-wrapper">
+            <label for="q${n}-img-input" class="file-custom-btn" id="lbl-q${n}-img">1. Imagen Inicial de Pregunta</label>
+            <input type="file" id="q${n}-img-input" accept="image/*" onchange="handleImageUpload(event, 'lbl-q${n}-img', 'q${n}Img')" />
+          </div>
+
+          <div class="file-input-wrapper">
+            <label for="q${n}-ans-img-input" class="file-custom-btn" id="lbl-q${n}-ans-img" style="border-color: #38bdf8;">2. Imagen de Respuesta Correcta (Transición)</label>
+            <input type="file" id="q${n}-ans-img-input" accept="image/*" onchange="handleImageUpload(event, 'lbl-q${n}-ans-img', 'q${n}AnsImg')" />
+          </div>
+
+          <div class="file-input-wrapper">
+            <label for="q${n}-audio-input" class="file-custom-btn" id="lbl-q${n}-audio">Cargar Audio Pregunta ${n}</label>
+            <input type="file" id="q${n}-audio-input" accept="audio/*" onchange="handleFileUpload(event, 'lbl-q${n}-audio', 'q${n}Audio')" />
+          </div>
+
+          <div class="file-input-wrapper">
+            <label for="q${n}-ans-audio-input" class="file-custom-btn" id="lbl-q${n}-ans-audio">🔊 Cargar Audio Respuesta Correcta P${n}</label>
+            <input type="file" id="q${n}-ans-audio-input" accept="audio/*" onchange="handleFileUpload(event, 'lbl-q${n}-ans-audio', 'q${n}AnsAudio')" />
+          </div>
+        `;
+        container.appendChild(card);
+      }
+    }
+
+    function getQuestionData(idx) {
+      if (idx >= 0 && idx < NORMAL_QUESTIONS_TOTAL) {
+        const n = idx + 1;
+        const text = document.getElementById(`q${n}-text`).value || `Pregunta ${n}`;
+        const animDuration = parseFloat(document.getElementById(`q${n}-anim-duration`).value) || 2.0;
+        const optA = document.getElementById(`q${n}-optA`).value || 'Opción A';
+        const optB = document.getElementById(`q${n}-optB`).value || 'Opción B';
+        const optC = document.getElementById(`q${n}-optC`).value || 'Opción C';
+
+        const radios = document.getElementsByName(`q${n}-correct`);
+        let correct = 'A';
+        for (const r of radios) { if (r.checked) { correct = r.value; break; } }
+
+        return {
+          isExtra: false,
+          number: n,
+          total: NORMAL_QUESTIONS_TOTAL,
+          text,
+          animDuration,
+          optA, optB, optC, correct,
+          baseImg: mediaStore[`q${n}Img`],
+          ansImg: mediaStore[`q${n}AnsImg`],
+          baseImgKey: `q${n}Img`,
+          ansImgKey: `q${n}AnsImg`,
+          audioKey: `q${n}Audio`,
+          ansAudioKey: `q${n}AnsAudio`
+        };
+      } else {
+        const text = document.getElementById('q-extra-text').value || '¡Pregunta Extra!';
+        const animDuration = parseFloat(document.getElementById('q-extra-anim-duration').value) || 2.0;
+        const optA = document.getElementById('q-extra-optA').value || 'Opción A';
+        const optB = document.getElementById('q-extra-optB').value || 'Opción B';
+        const optC = document.getElementById('q-extra-optC').value || 'Opción C';
+
+        return {
+          isExtra: true,
+          number: 'Extra',
+          text,
+          animDuration,
+          optA, optB, optC,
+          correct: null,
+          baseImg: mediaStore.qExtraImg,
+          ansImg: null,
+          baseImgKey: 'qExtraImg',
+          ansImgKey: null,
+          audioKey: 'qExtraAudio',
+          extraIntroAudioKey: 'extraIntroAudio',
+          extraCtaAudioKey: 'extraCtaAudio'
+        };
+      }
+    }
+
+    /* ========================================================
+       ANIMACIONES Y ESCENARIO 9:16
+       ======================================================== */
+    let countdownTimer = null;
+    let countdownInterval = null;
+    let ansImageTransitionTimer = null;
+    let stageBusy = false;
+    let stageTransitionTimer = null;
+    const STAGE_EXIT_MS = 170;
+
+    const DIFFICULTY_LEVELS = [
+      { c1: '#00E676', c2: '#10b981', shadow: 'rgba(0, 230, 118, 0.5)' },
+      { c1: '#9ACD32', c2: '#65a30d', shadow: 'rgba(154, 205, 50, 0.5)' },
+      { c1: '#FFC400', c2: '#f59e0b', shadow: 'rgba(255, 196, 0, 0.55)' },
+      { c1: '#FF8A00', c2: '#ea580c', shadow: 'rgba(255, 138, 0, 0.55)' },
+      { c1: '#FF1744', c2: '#b91c1c', shadow: 'rgba(255, 23, 68, 0.6)' }
+    ];
+
+    const DIFFICULTY_LEVEL_SETS = {
+      1: [0],
+      2: [0, 4],
+      3: [0, 2, 4],
+      4: [0, 2, 3, 4],
+      5: [0, 1, 2, 3, 4]
+    };
+
+    function getDifficultyBadgeStyle(index, total) {
+      const n = Math.max(1, Math.floor(total) || 1);
+      const i = Math.min(Math.max(index, 0), n - 1);
+      let levelIdx;
+      if (DIFFICULTY_LEVEL_SETS[n]) {
+        levelIdx = DIFFICULTY_LEVEL_SETS[n][i];
+      } else {
+        levelIdx = Math.round(i * (DIFFICULTY_LEVELS.length - 1) / (n - 1));
+      }
+      const lvl = DIFFICULTY_LEVELS[levelIdx];
+      return {
+        background: `linear-gradient(135deg, ${lvl.c1}, ${lvl.c2})`,
+        borderColor: lvl.c1,
+        boxShadow: `0 4px 14px ${lvl.shadow}`
+      };
+    }
+
+    function restartAnim(el, cls) {
+      if (!el) return;
+      el.classList.remove(cls);
+      void el.offsetWidth;
+      el.classList.add(cls);
+    }
+
+    function exitStageThen(fn) {
+      const card = document.getElementById('stage-question-card');
+      const badge = document.getElementById('stage-counter-badge');
+      stageBusy = true;
+      card.classList.add('card-exit');
+      badge.classList.add('badge-exit');
+      const gm = document.getElementById('stage-giant-mark');
+      if (gm && gm.style.display === 'block') gm.classList.add('mark-exit');
+      clearTimeout(stageTransitionTimer);
+      stageTransitionTimer = setTimeout(() => {
+        stageBusy = false;
+        fn();
+      }, STAGE_EXIT_MS);
+    }
+
+    function setCounterBadge(data) {
+      const badge = document.getElementById('stage-counter-badge');
+      badge.classList.remove('badge-exit');
+      if (data.isExtra) {
+        badge.innerHTML = '<span class="rb-star">⭐</span><span>¡PREGUNTA EXTRA!</span><span class="rb-star rb-star-2">⭐</span>';
+        badge.classList.add('rainbow-badge');
+        badge.style.background = '';
+        badge.style.borderColor = '';
+        badge.style.boxShadow = '';
+      } else {
+        badge.classList.remove('rainbow-badge');
+        badge.textContent = `PREGUNTA ${data.number} DE ${data.total}`;
+        const st = getDifficultyBadgeStyle(data.number - 1, data.total);
+        badge.style.background = st.background;
+        badge.style.borderColor = st.borderColor;
+        badge.style.boxShadow = st.boxShadow;
+      }
+      restartAnim(badge, 'badge-enter');
+    }
+
+    function renderQuestionOnStage(data) {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(ansImageTransitionTimer);
+      clearConfetti();
+
+      const card = document.getElementById('stage-question-card');
+      const badge = document.getElementById('stage-counter-badge');
+      const giantMark = document.getElementById('stage-giant-mark');
+      const timerBox = document.getElementById('stage-timer-container');
+      const hookTitle = document.getElementById('stage-hook-title');
+      const hookCard = document.getElementById('header-hook-card');
+
+      hookTitle.textContent = document.getElementById('header-hook-input').value || 'Quiz de Cultura General 🧐';
+      hookCard.style.display = 'block';
+      if (!data.isExtra && data.number === 1) restartAnim(hookCard, 'hook-enter');
+
+      card.classList.remove('final-extra-dimmed', 'rainbow-card', 'card-exit');
+      giantMark.style.display = 'none';
+      giantMark.classList.remove('mark-exit');
+      timerBox.style.display = 'none';
+
+      ['A', 'B', 'C'].forEach(opt => {
+        const btn = document.getElementById(`opt-btn-${opt}`);
+        btn.classList.remove('is-correct', 'is-wrong');
+      });
+
+      if (data.isExtra) {
+        card.classList.add('rainbow-card');
+        if (!badge.classList.contains('rainbow-badge') || badge.classList.contains('badge-exit')) {
+          setCounterBadge(data);
+        }
+      } else {
+        setCounterBadge(data);
+      }
+      restartAnim(card, 'card-enter');
+
+      // Configurar Imagen
+      const wrap = document.getElementById('question-img-wrap');
+      const baseImg = document.getElementById('q-base-img');
+      const ansImg = document.getElementById('q-ans-img');
+      wrap.classList.add('no-trans');
+      wrap.classList.remove('do-flash', 'show-answer');
+
+      if (data.baseImg) {
+        baseImg.src = getPreloadedImageUrl(data.baseImgKey, data.baseImg);
+        wrap.style.display = 'block';
+        if (data.ansImg) {
+          ansImg.src = getPreloadedImageUrl(data.ansImgKey, data.ansImg);
+        } else {
+          ansImg.removeAttribute('src');
+        }
+      } else {
+        wrap.style.display = 'none';
+        baseImg.removeAttribute('src');
+        ansImg.removeAttribute('src');
+      }
+      void wrap.offsetWidth;
+      wrap.classList.remove('no-trans');
+
+      // Texto de pregunta animado con negritas corregidas
+      const textContainer = document.getElementById('stage-question-text');
+      textContainer.innerHTML = formatAnimatedQuestionText(data.text, data.animDuration);
+
+      document.getElementById('txt-opt-A').textContent = data.optA;
+      document.getElementById('txt-opt-B').textContent = data.optB;
+      document.getElementById('txt-opt-C').textContent = data.optC;
+
+      restartAnim(document.getElementById('stage-quiz-options'), 'cascade');
+
+      setTimeout(() => {
+        playVoiceInstant(data.audioKey);
+      }, 50);
+    }
+
+    /* CONTROLES DE LA SECUENCIA */
+    function ctrlActionStartQuestion(skipExit) {
+      if (skipExit === true) { startFirstQuestion(); return; }
+      if (stageBusy) return;
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(ansImageTransitionTimer);
+      clearConfetti();
+      exitStageThen(startFirstQuestion);
+    }
+
+    function startFirstQuestion() {
+      currentQuestionIndex = 0;
+      document.getElementById('stage-card-wrap').style.display = 'block';
+      const data = getQuestionData(currentQuestionIndex);
+      renderQuestionOnStage(data);
+    }
+
+    function ctrlActionStartCountdown() {
+      const timerBox = document.getElementById('stage-timer-container');
+      const timerFill = document.getElementById('stage-timer-fill');
+      const timerBadge = document.getElementById('stage-timer-badge');
+      if (!timerBox || !timerFill) return;
+
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(ansImageTransitionTimer);
+
+      timerBox.style.display = 'block';
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '100%';
+      void timerFill.offsetWidth;
+
+      timerFill.style.transition = 'width 2s linear';
+      timerFill.style.width = '0%';
+
+      let secondsLeft = 2;
+      timerBadge.textContent = '2 SEGUNDOS';
+
+      currentTimerSfxSource = playSfxInstant('timerSfx', 0.7);
+
+      countdownInterval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+          timerBadge.textContent = `${secondsLeft} SEGUNDO`;
+        }
+      }, 1000);
+
+      const isExtra = (currentQuestionIndex >= NORMAL_QUESTIONS_TOTAL);
+
+      countdownTimer = setTimeout(() => {
+        clearInterval(countdownInterval);
+        timerBadge.textContent = '¡TIEMPO!';
+
+        if (!isExtra) {
+          revealNormalAnswer();
+        } else {
+          executeExtraQuestionEndAnimation();
+        }
+      }, 2000);
+    }
+
+    function revealNormalAnswer() {
+      const data = getQuestionData(currentQuestionIndex);
+      ['A', 'B', 'C'].forEach(opt => {
+        const btn = document.getElementById(`opt-btn-${opt}`);
+        if (!btn) return;
+        if (opt === data.correct) {
+          btn.classList.add('is-correct');
+        } else {
+          btn.classList.add('is-wrong');
+        }
+      });
+
+      if (data.ansImg) {
+        const wrap = document.getElementById('question-img-wrap');
+        const ansImg = document.getElementById('q-ans-img');
+        if (wrap && ansImg) {
+          wrap.classList.add('do-flash', 'show-answer');
+        }
+      }
+
+      triggerConfetti();
+
+      setTimeout(() => {
+        playVoiceInstant(data.ansAudioKey);
+      }, 180);
+    }
+
+    function executeExtraQuestionEndAnimation() {
+      const card = document.getElementById('stage-question-card');
+      const giantMark = document.getElementById('stage-giant-mark');
+
+      card.classList.add('final-extra-dimmed');
+      giantMark.style.display = 'block';
+
+      setTimeout(() => {
+        playVoiceInstant('extraCtaAudio');
+      }, 250);
+    }
+
+    function ctrlActionNext() {
+      if (stageBusy) return;
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearConfetti();
+
+      exitStageThen(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex > NORMAL_QUESTIONS_TOTAL) {
+          currentQuestionIndex = 0;
+        }
+
+        const isNextExtra = (currentQuestionIndex === NORMAL_QUESTIONS_TOTAL);
+        const card = document.getElementById('stage-card-wrap');
+
+        if (isNextExtra) {
+          const badge = document.getElementById('stage-counter-badge');
+          const hookCard = document.getElementById('header-hook-card');
+
+          hookCard.style.display = 'block';
+          card.style.display = 'none';
+
+          setCounterBadge({ isExtra: true });
+          badge.style.display = 'inline-flex';
+
+          playVoiceWithCallback('extraIntroAudio', () => {
+            card.style.display = 'block';
+            const extraData = getQuestionData(currentQuestionIndex);
+            renderQuestionOnStage(extraData);
+          });
+        } else {
+          card.style.display = 'block';
+          const data = getQuestionData(currentQuestionIndex);
+          renderQuestionOnStage(data);
+        }
+      });
+    }
+
+    /* CONFETI */
+    let confettiAnimationId = null;
+    let confettiParticles = [];
+
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      confettiParticles = [];
+      const colors = ['#00F0FF', '#FF007F', '#FFC400', '#00E676', '#ffffff', '#a855f7'];
+
+      for (let i = 0; i < 46; i++) {
+        confettiParticles.push({
+          x: Math.random() * canvas.width,
+          y: 40 - Math.random() * 50,
+          w: 6 + Math.random() * 6,
+          h: 10 + Math.random() * 8,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: -1.5 + Math.random() * 3,
+          vy: 2.5 + Math.random() * 3.5,
+          angle: Math.random() * 360,
+          vAngle: -4 + Math.random() * 8,
+          opacity: 1
+        });
+      }
+
+      cancelAnimationFrame(confettiAnimationId);
+      const startTime = performance.now();
+
+      function updateConfetti(now) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const elapsed = now - startTime;
+        let activeCount = 0;
+
+        confettiParticles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.angle += p.vAngle;
+
+          if (elapsed > 1600) p.opacity -= 0.025;
+
+          if (p.opacity > 0 && p.y < canvas.height + 20) {
+            activeCount++;
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, p.opacity);
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.angle * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          }
+        });
+
+        if (activeCount > 0 && elapsed < 3000) {
+          confettiAnimationId = requestAnimationFrame(updateConfetti);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      confettiAnimationId = requestAnimationFrame(updateConfetti);
+    }
+
+    function clearConfetti() {
+      cancelAnimationFrame(confettiAnimationId);
+      const canvas = document.getElementById('confetti-canvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    /* MODO GRABACIÓN / FONDO */
+    function setStageBackgroundMedia(file) {
+      const videoPlayer = document.getElementById('bg-video-player');
+      const imgPlayer = document.getElementById('bg-img-player');
+
+      if (!file) {
+        videoPlayer.removeAttribute('src');
+        videoPlayer.style.display = 'none';
+        imgPlayer.removeAttribute('src');
+        imgPlayer.style.display = 'none';
+        return;
+      }
+
+      const isGifOrImg = file.type.startsWith('image/') || file.name.toLowerCase().endsWith('.gif');
+
+      if (isGifOrImg) {
+        videoPlayer.pause();
+        videoPlayer.removeAttribute('src');
+        videoPlayer.style.display = 'none';
+        imgPlayer.src = URL.createObjectURL(file);
+        imgPlayer.style.display = 'block';
+      } else {
+        imgPlayer.removeAttribute('src');
+        imgPlayer.style.display = 'none';
+        videoPlayer.src = URL.createObjectURL(file);
+        videoPlayer.style.display = 'block';
+        videoPlayer.play().catch(() => {});
+      }
+    }
+
+    async function enterRecordMode() {
+      getAudioContext();
+
+      for (const [key, file] of Object.entries(mediaStore)) {
+        if (file && key !== 'bgVideo' && !key.includes('Img') && !audioBufferCache[key]) {
+          await preloadAudioToBuffer(key, file);
+        }
+      }
+
+      setStageBackgroundMedia(mediaStore.bgVideo);
+      document.getElementById('record-screen').style.display = 'flex';
+      ctrlActionStartQuestion(true);
+    }
+
+    function exitRecordMode() {
+      stopAllAudio();
+      clearInterval(countdownInterval);
+      clearTimeout(countdownTimer);
+      clearTimeout(ansImageTransitionTimer);
+      clearTimeout(stageTransitionTimer);
+      stageBusy = false;
+      clearConfetti();
+
+      document.getElementById('record-screen').style.display = 'none';
+      document.getElementById('bg-video-player').pause();
+    }
+
+    /* ========================================================
+       GESTIÓN DE ARCHIVOS
+       ======================================================== */
+    async function handleFileUpload(event, labelId, storeKey) {
+      getAudioContext();
+      const file = event.target.files[0];
+      const lbl = document.getElementById(labelId);
+      if (file) {
+        mediaStore[storeKey] = file;
+        lbl.textContent = `✓ ${file.name}`;
+        lbl.classList.add('loaded');
+
+        if (storeKey !== 'bgVideo' && !storeKey.includes('Img')) {
+          await preloadAudioToBuffer(storeKey, file);
+        }
+        markDirty();
+      }
+    }
+
+    function handleImageUpload(event, labelId, storeKey) {
+      const file = event.target.files[0];
+      const lbl = document.getElementById(labelId);
+      if (file) {
+        mediaStore[storeKey] = file;
+        preloadImageBlob(storeKey, file);
+        lbl.textContent = `✓ Imagen: ${file.name}`;
+        lbl.classList.add('loaded');
+        markDirty();
+      }
+    }
+
+    function updateFileLabel(labelId, file, defaultText) {
+      const lbl = document.getElementById(labelId);
+      if (!lbl) return;
+      if (file) {
+        lbl.textContent = `✓ ${file.name || 'Archivo cargado'}`;
+        lbl.classList.add('loaded');
+      } else {
+        lbl.textContent = defaultText;
+        lbl.classList.remove('loaded');
+      }
+    }
+
+    /* ========================================================
+       INDEXEDDB: BIBLIOTECA COMPLETA + AUTOGUARDADO ROBUSTO
+       ======================================================== */
+    const DB_NAME = 'QuizStudioFullPro_v3';
+    const DB_VERSION = 1;
+    const STORE_PROJECTS = 'projects';
+    const STORE_AUTOSAVE = 'autosave';
+
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_PROJECTS)) {
+            db.createObjectStore(STORE_PROJECTS, { keyPath: 'id', autoIncrement: true });
+          }
+          if (!db.objectStoreNames.contains(STORE_AUTOSAVE)) {
+            db.createObjectStore(STORE_AUTOSAVE, { keyPath: 'key' });
+          }
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
+        req.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    function collectCurrentState() {
+      const state = {
+        headerHook: document.getElementById('header-hook-input').value,
+        boldColor: customBoldColor,
+        qExtraText: document.getElementById('q-extra-text').value,
+        qExtraOptA: document.getElementById('q-extra-optA').value,
+        qExtraOptB: document.getElementById('q-extra-optB').value,
+        qExtraOptC: document.getElementById('q-extra-optC').value,
+        qExtraAnim: document.getElementById('q-extra-anim-duration').value,
+        questions: [],
+        files: { ...mediaStore } // Guarda Blobs / Files directamente
+      };
+
+      for (let n = 1; n <= NORMAL_QUESTIONS_TOTAL; n++) {
+        const radios = document.getElementsByName(`q${n}-correct`);
+        let correct = 'A';
+        for (const r of radios) { if (r.checked) { correct = r.value; break; } }
+
+        state.questions.push({
+          text: document.getElementById(`q${n}-text`).value,
+          anim: document.getElementById(`q${n}-anim-duration`).value,
+          optA: document.getElementById(`q${n}-optA`).value,
+          optB: document.getElementById(`q${n}-optB`).value,
+          optC: document.getElementById(`q${n}-optC`).value,
+          correct: correct
+        });
+      }
+
+      return state;
+    }
+
+    async function restoreFullState(state) {
+      if (!state) return;
+
+      if (state.headerHook !== undefined) document.getElementById('header-hook-input').value = state.headerHook;
+      if (state.boldColor) applyBoldColor(state.boldColor);
+
+      if (state.qExtraText !== undefined) document.getElementById('q-extra-text').value = state.qExtraText;
+      if (state.qExtraOptA !== undefined) document.getElementById('q-extra-optA').value = state.qExtraOptA;
+      if (state.qExtraOptB !== undefined) document.getElementById('q-extra-optB').value = state.qExtraOptB;
+      if (state.qExtraOptC !== undefined) document.getElementById('q-extra-optC').value = state.qExtraOptC;
+      if (state.qExtraAnim !== undefined) document.getElementById('q-extra-anim-duration').value = state.qExtraAnim;
+
+      if (state.questions) {
+        state.questions.forEach((qData, i) => {
+          const n = i + 1;
+          const t = document.getElementById(`q${n}-text`);
+          const an = document.getElementById(`q${n}-anim-duration`);
+          const oa = document.getElementById(`q${n}-optA`);
+          const ob = document.getElementById(`q${n}-optB`);
+          const oc = document.getElementById(`q${n}-optC`);
+          if (t) t.value = qData.text || '';
+          if (an) an.value = qData.anim || '2.0';
+          if (oa) oa.value = qData.optA || '';
+          if (ob) ob.value = qData.optB || '';
+          if (oc) oc.value = qData.optC || '';
+
+          const radios = document.getElementsByName(`q${n}-correct`);
+          for (const r of radios) r.checked = (r.value === qData.correct);
+        });
+      }
+
+      if (state.files) {
+        Object.assign(mediaStore, state.files);
+
+        // Precarga de audios e imágenes restaurados
+        for (const [key, file] of Object.entries(mediaStore)) {
+          if (file && key !== 'bgVideo' && !key.includes('Img')) {
+            await preloadAudioToBuffer(key, file);
+          }
+          if (file && key.includes('Img')) {
+            preloadImageBlob(key, file);
+          }
+        }
+
+        // Actualizar estados visuales de los labels
+        updateFileLabel('lbl-bg-video', mediaStore.bgVideo, 'Cargar Video MP4 o GIF de fondo');
+        updateFileLabel('lbl-timer-sfx', mediaStore.timerSfx, '⏱️ SFX 2 Segundos (Volumen 70%)');
+        updateFileLabel('lbl-extra-intro-audio', mediaStore.extraIntroAudio, '🔊 Cargar Audio "¡Pregunta Extra!"');
+        updateFileLabel('lbl-extra-cta-audio', mediaStore.extraCtaAudio, '🔊 Cargar Audio CTA ("Deja tu respuesta...")');
+        updateFileLabel('lbl-q-extra-img', mediaStore.qExtraImg, 'Imagen Ilustrativa Pregunta Extra');
+        updateFileLabel('lbl-q-extra-audio', mediaStore.qExtraAudio, 'Cargar Audio Pregunta Extra');
+
+        for (let n = 1; n <= NORMAL_QUESTIONS_TOTAL; n++) {
+          updateFileLabel(`lbl-q${n}-img`, mediaStore[`q${n}Img`], '1. Imagen Inicial de Pregunta');
+          updateFileLabel(`lbl-q${n}-ans-img`, mediaStore[`q${n}AnsImg`], '2. Imagen de Respuesta Correcta (Transición)');
+          updateFileLabel(`lbl-q${n}-audio`, mediaStore[`q${n}Audio`], `Cargar Audio Pregunta ${n}`);
+          updateFileLabel(`lbl-q${n}-ans-audio`, mediaStore[`q${n}AnsAudio`], `🔊 Cargar Audio Respuesta Correcta P${n}`);
+        }
+      }
+    }
+
+    /* BIBLIOTECA */
+    async function saveProjectToLibrary() {
+      const hookTitle = document.getElementById('header-hook-input').value.trim() || 'Proyecto Quiz';
+      const name = prompt('Nombre para guardar este proyecto en la biblioteca:', hookTitle);
+      if (!name) return;
+
+      const state = collectCurrentState();
+      const projectRecord = {
+        name: name,
+        date: new Date().toLocaleString(),
+        state: state
+      };
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readwrite');
+        tx.objectStore(STORE_PROJECTS).add(projectRecord);
+        tx.oncomplete = () => {
+          alert('✅ ¡Proyecto guardado con TODO su contenido en la biblioteca!');
+        };
+      } catch (err) {
+        alert('Error al guardar en la biblioteca.');
+      }
+    }
+
+    async function openLibraryModal() {
+      document.getElementById('library-modal').style.display = 'flex';
+      renderProjectsList();
+    }
+
+    function closeLibraryModal() {
+      document.getElementById('library-modal').style.display = 'none';
+    }
+
+    async function renderProjectsList() {
+      const container = document.getElementById('projects-list');
+      container.innerHTML = '<div style="text-align:center; padding:15px; color:#888;">Cargando...</div>';
+
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readonly');
+        const req = tx.objectStore(STORE_PROJECTS).getAll();
+
+        req.onsuccess = () => {
+          const list = req.result || [];
+          if (list.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:25px; color:#888; font-size:0.8rem;">No hay proyectos guardados todavía.<br><br>Presiona <b>💾 Guardar</b> arriba para guardar el actual.</div>';
+            return;
+          }
+
+          container.innerHTML = '';
+          list.reverse().forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'project-item';
+            div.innerHTML = `
+              <div class="project-info">
+                <h4>${escapeHtml(item.name)}</h4>
+                <span>📅 ${item.date}</span>
+              </div>
+              <div class="project-actions">
+                <button class="btn-proj-load" onclick="loadProjectById(${item.id})">Cargar</button>
+                <button class="btn-proj-del" onclick="deleteProjectById(${item.id})">✕</button>
+              </div>
+            `;
+            container.appendChild(div);
+          });
+        };
+      } catch (err) {
+        container.innerHTML = '<div style="text-align:center; padding:15px; color:red;">Error al cargar.</div>';
+      }
+    }
+
+    async function loadProjectById(id) {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readonly');
+        const req = tx.objectStore(STORE_PROJECTS).get(id);
+
+        req.onsuccess = async () => {
+          const item = req.result;
+          if (item && item.state) {
+            await restoreFullState(item.state);
+            closeLibraryModal();
+            triggerSaveImmediate();
+            alert(`✅ Proyecto "${item.name}" cargado exitosamente.`);
+          }
+        };
+      } catch (err) {
+        alert('Error al restaurar proyecto.');
+      }
+    }
+
+    async function deleteProjectById(id) {
+      if (!confirm('¿Eliminar este proyecto de la biblioteca?')) return;
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_PROJECTS, 'readwrite');
+        tx.objectStore(STORE_PROJECTS).delete(id);
+        tx.oncomplete = () => renderProjectsList();
+      } catch (e) {}
+    }
+
+    /* AUTOGUARDADO CADA CIERTOS SEGUNDOS */
+    function markDirty() {
+      isDirty = true;
+      const indicator = document.getElementById('autosave-status');
+      if (indicator) {
+        indicator.classList.remove('saved');
+        indicator.innerHTML = '<span>●</span> <span>Cambios pendientes...</span>';
+      }
+    }
+
+    async function triggerSaveImmediate() {
+      try {
+        const state = collectCurrentState();
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_AUTOSAVE, 'readwrite');
+        tx.objectStore(STORE_AUTOSAVE).put({ key: 'current_session', state: state });
+        tx.oncomplete = () => {
+          isDirty = false;
+          const indicator = document.getElementById('autosave-status');
+          if (indicator) {
+            indicator.classList.add('saved');
+            indicator.innerHTML = '<span>●</span> <span>Autoguardado completado</span>';
+          }
+        };
+      } catch (e) {}
+    }
+
+    // Intervalo de autoguardado en segundo plano
+    setInterval(() => {
+      if (isDirty) {
+        triggerSaveImmediate();
+      }
+    }, 4000);
+
+    async function restoreAutosaveOnLoad() {
+      try {
+        const db = await openDatabase();
+        const tx = db.transaction(STORE_AUTOSAVE, 'readonly');
+        const req = tx.objectStore(STORE_AUTOSAVE).get('current_session');
+        req.onsuccess = async () => {
+          if (req.result && req.result.state) {
+            await restoreFullState(req.result.state);
+            const indicator = document.getElementById('autosave-status');
+            if (indicator) {
+              indicator.classList.add('saved');
+              indicator.innerHTML = '<span>●</span> <span>Sesión previa recuperada</span>';
+            }
+          }
+        };
+      } catch (e) {}
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+
+    /* INICIALIZACIÓN */
+    window.addEventListener('DOMContentLoaded', async () => {
+      renderQuizQuestionsInputs();
+      await restoreAutosaveOnLoad();
+    });
+  </script>
+</body>
+</html>
